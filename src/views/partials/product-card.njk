@@ -31,7 +31,12 @@
 
       <div class="product-card__foot">
         <div class="price">
-          {% if item.sale_price_toman %}
+          {% if not item.price_toman %}
+            {# قیمت فروشگاهی هنوز ثبت نشده. «۰ تومان» نشان داده نمی‌شود،
+               چون عددِ صفر برای مشتری یعنی رایگان — و این دروغ است.
+               کلاس num عمدا نیست: این متن است، نه رقم. #}
+            <strong class="price__now">استعلام قیمت</strong>
+          {% elif item.sale_price_toman %}
             <strong class="price__now num">{{ item.sale_price_toman | toman }}</strong>
             <del class="price__old num">{{ item.price_toman | tomanPlain }}</del>
           {% else %}
@@ -39,7 +44,10 @@
           {% endif %}
         </div>
 
-        {% if item.availability == 'in_stock' %}
+        {# بدون دادهٔ تجاری، هیچ ادعایی دربارهٔ موجودی نمی‌شود. #}
+        {% if not item.price_toman %}
+          <span class="stock stock--order">استعلام موجودی</span>
+        {% elif item.availability == 'in_stock' %}
           <span class="stock stock--in">موجود</span>
         {% elif item.availability == 'on_order' %}
           <span class="stock stock--order">قابل سفارش</span>

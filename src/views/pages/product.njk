@@ -70,7 +70,10 @@
 
         <div class="buy-card">
           <div class="buy-card__price">
-            {% if product.sale_price_toman %}
+            {% if not product.price_toman %}
+              {# قیمت فروشگاهی هنوز ثبت نشده — هیچ عددی به‌جای آن نمی‌نشیند. #}
+              <strong class="price__now">استعلام قیمت</strong>
+            {% elif product.sale_price_toman %}
               <strong class="price__now num">{{ product.sale_price_toman | toman }}</strong>
               <del class="price__old num">{{ product.price_toman | tomanPlain }}</del>
               {% if discountPercent > 0 %}
@@ -82,7 +85,11 @@
           </div>
 
           <div class="buy-card__row">
-            {% if product.availability == 'in_stock' %}
+            {# قطعه‌ای که هنوز دادهٔ تجاری ندارد، هیچ وضعیتی اعلام نمی‌کند:
+               نه «موجود»، نه «قابل سفارش» — چون هیچ‌کدام تأیید نشده است. #}
+            {% if not product.price_toman %}
+              <span class="availability availability--order">استعلام موجودی</span>
+            {% elif product.availability == 'in_stock' %}
               <span class="availability availability--in">موجود</span>
             {% elif product.availability == 'on_order' %}
               <span class="availability availability--order">قابل سفارش</span>
@@ -95,11 +102,20 @@
           </div>
 
           <div class="buy-card__row">
-            {# سبد خرید و ثبت سفارش هنوز ساخته نشده‌اند. #}
-            <p class="info-note">
-              ثبت سفارش آنلاین هنوز فعال نشده است. برای پیگیری این قطعه،
-              کد کالا یا شماره فنی بالا را یادداشت کنید.
-            </p>
+            {# سبد خرید و ثبت سفارش هنوز ساخته نشده‌اند. برای قطعه‌ای که
+               قیمتش هم ثبت نشده، جملهٔ صریح‌تری لازم است. #}
+            {% if not product.price_toman %}
+              <p class="info-note">
+                قیمت و موجودی این قطعه هنوز نهایی نشده و باید استعلام شود.
+                تا ثبت قیمت واقعی، هیچ عددی به‌عنوان قیمت نشان داده نمی‌شود.
+                برای پیگیری، کد کالا یا شماره فنی بالا را یادداشت کنید.
+              </p>
+            {% else %}
+              <p class="info-note">
+                ثبت سفارش آنلاین هنوز فعال نشده است. برای پیگیری این قطعه،
+                کد کالا یا شماره فنی بالا را یادداشت کنید.
+              </p>
+            {% endif %}
           </div>
         </div>
 
@@ -121,7 +137,8 @@
           <div class="spec-table__row">
             <dt>وضعیت</dt>
             <dd>
-              {% if product.availability == 'in_stock' %}موجود
+              {% if not product.price_toman %}استعلام موجودی
+              {% elif product.availability == 'in_stock' %}موجود
               {% elif product.availability == 'on_order' %}قابل سفارش
               {% elif product.availability == 'discontinued' %}تولید متوقف شده
               {% else %}ناموجود{% endif %}
