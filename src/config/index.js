@@ -190,7 +190,7 @@ export function assertDatabaseConfigured() {
   if (!config.database.url) {
     throw new Error(
       'DATABASE_URL تعریف نشده است. یک رشته اتصال PostgreSQL در فایل .env بگذارید. ' +
-      'نمونه: postgresql://user:password@127.0.0.1:5432/pars2008'
+      'نمونه: postgresql://user:password@127.0.0.1:5432/parts2008'
     );
   }
   return true;

@@ -23,13 +23,13 @@ export async function start() {
   const app = createApp();
 
   const server = app.listen(config.port, config.host, () => {
-    console.log(`[2008pars] روی http://${config.host}:${config.port} در حالت ${config.env}`);
-    console.log(`[2008pars] ذخیره‌سازی: ${config.storage.root}`);
-    console.log(`[2008pars] پایگاه داده: ${config.database.url ? 'پیکربندی شده' : 'پیکربندی نشده (DATABASE_URL خالی است)'}`);
+    console.log(`[parts2008] روی http://${config.host}:${config.port} در حالت ${config.env}`);
+    console.log(`[parts2008] ذخیره‌سازی: ${config.storage.root}`);
+    console.log(`[parts2008] پایگاه داده: ${config.database.url ? 'پیکربندی شده' : 'پیکربندی نشده (DATABASE_URL خالی است)'}`);
   });
 
   async function shutdown(signal) {
-    console.log(`[2008pars] ${signal} — بستن سرویس`);
+    console.log(`[parts2008] ${signal} — بستن سرویس`);
     server.close(async () => {
       await closeDb();
       process.exit(0);
@@ -46,7 +46,7 @@ export async function start() {
 const invoked = process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href;
 if (invoked) {
   start().catch((err) => {
-    console.error('[2008pars] راه‌اندازی شکست خورد:', err.message);
+    console.error('[parts2008] راه‌اندازی شکست خورد:', err.message);
     process.exit(1);
   });
 }

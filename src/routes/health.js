@@ -16,7 +16,7 @@ export const healthRouter = express.Router();
 healthRouter.get('/health', (req, res) => {
   res.json({
     ok: true,
-    service: '2008pars',
+    service: 'parts2008',
     env: config.env,
     uptimeSeconds: Math.round(process.uptime()),
     time: new Date().toISOString(),

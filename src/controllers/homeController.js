@@ -44,7 +44,7 @@ export function createHomeController({ products, categories, brands }) {
       res.render('pages/home', {
         title: 'قطعات یدکی پژو ۲۰۰۸',
         metaDescription:
-          'پارس ۲۰۰۸ — فروشگاه اینترنتی قطعات یدکی پژو ۲۰۰۸. جست‌وجو بر اساس نام قطعه، کد کالا یا شماره فنی.',
+          'parts2008 — فروشگاه اینترنتی قطعات یدکی پژو ۲۰۰۸. جست‌وجو بر اساس نام قطعه، کد کالا یا شماره فنی.',
         featuredItems,
         freshItems,
         latestItems: (featuredItems.length === 0 && freshItems.length === 0) ? latest.items : [],

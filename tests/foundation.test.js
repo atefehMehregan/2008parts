@@ -64,7 +64,7 @@ test('GET /health وضعیت ۲۰۰ و بدنه ماشین‌خوان می‌د�
   assert.equal(res.status, 200);
   const body = await res.json();
   assert.equal(body.ok, true);
-  assert.equal(body.service, '2008pars');
+  assert.equal(body.service, 'parts2008');
   assert.equal(body.env, 'test');
   assert.equal(typeof body.uptimeSeconds, 'number');
 });
@@ -185,7 +185,7 @@ test('صفحهٔ اصلی پوستهٔ فروشگاه را دارد: هدر، ج
   assert.match(html, /action="\/search"/, 'فرم جست‌وجو');
   assert.match(html, /name="q"/);
   assert.match(html, /class="site-footer"/, 'فوتر فروشگاه');
-  assert.match(html, /پارس ۲۰۰۸/, 'نام فارسی فروشگاه');
+  assert.match(html, /parts2008/, 'نام فروشگاه');
 });
 
 test('متن جای‌نگهدارِ فاز ۰ دیگر در صفحهٔ اصلی نیست', async () => {
