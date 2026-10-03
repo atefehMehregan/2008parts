@@ -51,6 +51,25 @@
            آن هرگز تجزیه نمی‌شوند. #}
         <input type="hidden" name="_csrf" value="{{ adminCsrfToken }}" />
 
+        {# متن جایگزین، همان‌جا که تصویر انتخاب می‌شود.
+           پیش از این فقط *بعد* از بارگذاری و با یک فرم جدا قابل ثبت بود،
+           پس ردیف‌ها با alt_text = NULL می‌ماندند و کسی برنمی‌گشت پرشان
+           کند. اختیاری است تا رفتار قبلی نشکند.
+
+           مثل _csrf، *پیش از* کادر فایل می‌نشیند — به همان دلیل ترتیبی.
+           اگر چند فایل در یک بار فرستاده شود، همین یک متن روی همه
+           می‌نشیند و بعد می‌شود هر کدام را جدا ویرایش کرد؛ جفت‌کردن
+           متن با فایلِ مشخص در یک کادر چندفایلی ممکن نیست. #}
+        <div class="field">
+          <label class="field__label" for="f-alt">متن جایگزین (اختیاری)</label>
+          <input class="field__input" id="f-alt" name="altText" type="text"
+                 maxlength="300" placeholder="مثلا: فیلتر روغن پژو ۲۰۰۸" />
+          <p class="field__hint">
+            برای دسترس‌پذیری و موتور جست‌وجو. خالی بگذارید تا بعدا پرش کنید.
+            اگر چند فایل می‌فرستید، این متن روی همه‌شان می‌نشیند.
+          </p>
+        </div>
+
         <div class="field">
           <label class="field__label" for="f-images">فایل تصویر</label>
           <input class="field__input" id="f-images" name="images" type="file"

@@ -79,11 +79,14 @@ async function adminCsrf(jar, id) {
   return (html.match(/name="_csrf" value="([^"]*)"/) || [])[1] || '';
 }
 
-/** آپلود، دقیقا با همان ترتیبی که قالب می‌فرستد: _csrf پیش از فایل. */
-async function upload(jar, id, files, { csrf } = {}) {
+/** آپلود، دقیقا با همان ترتیبی که قالب می‌فرستد: _csrf و altText پیش از فایل. */
+async function upload(jar, id, files, { csrf, altText } = {}) {
   const token = csrf !== undefined ? csrf : await adminCsrf(jar, id);
   const fd = new FormData();
   fd.append('_csrf', token);
+  /* همان ترتیب قالب: فیلدهای متنی پیش از کادر فایل، تا اگر سقف حجم وسط
+     فایل بشکند، تجزیه‌شان از قبل تمام شده باشد. */
+  if (altText !== undefined) fd.append('altText', altText);
   for (const f of files) {
     fd.append(f.field || 'images', new Blob([f.buffer], { type: f.type || 'image/jpeg' }),
       f.name || 'photo.jpg');
@@ -244,6 +247,60 @@ test('آپلود درست: هشت مشتق، اصلِ خصوصی، و ردیف �
   const originals = await listOriginals();
   assert.equal(originals.length, 1, 'اصل نگه داشته می‌شود');
   assert.ok(originals[0].startsWith(rows[0].image_id));
+});
+
+/* --------------------------------------------------------------------------
+ * متن جایگزین در همان فرم آپلود (فاز ۴A).
+ *
+ * پیش از این فقط با یک فرم جدا و *پس از* بارگذاری قابل ثبت بود، پس
+ * ردیف‌ها با alt_text = NULL می‌ماندند. فیلد اختیاری است، پس هر دو حالت
+ * سنجیده می‌شود.
+ * ------------------------------------------------------------------------ */
+
+test('متن جایگزینِ فرم آپلود روی ردیف می‌نشیند', async () => {
+  const jar = await login();
+  const res = await upload(jar, productId, [{ buffer: await jpeg() }],
+    { altText: 'فیلتر روغن پژو ۲۰۰۸' });
+  assert.equal(res.status, 303);
+
+  const [row] = await repo.listForProduct(productId);
+  assert.equal(row.alt_text, 'فیلتر روغن پژو ۲۰۰۸');
+});
+
+test('متن جایگزینِ خالی یعنی NULL، نه رشتهٔ خالی', async () => {
+  const jar = await login();
+  await upload(jar, productId, [{ buffer: await jpeg() }], { altText: '   ' });
+  const [row] = await repo.listForProduct(productId);
+  assert.equal(row.alt_text, null);
+});
+
+test('نبودِ فیلد متن جایگزین رفتار قبلی را نمی‌شکند', async () => {
+  const jar = await login();
+  await upload(jar, productId, [{ buffer: await jpeg() }]);
+  const [row] = await repo.listForProduct(productId);
+  assert.equal(row.alt_text, null);
+});
+
+test('با چند فایل، همان یک متن روی همه می‌نشیند', async () => {
+  const jar = await login();
+  await upload(jar, productId,
+    [{ buffer: await jpeg() }, { buffer: await jpeg() }], { altText: 'لنت ترمز' });
+  const rows = await repo.listForProduct(productId);
+  assert.equal(rows.length, 2);
+  assert.ok(rows.every((r) => r.alt_text === 'لنت ترمز'));
+});
+
+test('آپلود از پنل هیچ ادعای حقوقی نمی‌کند — not_cleared می‌ماند', async () => {
+  /* پنل مدیر فقط فایل می‌گیرد و دربارهٔ اجازهٔ استفاده چیزی نمی‌داند، پس
+     ردیف باید با پیش‌فرض محافظه‌کارانه بنشیند. ثبت منشأ کار واردکنندهٔ
+     مانیفست‌محور است. */
+  const jar = await login();
+  await upload(jar, productId, [{ buffer: await jpeg() }]);
+  const [row] = await repo.listForProduct(productId);
+  assert.equal(row.rights_status, 'not_cleared');
+  assert.equal(row.source_name, null);
+  assert.equal(row.approved_at, null);
+  assert.equal(row.approved_by, null);
 });
 
 test('مشتق‌ها مربع و در اندازهٔ اعلام‌شده‌اند', async () => {

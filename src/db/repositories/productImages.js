@@ -19,7 +19,23 @@
  * فایل کار لایهٔ ذخیره‌سازی است و ترتیبش در کنترلر تعیین می‌شود.
  * ==========================================================================*/
 
-const COLUMNS = 'id, product_id, image_id, alt_text, width, height, sort_order, is_primary, created_at';
+const COLUMNS = `id, product_id, image_id, alt_text, width, height, sort_order, is_primary, created_at,
+  source_name, source_url, source_ref, rights_status, rights_note, approved_by, approved_at`;
+
+/* وضعیت‌های حقوقی مجاز — بازتابِ قید product_images_rights_status_known در
+   مهاجرت ۰۰۴. اینجا تکرار می‌شود تا واردکننده بتواند *پیش از* زدن به
+   پایگاه داده ایراد را بگوید؛ مرجع نهایی همان قید است، نه این آرایه. */
+export const RIGHTS_STATUS = {
+  NOT_CLEARED: 'not_cleared',
+  OWNER_SUPPLIED: 'owner_supplied',
+  LICENSED: 'licensed',
+  OWN_PHOTO: 'own_photo',
+};
+
+/** وضعیت‌هایی که یعنی «اجازهٔ استفاده داریم». */
+export const CLEARED_RIGHTS_STATUSES = Object.freeze([
+  RIGHTS_STATUS.OWNER_SUPPLIED, RIGHTS_STATUS.LICENSED, RIGHTS_STATUS.OWN_PHOTO,
+]);
 
 export function createProductImageRepository(db) {
   /** همهٔ تصویرهای یک محصول، به ترتیب نمایش. */
@@ -59,21 +75,47 @@ export function createProductImageRepository(db) {
    * sort_order اگر داده نشود، انتهای فهرست می‌نشیند. is_primary عمدا
    * پارامتر است و نه تصمیمِ این لایه: قاعدهٔ «اولین تصویر، اصلی است»
    * تصمیمِ کنترلر است و آنجا آزمون می‌شود.
+   *
+   * -------------------------------------------------------------------------
+   * فیلدهای منشأ و حقوق (مهاجرت ۰۰۴)
+   *
+   * همه اختیاری‌اند و پیش‌فرضشان دقیقا همان چیزی است که پیش از مهاجرت
+   * اتفاق می‌افتاد: rightsStatus روی 'not_cleared' و بقیه NULL. پس
+   * فراخوان‌های موجود — مسیر آپلود مدیر — هیچ تغییری در رفتار نمی‌بینند.
+   *
+   * این لایه سازگاریِ وضعیت حقوقی را *تقلید نمی‌کند*؛ قیدهای
+   * product_images_rights_approval_consistent و
+   * product_images_cleared_has_source در پایگاه داده آن را اعمال
+   * می‌کنند. همان قاعدهٔ «یک تصویر اصلی» که اینجا هم تکرار نشده است.
    */
   async function add({ productId, imageId, altText = null, width = null, height = null,
-    sortOrder = null, isPrimary = false }) {
+    sortOrder = null, isPrimary = false,
+    sourceName = null, sourceUrl = null, sourceRef = null,
+    rightsStatus = RIGHTS_STATUS.NOT_CLEARED, rightsNote = null,
+    approvedBy = null, approvedAt = null }) {
     const order = sortOrder === null
       ? (await db.query(
         'SELECT COALESCE(MAX(sort_order) + 1, 0) AS next FROM product_images WHERE product_id = $1',
         [productId])).rows[0].next
       : sortOrder;
 
+    /* رشتهٔ خالی یعنی «کاربر چیزی نگذاشت»، نه مقدار. مثل updateAlt. */
+    const blankToNull = (v) => {
+      const s = (v ?? '').toString().trim();
+      return s === '' ? null : s;
+    };
+
     const res = await db.query(
       `INSERT INTO product_images
-         (product_id, image_id, alt_text, width, height, sort_order, is_primary)
-       VALUES ($1,$2,$3,$4,$5,$6,$7)
+         (product_id, image_id, alt_text, width, height, sort_order, is_primary,
+          source_name, source_url, source_ref, rights_status, rights_note,
+          approved_by, approved_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
        RETURNING ${COLUMNS}`,
-      [productId, imageId, altText, width, height, order, isPrimary === true]
+      [productId, imageId, blankToNull(altText), width, height, order, isPrimary === true,
+        blankToNull(sourceName), blankToNull(sourceUrl), blankToNull(sourceRef),
+        rightsStatus ?? RIGHTS_STATUS.NOT_CLEARED, blankToNull(rightsNote),
+        approvedBy ?? null, approvedAt ?? null]
     );
     return res.rows[0];
   }

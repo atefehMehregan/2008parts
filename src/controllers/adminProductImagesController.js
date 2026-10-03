@@ -154,6 +154,12 @@ export function createAdminProductImagesController({ repositories, storage, audi
       const errors = [];
       let saved = 0;
 
+      /* متن جایگزینِ اختیاریِ همین درخواست. همان سقف ۳۰۰ نویسهٔ updateAlt.
+         با چند فایل، روی همه می‌نشیند — جفت‌کردنش با فایلِ مشخص در یک
+         کادر چندفایلی ممکن نیست و حدس زدن بدتر از نگذاشتن است.
+         خالی یعنی NULL، که دقیقا رفتار پیش از این فیلد است. */
+      const sharedAltText = String(req.body?.altText ?? '').slice(0, 300).trim() || null;
+
       for (const [i, file] of files.entries()) {
         if (saved >= room) {
           errors.push(`ظرفیت پر شد؛ ${files.length - saved} فایل ذخیره نشد.`);
@@ -187,9 +193,14 @@ export function createAdminProductImagesController({ repositories, storage, audi
           await productImages.add({
             productId: product.id,
             imageId: processed.id,
+            altText: sharedAltText,
             width: inspected.meta.width,
             height: inspected.meta.height,
             isPrimary: existing === 0 && saved === 0,
+            /* منشأ و وضعیت حقوقی عمدا اینجا تنظیم نمی‌شوند: آپلود از پنل
+               هیچ ادعایی دربارهٔ اجازهٔ استفاده نمی‌کند، پس ردیف با
+               پیش‌فرضِ محافظه‌کارانهٔ 'not_cleared' می‌نشیند. ثبت منشأ
+               کار واردکنندهٔ مانیفست‌محور است. */
           });
         } catch (err) {
           console.error('[images] درج ردیف شکست خورد، فایل‌ها پاک می‌شوند:', err.message);
