@@ -60,12 +60,27 @@ function sslSetting() {
   return isProd ? { rejectUnauthorized: true } : false;
 }
 
+/* پوستهٔ ظاهری. دو مقدار معتبر دارد و نه بیشتر:
+ *   auros  پیش‌فرض — سبزآبیِ تیره (base.css تنها)
+ *   blue   آبیِ روشن (base.css + theme-blue.css)
+ * مقدار ناشناخته بی‌صدا به پیش‌فرض برمی‌گردد: یک غلط تایپی در .env نباید
+ * فروشگاه را بی‌استایل کند، ولی باید دیده شود، پس هشدار چاپ می‌شود. */
+const THEMES = ['auros', 'blue'];
+function themeSetting() {
+  const raw = (process.env.THEME || '').trim().toLowerCase();
+  if (!raw) return 'auros';
+  if (THEMES.includes(raw)) return raw;
+  console.warn(`[config] THEME ناشناخته: «${raw}». یکی از ${THEMES.join(' | ')} را بگذارید. فعلا auros.`);
+  return 'auros';
+}
+
 export const config = {
   env,
   isProd,
   isTest,
   port: int('PORT', 3000),
   host: process.env.HOST || '127.0.0.1',
+  theme: themeSetting(),
 
   database: {
     url: databaseUrl,

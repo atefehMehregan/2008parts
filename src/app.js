@@ -117,6 +117,9 @@ export function createApp({
        دست‌نخورده‌اند و span خالی چیزی رندر نمی‌کند. */
     res.locals.storeName = 'parts2008';
     res.locals.storeNameLatin = '';
+    /* پوسته از پیکربندی می‌آید، نه از درخواست: انتخاب رنگ یک تصمیم
+       استقرار است، نه ترجیح کاربر. قالب فقط همین را می‌خواند. */
+    res.locals.theme = config.theme;
     res.locals.currentPath = req.path;
     res.locals.year = new Date().getFullYear();
     next();

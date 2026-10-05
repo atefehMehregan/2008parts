@@ -4,13 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{{ metaDescription | default('فروشگاه اینترنتی قطعات یدکی پژو ۲۰۰۸') }}" />
-    <meta name="theme-color" content="#123a5e" />
+    {# رنگ نوار مرورگر موبایل باید با پوستهٔ فعال بخواند. پیش از این
+       روی آبی ثابت بود و در پوستهٔ تیره با خود صفحه نمی‌خواند. #}
+    <meta name="theme-color" content="{% if theme == 'blue' %}#123a5e{% else %}#012624{% endif %}" />
     <title>{{ title }} | {{ storeName }}</title>
     {# نشان برند. SVG برای مرورگرهای امروزی، و PNG مات برای آیکون iOS —
        iOS آیکون شفاف را روی زمینهٔ سیاه می‌نشاند. #}
     <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
     <link rel="stylesheet" href="/css/base.css" />
+    {# پوستهٔ آبی یک لایهٔ روی base.css است و فقط تفاوت رنگ را دارد، پس
+       باید *بعد* از آن بیاید. با THEME=auros هیچ درخواست اضافی نمی‌رود. #}
+    {% if theme == 'blue' %}<link rel="stylesheet" href="/css/theme-blue.css" />{% endif %}
   </head>
 
   <body>
