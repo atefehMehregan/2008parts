@@ -384,7 +384,9 @@ a:hover { color: var(--c-ink); }
 .ticker__track {
   display: flex;
   width: max-content;
-  animation: ticker-rtl 38s linear infinite;
+  /* سرعت: ۳۸ ثانیه بیش از حد کند بود و حرکت دیده نمی‌شد.
+     اکنون ۷ ثانیه — حدود پنج‌و‌نیم برابر سریع‌تر از ۳۸ ثانیهٔ اولیه. */
+  animation: ticker-rtl 7s linear infinite;
 }
 .ticker:hover .ticker__track { animation-play-state: paused; }
 .ticker__list {
