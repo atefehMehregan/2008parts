@@ -122,6 +122,24 @@ export function createApp({
     next();
   });
 
+  /* دسته‌ها برای منوی هدر — روی *همهٔ* صفحه‌ها لازم است، نه فقط صفحهٔ
+     اصلی. عمدا شکست‌پذیرِ نرم است: اگر پایگاه داده در دسترس نباشد منو
+     خالی می‌ماند ولی صفحه بالا می‌آید. سرویس باید بدون پایگاه داده هم
+     بالا بیاید (همان قاعده‌ای که /health روی آن بنا شده). */
+  app.use(async (req, res, next) => {
+    res.locals.navCategories = [];
+    /* فایل‌های استاتیک و بخش مدیر به این منو نیازی ندارند. */
+    if (req.path.startsWith('/admin') || req.path.startsWith('/media')) return next();
+    try {
+      if (repositories?.categories?.listActive) {
+        res.locals.navCategories = await repositories.categories.listActive();
+      }
+    } catch (err) {
+      console.error('[nav] خواندن دسته‌ها شکست خورد:', err.code || err.message);
+    }
+    return next();
+  });
+
   /* --------------------------------------------------- فایل‌های استاتیک */
   app.use(express.static(path.join(ROOT, 'public'), {
     maxAge: config.isProd ? '7d' : 0,

@@ -10,7 +10,10 @@
                alt="{{ item.name }}" width="400" height="400" loading="lazy" />
         </picture>
       {% else %}
-        {# تصویری هنوز بارگذاری نشده — جای آن نگه داشته می‌شود تا چیدمان نپرد. #}
+        {# تصویری هنوز بارگذاری نشده — جای آن نگه داشته می‌شود تا چیدمان نپرد.
+           برچسب از دادهٔ موجودِ همین محصول می‌آید (نام دسته)؛ هیچ مشخصهٔ
+           فنی، شماره فنی یا برندی ساخته نمی‌شود. #}
+        {% set phLabel = item.category_name %}
         {% include "partials/media-placeholder.njk" %}
       {% endif %}
 
@@ -34,18 +37,26 @@
           {% if not item.price_toman %}
             {# قیمت فروشگاهی هنوز ثبت نشده. «۰ تومان» نشان داده نمی‌شود،
                چون عددِ صفر برای مشتری یعنی رایگان — و این دروغ است.
-               کلاس num عمدا نیست: این متن است، نه رقم. #}
+               کلاس num عمدا نیست: این متن است، نه رقم.
+               برچسب «قیمت:» اینجا نمی‌آید تا «قیمت: استعلام قیمت» نشود. #}
             <strong class="price__now">استعلام قیمت</strong>
-          {% elif item.sale_price_toman %}
-            <strong class="price__now num">{{ item.sale_price_toman | toman }}</strong>
-            <del class="price__old num">{{ item.price_toman | tomanPlain }}</del>
           {% else %}
-            <strong class="price__now num">{{ item.price_toman | toman }}</strong>
+            <span class="price__label">قیمت:</span>
+            {% if item.sale_price_toman %}
+              <strong class="price__now num">{{ item.sale_price_toman | toman }}</strong>
+              <del class="price__old num">{{ item.price_toman | tomanPlain }}</del>
+            {% else %}
+              <strong class="price__now num">{{ item.price_toman | toman }}</strong>
+            {% endif %}
           {% endif %}
         </div>
 
-        {# بدون دادهٔ تجاری، هیچ ادعایی دربارهٔ موجودی نمی‌شود. #}
-        {% if not item.price_toman %}
+        {# شمار واقعیِ موجودی نشان داده می‌شود، نه فقط برچسب وضعیت.
+           شاخه‌های بعدی جانشین می‌مانند تا محصولی که هنوز قیمت یا موجودی
+           ندارد، بی‌صدا «۰ عدد» نشان ندهد. #}
+        {% if item.stock_qty > 0 %}
+          <span class="stock stock--in">موجودی: <span class="num">{{ item.stock_qty | faDigits }}</span> عدد</span>
+        {% elif not item.price_toman %}
           <span class="stock stock--order">استعلام موجودی</span>
         {% elif item.availability == 'in_stock' %}
           <span class="stock stock--in">موجود</span>

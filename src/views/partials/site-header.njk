@@ -8,13 +8,33 @@
    موبایل با ترتیب flex کار می‌کند، نه با منوی کشویی: دو پیوند ناوبری
    ارزش یک دکمهٔ همبرگری و جاوااسکریپتش را ندارند.
    ========================================================================= #}
-<header class="site-header">
-  <div class="site-header__top">
-    <div class="container">
-      <p>قطعات یدکی پژو ۲۰۰۸ — جست‌وجو بر اساس نام قطعه، کد کالا یا شماره فنی</p>
-    </div>
-  </div>
+{# نوار پیام متحرک.
 
+   متن دو بار تکرار می‌شود و انیمیشن دقیقا به اندازهٔ نیمِ عرض جابه‌جا
+   می‌کند، پس حلقه بی‌درز است و پرش ندارد. جهت حرکت برای RTL از راست
+   به چپ است.
+
+   بدون جاوااسکریپت و بدون کتابخانه. بلوک سراسریِ
+   prefers-reduced-motion در base.css انیمیشن را برای کاربرانی که
+   حرکت کمتر خواسته‌اند خنثی می‌کند و متن ثابت می‌ماند.
+
+   ⚠️ متن‌ها فعلا فقط قابلیت‌های *واقعی* همین نسخه را می‌گویند. هیچ
+   ادعایی دربارهٔ ارسال، گارانتی یا خدماتی که هنوز پیاده نشده نوشته
+   نشده است — متن تجاری واقعی را باید صاحب فروشگاه بدهد. #}
+<div class="ticker" role="status" aria-label="اطلاعیه‌های فروشگاه">
+  <div class="ticker__track">
+    {% for pass in [1, 2] %}
+      <ul class="ticker__list" {% if pass == 2 %}aria-hidden="true"{% endif %}>
+        <li>جست‌وجو با شماره فنی، کد کالا یا نام فارسی قطعه</li>
+        <li>کاتالوگ تخصصی و متمرکز</li>
+        <li>شمارهٔ فنی را با خط تیره یا بدون آن وارد کنید؛ نتیجه یکی است</li>
+        <li>موجودی هر قطعه روی همان کارت محصول نوشته شده است</li>
+      </ul>
+    {% endfor %}
+  </div>
+</div>
+
+<header class="site-header">
   <div class="container site-header__bar">
     <a class="brand" href="/">
       {# نشان برند. تزئینی است و نام فروشگاه بلافاصله بعدش می‌آید، پس از
@@ -49,4 +69,30 @@
       </ul>
     </nav>
   </div>
+
+  {# ردیف دسته‌ها — الگوی متعارف فروشگاه قطعات: دسترسی یک‌کلیکی به هر
+     دسته از هر صفحه. دسته‌ها از پایگاه داده می‌آیند (res.locals در
+     app.js) و اگر خالی بود، کل ردیف رندر نمی‌شود — نه ردیف خالی، نه
+     پیوند مرده.
+
+     روی موبایل به‌جای منوی کشویی و جاوااسکریپت، ردیف افقی اسکرول
+     می‌شود: دو خط CSS در برابر یک همبرگر و شنونده‌های رویداد. #}
+  {% if navCategories.length %}
+    <nav class="cat-bar" aria-label="دسته‌بندی قطعات">
+      <ul class="container cat-bar__list">
+        <li>
+          <a class="cat-bar__link{% if currentPath == '/products' %} is-current{% endif %}"
+             href="/products">همهٔ قطعات</a>
+        </li>
+        {% for c in navCategories %}
+          {% set catPath = '/category/' + (c.slug | urlencode) %}
+          <li>
+            <a class="cat-bar__link{% if currentPath == catPath %} is-current{% endif %}"
+               href="{{ catPath }}"
+               {% if currentPath == catPath %}aria-current="page"{% endif %}>{{ c.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
 </header>

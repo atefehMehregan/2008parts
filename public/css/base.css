@@ -27,37 +27,65 @@
 /* ═══════════════════════════════════════════════════════ ۱. توکن‌ها ═══ */
 
 :root {
+  /* ===================================================================
+     پوستهٔ Auros — «ژرفای زیستْ‌تاب»
+
+     پشتهٔ سطح فقط سه پله از یک سبزآبی است، نه خاکستری و نه سیاه:
+       Liquid Deep  #011d1c  فرورفته (فوتر، چاهِ عمیق)
+       Liquid Abyss #012624  بوم صفحه
+       Liquid Kelp  #003734  کارتِ برآمده و پُرکنندهٔ دکمهٔ اصلی
+
+     عمق از *اختلاف رنگ سطح* می‌آید، نه از سایه. سایه‌ها عمدا صفرند.
+     =================================================================== */
+
   /* --- سطح و متن --- */
-  --c-bg:          #f4f6f8;   /* زمینهٔ صفحه */
-  --c-surface:     #ffffff;   /* کارت، پنل، نوار */
-  --c-surface-2:   #eef1f4;   /* سطح فرورفته: جای تصویر، ردیف نوبتی */
-  --c-ink:         #14181d;   /* متن اصلی */
-  --c-ink-2:       #4a5560;   /* متن دوم */
-  --c-ink-3:       #6e7a86;   /* متن کم‌رنگ، برچسب */
-  --c-line:        #dde3e9;   /* خط جداکننده */
-  --c-line-strong: #c2ccd6;   /* خط پررنگ‌تر، کادر ورودی در حالت تمرکز */
+  --c-bg:          #012624;   /* Liquid Abyss — بوم صفحه */
+  --c-surface:     #003734;   /* Liquid Kelp — کارت برآمده */
+  --c-surface-2:   #011d1c;   /* Liquid Deep — سطح فرورفته */
+  --c-ink:         #ffffff;   /* Platinum — فقط تیتر و ناوبری */
+  --c-ink-2:       #bbc7c6;   /* Silver Mist — متن بدنه */
+  /* متن کم‌تأکید. Slate Deep (#707777) عمدا اینجا *نیست*: پوسته آن را
+     «ته‌رنگ سطح» تعریف کرده، نه رنگ متن، و روی کارتِ Kelp نسبت
+     کنتراستش ۲٫۸۸ می‌شود — مردود. این مقدار همان Silver Mist است
+     که ۷۵٪ به سمت سطح کم‌رنگ شده: سلسله‌مراتب حفظ می‌شود و روی
+     هر سه سطح از ۴٫۵ رد می‌شود. */
+  --c-ink-3:       #8ca3a2;
+  /* Slate Deep سر جای واقعی‌اش: ته‌رنگ سطح و خط پررنگ. */
+  --c-slate-deep:  #707777;
+  --c-line:        rgba(255, 255, 255, 0.10);
+  --c-line-strong: #707777;
 
   /* --- برند و کنش --- */
-  /* آبی فولادی تیره: حرفه‌ای و خودرویی، نه آبیِ اداری و نه رنگ مد. */
-  --c-brand:        #123a5e;
-  --c-brand-strong: #0d2a45;   /* hover/active */
-  --c-brand-soft:   #e9eff5;   /* زمینهٔ ملایم برند */
-  --c-brand-ink:    #ffffff;   /* متن روی برند */
+  --c-brand:        #003734;   /* Liquid Kelp — پُرکنندهٔ کنش اصلی */
+  --c-brand-strong: #011d1c;   /* hover: یک پله عمیق‌تر، نه روشن‌تر */
+  --c-brand-soft:   rgba(0, 130, 124, 0.22);
+  --c-brand-ink:    #ffffff;
 
-  /* رنگ تأکید فقط برای حراج و فراخوان اصلی. کم استفاده شود. */
-  --c-accent:      #b4441f;
-  --c-accent-soft: #fbeee9;
+  /* تأکید: Lavender Phosphor. فقط عددهای بزرگ و نقطه‌های تأکید —
+     هرگز متن بدنه و هرگز کنترل رابط. */
+  --c-accent:      #fde9ff;
+  --c-accent-soft: rgba(253, 233, 255, 0.12);
 
-  /* --- وضعیت --- */
-  --c-ok:        #15653f;
-  --c-ok-soft:   #e8f4ed;
-  --c-ok-line:   #bcdcc4;
-  --c-warn:      #8a5a10;
-  --c-warn-soft: #fdf7e8;
-  --c-warn-line: #e8d7a8;
-  --c-err:       #9b2c17;
-  --c-err-soft:  #fdf0ee;
-  --c-err-line:  #e6c4bd;
+  /* گرادیان امضا — فقط روی کنش اصلی. */
+  --g-aurora: linear-gradient(90deg,
+     rgb(203, 255, 252) 0%, rgb(237, 255, 254) 26.25%,
+     rgb(255, 253, 250) 47.57%, rgb(250, 209, 255) 88.96%);
+  --g-biolum: linear-gradient(90deg, rgb(0, 130, 124) 0%, rgb(203, 255, 252) 100%);
+  --c-on-aurora: #222222;      /* متن تیره روی گرادیان روشن */
+
+  /* --- وضعیت ---
+     انحراف آگاهانه: پالت Auros هیچ رنگ «موفق/هشدار/خطا» ندارد، ولی
+     فرم‌های بخش مدیر بدون آن‌ها غیرقابل استفاده می‌شوند. این سه، نسخهٔ
+     کم‌اشباعِ سازگار با بومِ تیره‌اند و جز در پیام وضعیت به کار نمی‌روند. */
+  --c-ok:        #7ee0cf;
+  --c-ok-soft:   rgba(126, 224, 207, 0.12);
+  --c-ok-line:   rgba(126, 224, 207, 0.35);
+  --c-warn:      #e8c98a;
+  --c-warn-soft: rgba(232, 201, 138, 0.12);
+  --c-warn-line: rgba(232, 201, 138, 0.35);
+  --c-err:       #ff9d8a;
+  --c-err-soft:  rgba(255, 157, 138, 0.12);
+  --c-err-line:  rgba(255, 157, 138, 0.38);
 
   /* --- فاصله --- */
   --s-1: 0.25rem;
@@ -78,20 +106,27 @@
   --t-2xl: 1.75rem;
   --t-3xl: clamp(1.75rem, 1.35rem + 1.9vw, 2.6rem);
 
-  /* --- شکل --- */
-  --r-sm: 4px;
-  --r-md: 8px;
-  --r-lg: 14px;
+  /* --- شکل ---
+     واژگانِ شکل در Auros فقط دو مقدار دارد: ۶ پیکسل برای دکمه و عنصر
+     کوچک، ۱۶ پیکسل برای کارت. هیچ گوشهٔ گردتر از ۱۶ پیکسل.
+     --r-pill فقط برای چیزهایی می‌ماند که واقعا دایره‌اند (نقطه‌ها). */
+  --r-sm: 6px;
+  --r-md: 6px;
+  --r-lg: 16px;
   --r-pill: 999px;
 
-  /* سایه فقط جایی که ارتفاع واقعی معنا دارد: نوار چسبان و فراخوان. */
-  --sh-sm: 0 1px 2px rgba(16, 24, 32, 0.06);
-  --sh-md: 0 8px 24px -12px rgba(16, 24, 32, 0.28);
+  /* بدون سایه. عمق از پشتهٔ سطح می‌آید، نه از ارتفاعِ کاغذی.
+     توکن‌ها می‌مانند تا ۱۳۰۰ خط CSS نشکند، ولی مقدارشان none است. */
+  --sh-sm: none;
+  --sh-md: none;
 
-  --container: 1200px;
+  --container: 1440px;
 
-  /* فونت فارسی در فاز هویت بصری انتخاب می‌شود؛ فعلا پشتهٔ سیستم. */
-  --font: system-ui, 'Segoe UI', Tahoma, 'Iranian Sans', sans-serif;
+  /* Matter در دسترس نیست و پروژه عمدا هیچ فونت وبی بار نمی‌کند
+     (CSP هم fontSrc: 'self' است). جانشین‌های پیشنهادیِ خودِ راهنما
+     اول می‌آیند و اگر نبودند، به پشتهٔ سیستم می‌افتد. */
+  --font: 'Matter', 'Inter', 'DM Sans', 'Satoshi',
+          system-ui, 'Segoe UI', Tahoma, 'Iranian Sans', sans-serif;
 
   /* ---------------------------------------------------------------------
      نام‌های قدیمی. بخش مدیر (فاز ۲ و ۳) با این‌ها نوشته شده و بازنویسی
@@ -121,21 +156,27 @@ body {
   color: var(--c-ink);
   font-family: var(--font);
   font-size: var(--t-md);
-  line-height: 1.8;          /* فارسی به فضای عمودی بیشتری نیاز دارد */
+  /* Auros برای بدنه ۱٫۴ می‌خواهد، ولی خط فارسی به فضای عمودی بیشتری
+     نیاز دارد. ۱٫۷ نزدیک‌ترین مقداری است که هم ریتم پوسته را می‌گیرد
+     هم فارسی را خفه نمی‌کند. */
+  line-height: 1.7;
   /* هیچ صفحه‌ای نباید افقی بلغزد. */
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4 { line-height: 1.5; text-wrap: balance; }
+/* تیترها فشرده — کنتراست ۱٫۲ تیتر در برابر ۱٫۷ بدنه، ریتم تایپی پوسته. */
+h1, h2, h3, h4 { line-height: 1.2; text-wrap: balance; letter-spacing: -0.02em; }
 
 img { max-width: 100%; }
 
-a { color: var(--c-brand); }
-a:hover { color: var(--c-brand-strong); }
+/* پیوند: Silver Mist در حالت عادی، Platinum روی hover.
+   --c-brand (Liquid Kelp) روی بوم تیره عملا نادیدنی است. */
+a { color: var(--c-ink-2); }
+a:hover { color: var(--c-ink); }
 
 /* تمرکز همیشه دیده می‌شود — روی هر عنصری، در هر بخشی. */
 :focus-visible {
-  outline: 2px solid var(--c-brand);
+  outline: 2px solid #cbfffc;
   outline-offset: 2px;
   border-radius: var(--r-sm);
 }
@@ -210,7 +251,7 @@ a:hover { color: var(--c-brand-strong); }
 /* دکمهٔ دوم: هم‌وزن ولی نه هم‌صدا. */
 .btn--ghost {
   background: transparent;
-  color: var(--c-brand);
+  color: var(--c-ink);
   border-color: var(--c-line-strong);
 }
 .btn--ghost:hover {
@@ -220,15 +261,19 @@ a:hover { color: var(--c-brand-strong); }
 }
 
 /* روی زمینهٔ تیرهٔ فراخوان. */
+/* کنش اصلی روی بوم تیره — تنها جایی که گرادیان امضا مجاز است.
+   پوسته صریح می‌گوید: گرادیان فقط روی CTA اصلی، نه زمینه، نه متن،
+   نه چیزی بزرگ‌تر از یک دکمه. متن تیره روی گرادیان روشن می‌نشیند. */
 .btn--onDark {
-  background: var(--c-surface);
-  border-color: var(--c-surface);
-  color: var(--c-brand);
+  background: var(--g-aurora);
+  border-color: transparent;
+  color: var(--c-on-aurora);
+  font-weight: 500;
 }
 .btn--onDark:hover {
-  background: var(--c-brand-soft);
-  border-color: var(--c-brand-soft);
-  color: var(--c-brand-strong);
+  /* گرادیان جابه‌جا نمی‌شود؛ فقط کمی روشن‌تر می‌شود. */
+  filter: brightness(1.06);
+  color: var(--c-on-aurora);
 }
 
 /* دکمهٔ دومِ روی زمینهٔ تیره: هم‌شکلِ ghost ولی با خطِ روشن.
@@ -252,15 +297,6 @@ a:hover { color: var(--c-brand-strong); }
   background: var(--c-surface);
   border-bottom: 1px solid var(--c-line);
 }
-
-/* نوار بالایی: یک جملهٔ کوتاه دربارهٔ خودِ فروشگاه. هیچ ادعای
-   خدماتی‌ای که پیاده نشده اینجا نوشته نمی‌شود. */
-.site-header__top {
-  background: var(--c-brand);
-  color: var(--c-brand-ink);
-  font-size: var(--t-xs);
-}
-.site-header__top p { margin: 0; padding-block: 0.45rem; }
 
 .site-header__bar {
   display: flex;
@@ -288,7 +324,9 @@ a:hover { color: var(--c-brand-strong); }
   flex-shrink: 0;
 }
 .brand__text { display: flex; flex-direction: column; line-height: 1.3; }
-.brand__name { font-weight: 700; font-size: var(--t-lg); }
+/* «parts2008» لاتین است، پس tracking پوسته اینجا بی‌خطر اعمال می‌شود.
+   روی متن فارسی هرگز — حروف فارسی به هم می‌چسبند و فاصله می‌شکندشان. */
+.brand__name { font-weight: 500; font-size: var(--t-lg); letter-spacing: 0.08em; }
 .brand__latin {
   font-size: var(--t-xs);
   letter-spacing: 0.16em;
@@ -332,6 +370,79 @@ a:hover { color: var(--c-brand-strong); }
 }
 .site-search__button:hover { background: var(--c-brand-strong); }
 
+/* --- نوار پیام متحرک ------------------------------------------------
+   متن دو بار تکرار شده و انیمیشن دقیقا نیمِ عرض track را جابه‌جا می‌کند،
+   پس حلقه بی‌درز است. جهت برای RTL از راست به چپ.
+   بدون جاوااسکریپت. بلوک سراسری prefers-reduced-motion در انتهای همین
+   فایل، انیمیشن را برای کاربران حساس به حرکت خنثی می‌کند. */
+.ticker {
+  background: var(--c-brand);
+  color: var(--c-brand-ink);
+  overflow: hidden;
+  border-block-end: 1px solid var(--c-line);
+}
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker-rtl 38s linear infinite;
+}
+.ticker:hover .ticker__track { animation-play-state: paused; }
+.ticker__list {
+  display: flex;
+  align-items: center;
+  gap: var(--s-6);
+  margin: 0;
+  padding: 0.5rem var(--s-6) 0.5rem 0;
+  list-style: none;
+  font-size: var(--t-xs);
+  white-space: nowrap;
+}
+/* جداکنندهٔ بین پیام‌ها — نقطه، نه خط، تا شلوغ نشود. */
+.ticker__list li { display: flex; align-items: center; gap: var(--s-6); }
+.ticker__list li::after {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: var(--r-pill);
+  background: currentColor;
+  opacity: 0.55;
+}
+@keyframes ticker-rtl {
+  from { transform: translateX(0); }
+  to   { transform: translateX(50%); }
+}
+
+/* --- ردیف دسته‌ها ---------------------------------------------------
+   روی موبایل افقی اسکرول می‌شود: بدون همبرگر، بدون جاوااسکریپت. */
+.cat-bar {
+  background: var(--c-surface);
+  border-block-end: 1px solid var(--c-line);
+}
+.cat-bar__list {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  margin: 0;
+  padding-block: var(--s-2);
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.cat-bar__link {
+  display: block;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--r-sm);
+  color: var(--c-ink-2);
+  text-decoration: none;
+  font-size: var(--t-sm);
+  white-space: nowrap;
+}
+.cat-bar__link:hover { background: var(--c-brand-soft); color: var(--c-ink); }
+.cat-bar__link.is-current {
+  background: var(--c-brand);
+  color: var(--c-brand-ink);
+}
+
 /* --- ناوبری --- */
 .site-nav { margin-inline-start: auto; }
 .site-nav__list {
@@ -358,11 +469,11 @@ a:hover { color: var(--c-brand-strong); }
 .site-footer {
   margin-top: var(--s-8);
   background: var(--c-ink);
-  color: #c9d2db;
+  color: var(--c-ink-2);
   font-size: var(--t-sm);
 }
-.site-footer a { color: #e4eaf0; text-decoration: none; }
-.site-footer a:hover { color: #ffffff; text-decoration: underline; }
+.site-footer a { color: var(--c-ink-2); text-decoration: none; }
+.site-footer a:hover { color: var(--c-ink); text-decoration: underline; }
 
 .site-footer__grid {
   display: grid;
@@ -373,63 +484,112 @@ a:hover { color: var(--c-brand-strong); }
 .site-footer__title {
   margin: 0 0 var(--s-3);
   font-size: var(--t-sm);
-  color: #ffffff;
+  color: var(--c-ink);
   letter-spacing: 0.04em;
 }
 .site-footer__text { margin: 0 0 var(--s-3); max-width: 46ch; line-height: 1.9; }
 .site-footer__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
 .site-footer__brand .brand__mark { margin-bottom: var(--s-3); }
-.site-footer__brand .brand__name { color: #ffffff; }
-.site-footer__brand .brand__latin { color: #93a1ad; }
-.site-footer__note { margin: 0; color: #93a1ad; font-size: var(--t-xs); }
+.site-footer__brand .brand__name { color: var(--c-ink); }
+.site-footer__brand .brand__latin { color: var(--c-ink-3); }
+.site-footer__note { margin: 0; color: var(--c-ink-3); font-size: var(--t-xs); }
 
 .site-footer__bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid var(--c-line);
   padding-block: var(--s-4);
   display: flex;
   justify-content: space-between;
   gap: var(--s-4);
   flex-wrap: wrap;
-  color: #93a1ad;
+  color: var(--c-ink-3);
   font-size: var(--t-xs);
 }
 .site-footer__bottom p { margin: 0; }
 
 /* ═════════════════════════════════════════════════ ۷. صفحهٔ اصلی ═══ */
 
+/* هیرو — سه لایهٔ پس‌زمینه به‌جای یک مستطیل آبیِ تخت.
+
+   همه با گرادیان CSS ساخته می‌شود: نه تصویر، نه کتابخانه، نه انیمیشن.
+   ۱. عمق عمودی از --c-brand به --c-brand-strong
+   ۲. یک هالهٔ نرم در گوشهٔ بالای سمت شروع (منطقی، پس در RTL راست است)
+   ۳. توریِ بسیار کم‌رنگ — حسِ فنی/مهندسی، نه تزئین پر سر و صدا */
 .hero {
-  background: var(--c-brand);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 120% at 100% 0%, rgba(0, 130, 124, 0.45) 0%, rgba(0, 130, 124, 0) 62%),
+    linear-gradient(170deg, #013f3c 0%, var(--c-bg) 48%, var(--c-surface-2) 100%);
   color: var(--c-brand-ink);
 }
+/* توریِ فنی. opacity پایین نگه داشته می‌شود تا متن همیشه خوانا بماند. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(0deg,  rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 72px);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 85%);
+}
+
 .hero__inner {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: var(--s-7);
   align-items: center;
-  padding-block: var(--s-8);
+  padding-block: clamp(var(--s-7), 6vw, 5.5rem);
 }
-.hero__eyebrow {
-  margin: 0 0 var(--s-3);
-  font-size: var(--t-xs);
-  letter-spacing: 0.14em;
-  color: #a9c0d6;
+
+/* خط تأکید در ابتدای ستون متن. border-inline-start منطقی است، پس در
+   RTL خودبه‌خود سمت راست می‌نشیند. */
+.hero__copy {
+  border-inline-start: 3px solid var(--c-accent);
+  padding-inline-start: var(--s-5);
 }
-.hero__title { margin: 0 0 var(--s-4); font-size: var(--t-3xl); }
+
+/* تیتر، کانون بصری است: بزرگ‌تر، فشرده‌تر، با شکستِ متوازن. */
+.hero__title {
+  margin: 0 0 var(--s-4);
+  font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3rem);
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
 .hero__lede {
-  margin: 0 0 var(--s-5);
-  max-width: 52ch;
-  color: #d3dfea;
-  font-size: var(--t-lg);
+  margin: 0 0 var(--s-6);
+  max-width: 48ch;
+  color: var(--c-ink-2);
+  font-size: var(--t-md);
+  line-height: 1.9;
 }
 .hero__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
+/* دکمه‌های هیرو کمی درشت‌تر از دکمهٔ معمولی — وزنِ یک فراخوان اصلی. */
+.hero__actions .btn { padding: 0.72rem 1.5rem; }
 
 /* کارت جست‌وجوی سمتِ دیگرِ هیرو: مسیر اصلیِ پیدا کردن قطعه. */
 .hero__panel {
+  position: relative;
   background: var(--c-surface);
   color: var(--c-ink);
   border-radius: var(--r-lg);
-  padding: var(--s-5);
-  box-shadow: var(--sh-md);
+  padding: var(--s-6) var(--s-5) var(--s-5);
+  /* سایهٔ عمیق‌تر + یک خط نازک روشن: کارت روی زمینهٔ تیره «شناور» شود. */
+  border: 1px solid var(--c-line);
+}
+/* نوار تأکید بالای کارت — همان رنگ تأکیدِ خط تیتر، برای پیوند بصری. */
+.hero__panel::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: var(--s-5);
+  height: 3px;
+  border-radius: 0 0 var(--r-sm) var(--r-sm);
+  background: var(--c-accent);
 }
 .hero__panel-title { margin: 0 0 var(--s-2); font-size: var(--t-lg); }
 .hero__panel-text { margin: 0 0 var(--s-4); color: var(--c-ink-2); font-size: var(--t-sm); }
@@ -548,7 +708,7 @@ a:hover { color: var(--c-brand-strong); }
   flex-wrap: wrap;
 }
 .cta-band__title { margin: 0 0 var(--s-2); font-size: var(--t-xl); }
-.cta-band__text { margin: 0; color: #d3dfea; max-width: 60ch; }
+.cta-band__text { margin: 0; color: var(--c-ink-2); max-width: 60ch; }
 
 /* ═══════════════════════════════════════════ ۸. فهرست کاتالوگ ═══ */
 
@@ -679,7 +839,7 @@ a:hover { color: var(--c-brand-strong); }
   overflow: hidden;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.product-card:hover { border-color: var(--c-line-strong); box-shadow: var(--sh-sm); }
+.product-card:hover { border-color: var(--c-line-strong); background: var(--c-surface); }
 .product-card:focus-within { border-color: var(--c-brand); }
 
 .product-card__link {
@@ -716,17 +876,69 @@ a:hover { color: var(--c-brand-strong); }
   overflow: hidden;
 }
 .product-card__oem { margin: 0; font-size: var(--t-xs); color: var(--c-ink-3); }
+/* قیمت و موجودی همیشه زیر هم، نه کنار هم.
+
+   شکل قبلی «flex + space-between + flex-wrap: wrap» بود و همین ناهماهنگی
+   را می‌ساخت: رشتهٔ قیمت بین ۲۹ تا ۳۳ نویسه طول دارد («۱٬۶۶۰٬۰۰۰ تومان»
+   در برابر «۱۳۰٬۰۰۰٬۰۰۰ تومان»)، پس روی قیمت‌های کوتاه هر دو در یک خط
+   جا می‌شدند و روی قیمت‌های بلند، موجودی به خط دوم می‌پرید. نتیجه:
+   چیدمانِ کارت به طول عدد وابسته بود.
+
+   ستون، این وابستگی را کامل حذف می‌کند: قیمت خط اول، موجودی خط دوم،
+   روی هر ۴۰ محصول یکسان.
+
+   align-items: flex-start روی محور عرضی است و منطقی عمل می‌کند، پس در
+   RTL خودبه‌خود به لبهٔ راست می‌چسبد — بدون left/right سخت‌کد. */
 .product-card__foot {
   margin-top: auto;
   padding-top: var(--s-3);
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--s-2);
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-1);
 }
 
 /* جای تصویر — SVG درون‌خط است، نه فایل بیرونی. */
+/* --- جای تصویر محصول ---------------------------------------------------
+   SVG مربع که دقیقا همان جعبهٔ تصویر واقعی را پر می‌کند. همه‌چیز داخل
+   viewBox است، پس با اندازهٔ کارت مقیاس می‌شود و در موبایل هم خوانا
+   می‌ماند — بدون container query و بدون جاوااسکریپت.
+   رنگ‌ها از همین توکن‌ها می‌آیند تا با پوسته یکی بماند. */
+.ph {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ph__bg   { fill: var(--c-surface-2); }
+/* نشان برند: تزئینی و کم‌رنگ، نه ادعای تصویر محصول. */
+.ph__mark { fill: var(--c-brand); opacity: 0.07; }
+.ph__icon {
+  fill: none;
+  stroke: var(--c-ink-3);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ph__title {
+  fill: var(--c-ink-2);
+  font-family: var(--font);
+  font-size: 27px;
+  font-weight: 700;
+}
+.ph__label {
+  fill: var(--c-ink-3);
+  font-family: var(--font);
+  font-size: 19px;
+}
+.ph__brand {
+  fill: var(--c-line-strong);
+  font-family: var(--font);
+  font-size: 16px;
+  letter-spacing: 1.5px;
+}
+
+/* نسخهٔ قدیمی نگه داشته می‌شود: صفحهٔ محصول هنوز از این پوشش استفاده
+   می‌کند تا نسبت ابعاد مربع تضمین شود. */
 .media-placeholder {
   width: 100%;
   height: 100%;
@@ -735,11 +947,19 @@ a:hover { color: var(--c-brand-strong); }
   background: var(--c-surface-2);
   color: var(--c-line-strong);
 }
-.media-placeholder svg { width: 38%; height: auto; max-width: 96px; }
 
 .price { display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap; }
-.price__now { font-size: var(--t-md); font-weight: 700; color: var(--c-ink); }
+/* قیمت، «عدد بزرگِ» این رابط است — همان جایی که پوسته
+   Lavender Phosphor را مجاز می‌داند. وزن ۵۰۰، نه بولد. */
+.price__now {
+  font-size: var(--t-md);
+  font-weight: 500;
+  color: var(--c-accent);
+  letter-spacing: -0.01em;
+}
 .price__old { font-size: var(--t-xs); color: var(--c-ink-3); }
+/* برچسب «قیمت:» — هم‌وزن برچسب موجودی، تا دو خط یک ریتم داشته باشند. */
+.price__label { font-size: var(--t-xs); font-weight: 600; color: var(--c-ink-3); }
 
 .badge {
   position: absolute;
@@ -748,11 +968,16 @@ a:hover { color: var(--c-brand-strong); }
   padding: 0.15rem 0.5rem;
   border-radius: var(--r-sm);
   font-size: var(--t-xs);
-  font-weight: 600;
-  color: #fff;
+  font-weight: 500;
+  /* پوسته صریح است: روی صورتیِ روشن، متن تیره — نه روشن. */
+  color: var(--c-on-aurora);
 }
-.badge--sale { background: var(--c-accent); }
-.badge--new { background: var(--c-brand); }
+/* دو نشان، دو زمینه، دو رنگ متن:
+     sale روی Lavender Phosphor روشن → متن تیره
+     new  روی Liquid Kelp تیره      → متن روشن */
+.badge--sale { background: var(--c-accent); color: var(--c-on-aurora); }
+.badge--new  { background: var(--c-surface); color: var(--c-ink);
+               border: 1px solid var(--c-line); }
 
 .stock { font-size: var(--t-xs); font-weight: 600; }
 .stock--in { color: var(--c-ok); }
@@ -784,6 +1009,8 @@ a:hover { color: var(--c-brand-strong); }
 .product-detail__placeholder {
   aspect-ratio: 1 / 1;
   border-radius: var(--r-sm);
+  /* تا زمینهٔ SVG از گوشهٔ گرد بیرون نزند. */
+  overflow: hidden;
 }
 .thumb-list {
   list-style: none;
@@ -817,7 +1044,8 @@ a:hover { color: var(--c-brand-strong); }
   margin-bottom: var(--s-5);
 }
 .buy-card__price { display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
-.buy-card__price .price__now { font-size: var(--t-2xl); }
+/* روی صفحهٔ محصول، قیمت به اندازهٔ یک statistic بزرگ می‌شود. */
+.buy-card__price .price__now { font-size: var(--t-3xl); line-height: 1; }
 .buy-card__price .badge { position: static; }
 .buy-card__row {
   display: flex;
@@ -966,6 +1194,8 @@ a:hover { color: var(--c-brand-strong); }
 
 @media (max-width: 900px) {
   .hero__inner { grid-template-columns: 1fr; gap: var(--s-6); padding-block: var(--s-6); }
+  /* در یک ستون، خط تأکید فاصلهٔ کمتری می‌خواهد تا متن به لبه نچسبد. */
+  .hero__copy { padding-inline-start: var(--s-4); }
   .listing { grid-template-columns: 1fr; }
   .listing-sidebar { position: static; }
   .product-detail { grid-template-columns: 1fr; }
@@ -1133,9 +1363,9 @@ a:hover { color: var(--c-brand-strong); }
   background: var(--c-warn-soft); color: var(--c-warn); border: 1px solid var(--c-warn-line);
   border-radius: var(--radius); padding: 0.4rem 0.9rem; font: inherit; cursor: pointer;
 }
-.btn--warn:hover { background: #fbf0d4; }
+.btn--warn:hover { background: var(--c-warn-soft); }
 .btn--danger {
-  background: var(--c-err); color: #fff; border: 1px solid var(--c-err);
+  background: var(--c-err); color: var(--c-bg); border: 1px solid var(--c-err);
   border-radius: var(--radius); padding: 0.45rem 1rem; font: inherit; cursor: pointer;
 }
 .btn--danger:hover { filter: brightness(1.1); }
@@ -1157,7 +1387,7 @@ a:hover { color: var(--c-brand-strong); }
 .field__req { color: var(--c-err); }
 .field__hint { margin: 0; font-size: 0.78rem; color: var(--muted); }
 .field__error { margin: 0; font-size: 0.8rem; color: var(--c-err); }
-.field--invalid .field__input { border-color: #c98a7c; }
+.field--invalid .field__input { border-color: var(--c-err); }
 .field__input--area { resize: vertical; line-height: 1.7; }
 
 /* انتخاب چندگزینه‌ای — ارتفاع ثابت تا فهرست بلند، فرم را نکشد. */

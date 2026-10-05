@@ -48,6 +48,8 @@
           {% endif %}
         {% else %}
           <div class="product-detail__placeholder">
+            {# برچسب فقط از دادهٔ موجودِ محصول: نام دسته. #}
+            {% set phLabel = product.category_name %}
             {% include "partials/media-placeholder.njk" %}
           </div>
           <p class="note">تصویر این محصول هنوز بارگذاری نشده است.</p>
@@ -87,7 +89,9 @@
           <div class="buy-card__row">
             {# قطعه‌ای که هنوز دادهٔ تجاری ندارد، هیچ وضعیتی اعلام نمی‌کند:
                نه «موجود»، نه «قابل سفارش» — چون هیچ‌کدام تأیید نشده است. #}
-            {% if not product.price_toman %}
+            {% if product.stock_qty > 0 %}
+              <span class="availability availability--in">موجودی: <span class="num">{{ product.stock_qty | faDigits }}</span> عدد</span>
+            {% elif not product.price_toman %}
               <span class="availability availability--order">استعلام موجودی</span>
             {% elif product.availability == 'in_stock' %}
               <span class="availability availability--in">موجود</span>
@@ -137,7 +141,8 @@
           <div class="spec-table__row">
             <dt>وضعیت</dt>
             <dd>
-              {% if not product.price_toman %}استعلام موجودی
+              {% if product.stock_qty > 0 %}<span class="num">{{ product.stock_qty | faDigits }}</span> عدد موجود
+              {% elif not product.price_toman %}استعلام موجودی
               {% elif product.availability == 'in_stock' %}موجود
               {% elif product.availability == 'on_order' %}قابل سفارش
               {% elif product.availability == 'discontinued' %}تولید متوقف شده
