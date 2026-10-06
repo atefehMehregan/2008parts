@@ -333,12 +333,17 @@ a:hover { color: var(--c-ink); }
   color: inherit;
   flex-shrink: 0;
 }
-/* نشان برند. دقیقا همان جعبهٔ ۴۲ پیکسلیِ نشانِ متنیِ قبلی را اشغال
-   می‌کند، پس تعادل هدر و فاصله‌ها هیچ تغییری نمی‌کنند. */
+/* نشان برند — تصویر واقعی.
+   ۴۸ پیکسل، نه بیشتر: نوار هدر min-height:72px دارد و padding عمودی‌اش
+   ۲×۱۲ پیکسل است، پس ۴۸ دقیقا تمام فضای موجود است و ارتفاع هدر هیچ
+   تغییری نمی‌کند. بزرگ‌تر از این، هدر را بلندتر می‌کرد.
+   گوشهٔ گرد لازم است: این PNG زمینهٔ مات خودش را دارد و بدون گردی مثل
+   یک مستطیلِ چسبانده‌شده دیده می‌شود، نه یک نشان. */
 .brand__mark {
   display: block;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
+  border-radius: 9px;
   flex-shrink: 0;
 }
 .brand__text { display: flex; flex-direction: column; line-height: 1.3; }
@@ -553,7 +558,11 @@ a:hover { color: var(--c-ink); }
 }
 .site-footer__text { margin: 0 0 var(--s-3); max-width: 46ch; line-height: 1.9; }
 .site-footer__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
-.site-footer__brand .brand__mark { margin-bottom: var(--s-3); }
+/* در فوتر کوچک‌تر: نشان آنجا نقش ثانویه دارد و نباید با هدر هم‌وزن باشد. */
+.site-footer__brand .brand__mark {
+  width: 40px; height: 40px; border-radius: 7px;
+  margin-bottom: var(--s-3);
+}
 .site-footer__brand .brand__name { color: var(--c-ink); }
 .site-footer__brand .brand__latin { color: var(--c-ink-3); }
 .site-footer__note { margin: 0; color: var(--c-ink-3); font-size: var(--t-xs); }

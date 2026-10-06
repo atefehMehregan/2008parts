@@ -10,8 +10,10 @@
     <title>{{ title }} | {{ storeName }}</title>
     {# نشان برند. SVG برای مرورگرهای امروزی، و PNG مات برای آیکون iOS —
        iOS آیکون شفاف را روی زمینهٔ سیاه می‌نشاند. #}
-    <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+    {# آیکون‌ها از خودِ نشان واقعی ساخته شده‌اند (۳۲ و ۱۸۰ پیکسل).
+       فایل‌های جانشین قبلی پاک نشده‌اند، فقط دیگر پیوند نمی‌شوند. #}
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/brand/2008parts-icon-32.png" />
+    <link rel="apple-touch-icon" href="/img/brand/2008parts-icon-180.png" />
     <link rel="stylesheet" href="/css/base.css" />
     {# پوستهٔ آبی یک لایهٔ روی base.css است و فقط تفاوت رنگ را دارد، پس
        باید *بعد* از آن بیاید. با THEME=auros هیچ درخواست اضافی نمی‌رود. #}
