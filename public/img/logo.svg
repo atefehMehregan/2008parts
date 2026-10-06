@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" role="img" aria-label="parts2008">
-  <title>parts2008</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" role="img" aria-label="2008parts">
+  <title>2008parts</title>
   <!-- ============================================================
        هشدار آگاهانه: این فایل «وردمارک برداری نهایی» نیست.
 
@@ -12,7 +12,7 @@
 
        نشانِ برداریِ سمت راست به فونت وابسته نیست و شکل قطعیِ برند است.
 
-       نام برند یک شکل دارد و فقط همین: parts2008. پیش از این دو خط بود
+       نام برند یک شکل دارد و فقط همین: 2008parts. پیش از این دو خط بود
        (نام فارسی بزرگ + نام لاتین کوچک) و همان ساختار دو ادعای برندی
        می‌ساخت. اکنون یک خط است، هم‌راستا با res.locals.storeName.
        direction="rtl" برداشته شد چون متن لاتین است و با آن جابه‌جا
@@ -21,7 +21,7 @@
        ============================================================ -->
   <text x="204" y="41" text-anchor="end"
         font-family="system-ui, 'Segoe UI', Tahoma, sans-serif"
-        font-size="25" font-weight="700" fill="#123a5e">parts2008</text>
+        font-size="25" font-weight="700" fill="#123a5e">2008parts</text>
 
   <g transform="translate(216,0)">
     <path fill="#123a5e" fill-rule="evenodd" d="

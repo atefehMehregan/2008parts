@@ -45,8 +45,14 @@
       {# نشان برند. تزئینی است و نام فروشگاه بلافاصله بعدش می‌آید، پس از
          دید صفحه‌خوان پنهان می‌ماند و alt خالی دارد.
          width/height صریح‌اند تا پیش از بار شدن تصویر، چیدمان نپرد. #}
-      <img class="brand__mark" src="/img/logo-mark.svg" alt="" aria-hidden="true"
-           width="42" height="42" />
+      {# نشان باید با زمینهٔ هدرِ همان پوسته بخواند، و دو پوسته دو زمینهٔ
+         متفاوت دارند:
+           پیش‌فرض (سرمه‌ای): هدر گرادیان تیره است → نشانِ سفید (۱۷٫۴۸)
+           روشن:              هدر #f5f9fd است      → نشانِ آبی  (۱۱٫۴۶)
+         پیش از این هر دو نسخهٔ آبی را می‌گرفتند و روی هدر تیره نسبتش
+         ۱٫۴۹ بود — عملا نامرئی. #}
+      <img class="brand__mark" alt="" aria-hidden="true" width="42" height="42"
+           src="{% if theme == 'blue' %}/img/logo-mark.svg{% else %}/img/logo-mark-white.svg{% endif %}" />
       <span class="brand__text">
         <span class="brand__name">{{ storeName }}</span>
         <span class="brand__latin">{{ storeNameLatin }}</span>

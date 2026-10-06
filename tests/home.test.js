@@ -84,7 +84,7 @@ test('هدر، جست‌وجو و فوتر روی صفحهٔ اصلی هستند
 
 test('عنوان صفحه و توضیح متا برای فروشگاه تنظیم شده‌اند', async () => {
   const html = await homeHtml();
-  assert.match(html, /<title>قطعات یدکی پژو ۲۰۰۸ \| parts2008<\/title>/);
+  assert.match(html, /<title>قطعات یدکی پژو ۲۰۰۸ \| 2008parts<\/title>/);
   assert.match(html, /<meta name="description" content="[^"]*پژو ۲۰۰۸[^"]*"/);
 });
 

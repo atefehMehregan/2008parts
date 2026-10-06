@@ -39,9 +39,9 @@
   --c-brand-ink: #ffffff;
   --c-accent: #b4441f;
   --c-accent-soft: #fbeee9;
-  --c-ok: #15653f;
-  --c-ok-soft: #e8f4ed;
-  --c-ok-line: #bcdcc4;
+  --c-ok: #10507d;
+  --c-ok-soft: #e8f1f9;
+  --c-ok-line: #bcd4e6;
   --c-warn: #8a5a10;
   --c-warn-soft: #fdf7e8;
   --c-warn-line: #e8d7a8;
@@ -96,6 +96,17 @@ a:hover { color: var(--c-brand-strong); }
   color: var(--c-brand-strong);
 }
 .brand__name { font-weight: 700; font-size: var(--t-lg); }
+/* --- هدر و فوتر ------------------------------------------------------
+   پوستهٔ پیش‌فرض (سرمه‌ای) هدر و فوتر را با گرادیان نشان رنگ می‌کند.
+   در پوستهٔ روشن این کار جواب نمی‌دهد: متنِ تیرهٔ این پوسته روی گرادیان
+   سرمه‌ای نسبت ۱٫۰۲ تا ۲٫۸۵ می‌داد — نامرئی. پس هر دو به همان
+   سطح‌هایی برمی‌گردند که این پوسته برایشان طراحی شده بود:
+     هدر  سطحِ روشن  (#f5f9fd) با متن تیره
+     فوتر سطحِ تیرهٔ --c-ink (#14181d) با متن روشنِ پایین‌تر
+   گرادیان نشان یک قابلیتِ پوستهٔ تیره است، نه عمومی. */
+.site-header { background: var(--c-surface); }
+.site-footer { background: var(--c-ink); }
+
 .site-footer {
   margin-top: var(--s-8);
   background: var(--c-ink);
@@ -197,7 +208,7 @@ h1, h2, h3, h4 { letter-spacing: normal; }
 
 /* نشان‌ها: در پوستهٔ آبی هر دو زمینهٔ تیره دارند، پس متن سفید است و
    هیچ‌کدام کادر ندارند. */
-.badge--sale { color: #fff; }
+.badge--sale { color: #fff; }   /* base.css اکنون قرمزِ تیره می‌دهد؛ سفید درست است */
 .badge--new  { color: #fff; border: 0; }
 
 .buy-card__price .price__now { line-height: normal; }
