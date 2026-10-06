@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" width="320" height="64"
+     role="img" aria-label="2008parts.ir">
+  <title>2008parts.ir — watermark</title>
+  <!-- واترمارک متنی سایت.
+       لوح نیمه‌شفاف لازم است: پس‌زمینهٔ عکس‌های محصول سفید است و متنِ
+       تنها (چه روشن چه تیره) روی بخشی از عکس‌ها گم می‌شود. این لوح روی
+       هر زمینه‌ای خوانا می‌ماند و در عین حال محو است.
+       فونت وب بار نمی‌شود (CSP: fontSrc 'self')؛ همان پشتهٔ سیستمیِ
+       پروژه استفاده می‌شود. -->
+  <rect x="0" y="0" width="320" height="64" rx="12" fill="#0a1a2f" fill-opacity="0.58"/>
+  <text x="160" y="42" text-anchor="middle"
+        font-family="system-ui, 'Segoe UI', Tahoma, sans-serif"
+        font-size="30" font-weight="700" letter-spacing="0.5"
+        fill="#ffffff" fill-opacity="0.95">2008parts.ir</text>
+</svg>

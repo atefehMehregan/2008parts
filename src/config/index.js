@@ -169,7 +169,7 @@ export const config = {
   images: {
     watermarkEnabled: bool('WATERMARK_ENABLED', true),
     /* نشانِ برند که روی مشتق‌ها می‌نشیند. فایل پروژه است، نه ورودی کاربر. */
-    watermarkFile: process.env.WATERMARK_FILE || path.join(ROOT, 'public', 'img', 'logo-watermark.svg'),
+    watermarkFile: process.env.WATERMARK_FILE || path.join(ROOT, 'public', 'img', 'watermark-2008parts.svg'),
     /* اندازه‌های مشتق — مربع ۱:۱، چون قطعات نسبت ابعادی بسیار متفاوتی دارند. */
     sizes: [
       { name: 'thumb', width: 160 },
