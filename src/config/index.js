@@ -92,8 +92,14 @@ export const config = {
 
   /* کوکی نشست — پیاده‌سازی کامل نشست در فاز بعد. */
   cookie: {
-    sessionName: process.env.SESSION_COOKIE_NAME || 'pars_session',
-    csrfName: process.env.CSRF_COOKIE_NAME || 'pars_csrf',
+    /* نام کوکی‌ها با برند هم‌خوان شد: pars_* → 2008parts_*.
+       هزینهٔ این تغییر آگاهانه پذیرفته شد: مرورگرها کوکیِ قبلی را با نام
+       قدیمی نگه می‌دارند و سرور دیگر آن را نمی‌خواند، پس هر نشستِ باز
+       (از جمله نشست مدیر) یک بار باطل می‌شود و ورود دوباره لازم است.
+       رقمِ آغازین مشکلی ندارد: در RFC 6265 نامِ کوکی یک token است و
+       token رقم را در هر جایگاهی می‌پذیرد. */
+    sessionName: process.env.SESSION_COOKIE_NAME || '2008parts_session',
+    csrfName: process.env.CSRF_COOKIE_NAME || '2008parts_csrf',
     /* در تولید حتما Secure. SameSite=Lax چون فرانت و بک‌اند هم‌دامنه‌اند. */
     secure: isProd,
     sameSite: 'lax',
@@ -105,8 +111,8 @@ export const config = {
      کوتاه‌تر. SESSION_DAYS (۳۰ روز) برای حساب مشتری است و هرگز نباید
      ورود مدیر را اداره کند. */
   admin: {
-    cookieName: process.env.ADMIN_COOKIE_NAME || 'pars_admin_session',
-    csrfCookieName: process.env.ADMIN_CSRF_COOKIE_NAME || 'pars_admin_csrf',
+    cookieName: process.env.ADMIN_COOKIE_NAME || '2008parts_admin_session',
+    csrfCookieName: process.env.ADMIN_CSRF_COOKIE_NAME || '2008parts_admin_csrf',
     /* کوکی مدیر فقط زیر /admin فرستاده می‌شود، پس روی صفحه‌های عمومی
        کاتالوگ اصلا روی سیم نمی‌رود. */
     cookiePath: '/admin',

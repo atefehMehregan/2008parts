@@ -213,7 +213,7 @@ test('هدرهای امنیتی روی پاسخ‌ها هستند', async () => 
 test('کوکی CSRF ساخته می‌شود و برای اسکریپت خواندنی است', async () => {
   const res = await fetch(`${BASE}/`);
   const setCookie = res.headers.getSetCookie?.() || [];
-  const csrf = setCookie.find((c) => c.startsWith('pars_csrf='));
+  const csrf = setCookie.find((c) => c.startsWith('2008parts_csrf='));
   assert.ok(csrf, 'کوکی CSRF باید ست شود');
   assert.ok(!/HttpOnly/i.test(csrf), 'کوکی CSRF نباید HttpOnly باشد');
 });
