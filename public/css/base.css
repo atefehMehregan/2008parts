@@ -922,9 +922,11 @@ a:hover { color: var(--c-ink); }
   color: inherit;
   text-decoration: none;
 }
+/* قاب تصویر کارت ۳:۴ است، هم‌اندازهٔ بومِ مشتق‌ها در config.images.sizes.
+   اگر این دو از هم جدا بیفتند، تصویر داخل قاب حاشیهٔ اضافه می‌گیرد. */
 .product-card__media {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   background: var(--c-surface-2);
 }
 .product-card__media img { width: 100%; height: 100%; object-fit: contain; display: block; }

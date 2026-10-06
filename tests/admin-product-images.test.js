@@ -303,15 +303,18 @@ test('آپلود از پنل هیچ ادعای حقوقی نمی‌کند — no
   assert.equal(row.approved_by, null);
 });
 
-test('مشتق‌ها مربع و در اندازهٔ اعلام‌شده‌اند', async () => {
+test('مشتق‌ها در ابعاد اعلام‌شدهٔ ۳:۴ ساخته می‌شوند', async () => {
   const jar = await login();
   await upload(jar, productId, [{ buffer: await jpeg(1200, 400) }]);
   const [img] = await repo.listForProduct(productId);
 
-  for (const [name, size] of [['thumb', 160], ['card', 400], ['detail', 800], ['zoom', 1600]]) {
+  /* بوم دیگر مربع نیست؛ ۳:۴ است. قرارداد عوض شده، نه سست‌تر: هر دو
+     بُعد هنوز دقیق بررسی می‌شوند. دلیلش کنار sizes در config/index.js. */
+  for (const [name, size, h] of [['thumb', 160, 213], ['card', 400, 533],
+    ['detail', 800, 1067], ['zoom', 1600, 2133]]) {
     const meta = await sharp(path.join(imageDir(img.image_id), `${name}.webp`)).metadata();
     assert.equal(meta.width, size, `${name} عرض`);
-    assert.equal(meta.height, size, `${name} ارتفاع — بوم مربع، حتی برای ورودی کشیده`);
+    assert.equal(meta.height, h, `${name} ارتفاع — بوم ۳:۴، حتی برای ورودی کشیده`);
   }
 });
 

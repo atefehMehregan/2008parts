@@ -105,10 +105,10 @@ export async function inspectUploadedImage(buffer) {
  * قطعات نسبت ابعادی بسیار متفاوتی دارند (پیچ در برابر سپر)، پس همه روی
  * بوم مربع با حاشیه یکسان می‌نشینند تا شبکه محصولات منظم بماند.
  */
-async function renderSize(buffer, width, { watermark } = {}) {
+async function renderSize(buffer, width, height, { watermark } = {}) {
   let pipeline = sharp(buffer, inputOptions())
     .rotate()                       // اعمال جهت EXIF پیش از حذف فراداده
-    .resize(width, width, {
+    .resize(width, height, {
       fit: 'contain',
       background: { r: 255, g: 255, b: 255, alpha: 1 },
       withoutEnlargement: true,
@@ -153,9 +153,9 @@ export async function processProductImage(buffer, { watermark = null, storage = 
       mark = await sharp(watermark).resize({ width: markWidth }).png().toBuffer();
     }
 
-    const webp = await (await renderSize(buffer, size.width, { watermark: mark }))
+    const webp = await (await renderSize(buffer, size.width, size.height, { watermark: mark }))
       .webp({ quality: config.images.webpQuality }).toBuffer();
-    const jpeg = await (await renderSize(buffer, size.width, { watermark: mark }))
+    const jpeg = await (await renderSize(buffer, size.width, size.height, { watermark: mark }))
       .jpeg({ quality: config.images.jpegQuality, mozjpeg: true }).toBuffer();
 
     await storage.putDerivative(id, size.name, 'webp', webp);
