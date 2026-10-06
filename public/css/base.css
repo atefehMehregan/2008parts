@@ -26,6 +26,46 @@
 
 /* ═══════════════════════════════════════════════════════ ۱. توکن‌ها ═══ */
 
+/* ═══════════════════════════════════════════ فونت وزیرمتن ═══ */
+
+/* وزیرمتن، میزبانی‌شده در خودِ پروژه — نه از CDN.
+   دلیل فنی: CSP پروژه fontSrc: 'self' است، پس فونت از دامنهٔ دیگر
+   (مثلا Google Fonts) بی‌صدا بلاک می‌شود و چیزی هم در صفحه دیده
+   نمی‌شود که بفهمی چرا. فایل‌ها در public/fonts/ هستند و از همان
+   دامنه سرو می‌شوند.
+   پروانه: SIL OFL 1.1 — متن کامل در public/fonts/OFL.txt کنار خودِ
+   فونت نگه داشته شده، چون پروانه باید همراه فونت توزیع شود.
+   font-display: swap — متن بلافاصله با فونت جانشین دیده می‌شود و
+   وقتی وزیرمتن رسید جایگزین می‌شود؛ صفحه هیچ‌وقت خالی نمی‌ماند. */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* ===================================================================
      پوستهٔ «۲۰۰۸پارتس» — آبیِ نشان تجاری
@@ -138,11 +178,13 @@
 
   --container: 1440px;
 
-  /* Matter در دسترس نیست و پروژه عمدا هیچ فونت وبی بار نمی‌کند
-     (CSP هم fontSrc: 'self' است). جانشین‌های پیشنهادیِ خودِ راهنما
-     اول می‌آیند و اگر نبودند، به پشتهٔ سیستم می‌افتد. */
-  --font: 'Matter', 'Inter', 'DM Sans', 'Satoshi',
-          system-ui, 'Segoe UI', Tahoma, 'Iranian Sans', sans-serif;
+  /* وزیرمتن، میزبانی‌شده در خودِ پروژه (بالای همین فایل، @font-face).
+     پیش از این پروژه عمدا هیچ فونت وبی بار نمی‌کرد و روی پشتهٔ سیستم
+     تکیه داشت؛ اکنون فونت از public/fonts/ و از همان دامنه می‌آید، پس
+     با CSP (fontSrc: 'self') سازگار است و به CDN بیرونی وابسته نیست.
+     جانشین‌ها می‌مانند تا اگر فونت نرسید، متن فارسی همچنان درست
+     نمایش داده شود. */
+  --font: 'Vazirmatn', system-ui, 'Segoe UI', Tahoma, 'Iranian Sans', sans-serif;
 
   /* ---------------------------------------------------------------------
      نام‌های قدیمی. بخش مدیر (فاز ۲ و ۳) با این‌ها نوشته شده و بازنویسی
@@ -181,7 +223,12 @@ body {
 }
 
 /* تیترها فشرده — کنتراست ۱٫۲ تیتر در برابر ۱٫۷ بدنه، ریتم تایپی پوسته. */
-h1, h2, h3, h4 { line-height: 1.2; text-wrap: balance; letter-spacing: -0.02em; }
+h1, h2, h3, h4 {
+  /* وزن صریح: با فونت سفارشی، تکیه بر پیش‌فرضِ مرورگر یعنی ممکن است
+     مرورگر به‌جای فیسِ Bold واقعی، یک بولدِ جعلی بسازد. */
+  font-weight: 700;
+  line-height: 1.2; text-wrap: balance; letter-spacing: -0.02em;
+}
 
 img { max-width: 100%; }
 
@@ -522,7 +569,7 @@ a:hover { color: var(--c-ink); }
   border-radius: var(--r-md);
   color: var(--c-ink-2);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;   /* ناوبری: ۵۰۰ */
   font-size: var(--t-sm);
 }
 .site-nav__link:hover { color: var(--c-brand); background: var(--c-brand-soft); }
@@ -629,7 +676,7 @@ a:hover { color: var(--c-ink); }
   margin: 0 0 var(--s-4);
   font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3rem);
   line-height: 1.35;
-  font-weight: 800;
+  font-weight: 700;   /* ۸۰۰ وجود ندارد؛ مرورگر جعلش می‌کرد */
   letter-spacing: -0.01em;
   text-wrap: balance;
 }
@@ -1029,7 +1076,7 @@ a:hover { color: var(--c-ink); }
    قرمز می‌سازد. قرمز فقط برای نشانِ «حراج» می‌ماند. */
 .price__now {
   font-size: var(--t-md);
-  font-weight: 500;
+  font-weight: 700;      /* قیمت، عددِ کلیدیِ کارت */
   color: var(--c-ink);
   letter-spacing: -0.01em;
 }
