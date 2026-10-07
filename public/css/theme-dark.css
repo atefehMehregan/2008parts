@@ -90,3 +90,23 @@ a:hover { color: var(--c-ink); }
 
 .product-card:hover { border-color: var(--c-line-strong); background: var(--c-surface); box-shadow: none; }
 .badge--new { background: var(--c-surface); color: var(--c-ink); border: 1px solid var(--c-line); }
+
+/* کاشی نشان برندها در پوستهٔ تیره سفید می‌ماند.
+
+   ⚠️ این سلیقه نیست: پنج نشان از هفت‌تا هنری تیره دارند — بوش ۴۰،
+   دپو ۵۱، موپار ۵۴، یوروریپار ۷۷ و توتال ۸۸ از ۲۵۵ روشنایی میانگین.
+   روی سطح سرمه‌ایِ این پوسته (#12304d) عملا ناپدید می‌شدند.
+
+   راه درست، سفید نگه داشتن خودِ کاشی است، نه دست بردن در هنرِ نشان:
+   آرم برند را نباید روشن یا وارونه کرد. همان الگوی «کارت نشان» که
+   سایت‌های قطعات روی زمینهٔ تیره به کار می‌برند. */
+.brand-logo {
+  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.brand-logo:hover {
+  background: #ffffff;
+  border-color: var(--c-brand);
+}
+/* کاشیِ جانشینِ نام هم باید روی سفید خوانده شود، نه روی سرمه‌ای. */
+.brand-logo__wordmark { background: #eef1f5; color: #46556a; }
