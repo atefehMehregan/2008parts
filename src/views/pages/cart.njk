@@ -1,0 +1,171 @@
+{% extends "layouts/base.njk" %}
+
+{# ============================================================================
+   سبد خرید.
+
+   ⚠️ هیچ قیمتی در فرم‌های این صفحه نیست. فرم‌ها فقط کد کالا و تعداد
+   می‌فرستند؛ قیمت در هر رندر از پایگاه داده خوانده می‌شود. اگر روزی
+   کسی وسوسه شد قیمت را در input پنهان بگذارد تا یک کوئری کمتر بزند،
+   همان‌جا دروازهٔ دست‌کاری قیمت باز می‌شود.
+
+   اینجا درگاه پرداخت نیست و نباید باشد. سبد فقط انتخاب مشتری را جمع
+   می‌کند و او را به تماس با فروشنده می‌رساند.
+   ========================================================================= #}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    {% set crumbs = [
+      { label: 'خانه', url: '/' },
+      { label: 'سبد خرید' }
+    ] %}
+    {% include "partials/breadcrumb.njk" %}
+
+    <h1 class="page-title">سبد خرید</h1>
+
+    {% if dropped.length %}
+      <div class="notice notice--quiet">
+        <p>
+          <span class="num">{{ dropped.length | faDigits }}</span>
+          قلم از سبد برداشته شد، چون دیگر در کاتالوگ موجود نیست.
+        </p>
+      </div>
+    {% endif %}
+
+    {% if isEmpty %}
+      {% set emptyTitle = 'سبد خرید خالی است' %}
+      {% set emptyText = 'هنوز قطعه‌ای به سبد اضافه نکرده‌اید.' %}
+      {% set emptyActionUrl = '/products' %}
+      {% set emptyActionLabel = 'دیدن همهٔ قطعات' %}
+      {% include "partials/empty-state.njk" %}
+    {% else %}
+
+      <div class="cart">
+        <div class="cart__items">
+          {% for l in lines %}
+            <article class="cart-line">
+              <a class="cart-line__media" href="/product/{{ l.slug | urlencode }}">
+                {% if l.imageId %}
+                  <picture>
+                    <source type="image/webp" srcset="/media/products/{{ l.imageId }}/thumb.webp" />
+                    <img src="/media/products/{{ l.imageId }}/thumb.jpg"
+                         alt="{{ l.name }}" width="160" height="213" loading="lazy" />
+                  </picture>
+                {% else %}
+                  {% set phLabel = '' %}
+                  {% include "partials/media-placeholder.njk" %}
+                {% endif %}
+              </a>
+
+              <div class="cart-line__body">
+                {% if l.brandName %}<p class="cart-line__brand">{{ l.brandName }}</p>{% endif %}
+                <h2 class="cart-line__name">
+                  <a href="/product/{{ l.slug | urlencode }}">{{ l.name }}</a>
+                </h2>
+                <p class="cart-line__sku">کد کالا: <bdi class="part-number">{{ l.sku }}</bdi></p>
+
+                {% if l.hasPrice %}
+                  <p class="cart-line__unit">
+                    قیمت واحد: <span class="num">{{ l.unitPrice | toman }}</span>
+                  </p>
+                {% else %}
+                  <p class="cart-line__unit cart-line__unit--ask">استعلام قیمت</p>
+                {% endif %}
+
+                {% if l.clamped %}
+                  <p class="cart-line__warn">
+                    موجودی این قطعه
+                    <span class="num">{{ l.stockQty | faDigits }}</span>
+                    عدد است، پس تعداد به همین عدد کاهش یافت.
+                  </p>
+                {% endif %}
+              </div>
+
+              <div class="cart-line__controls">
+                {# تغییر تعداد. فرم GET نیست چون وضعیت را عوض می‌کند. #}
+                <form class="cart-qty" action="/cart/update" method="post">
+                  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                  <input type="hidden" name="sku" value="{{ l.sku }}" />
+                  <label class="sr-only" for="qty-{{ l.sku }}">تعداد {{ l.name }}</label>
+                  {# dir=ltr روی خودِ عدد: ورودی عددی در متن راست‌به‌چپ
+                     وگرنه مکان‌نما را جابه‌جا نشان می‌دهد. #}
+                  <input class="cart-qty__input num" id="qty-{{ l.sku }}" name="qty"
+                         type="number" inputmode="numeric" dir="ltr"
+                         value="{{ l.qty }}" min="0" max="99" step="1" />
+                  <button class="btn btn--ghost btn--sm" type="submit">به‌روزرسانی</button>
+                </form>
+
+                <form action="/cart/remove" method="post">
+                  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                  <input type="hidden" name="sku" value="{{ l.sku }}" />
+                  <button class="cart-line__remove" type="submit"
+                          aria-label="حذف {{ l.name }} از سبد">حذف</button>
+                </form>
+
+                {% if l.lineTotal %}
+                  <p class="cart-line__total">
+                    <span class="sr-only">جمع این قلم:</span>
+                    <strong class="num">{{ l.lineTotal | toman }}</strong>
+                  </p>
+                {% endif %}
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <aside class="cart-summary" aria-label="جمع سبد">
+          <h2 class="cart-summary__title">جمع سبد</h2>
+
+          <dl class="cart-summary__rows">
+            <div>
+              <dt>تعداد اقلام</dt>
+              <dd><span class="num">{{ itemCount | faDigits }}</span></dd>
+            </div>
+            <div class="cart-summary__total">
+              <dt>جمع کل</dt>
+              <dd><strong class="num">{{ total | toman }}</strong></dd>
+            </div>
+          </dl>
+
+          {% set hasUnpriced = false %}
+          {% for l in lines %}{% if not l.hasPrice %}{% set hasUnpriced = true %}{% endif %}{% endfor %}
+          {% if hasUnpriced %}
+            <p class="cart-summary__note">
+              قیمت بعضی اقلام هنوز ثبت نشده و در جمع کل نیامده است؛ آن‌ها را
+              هنگام تماس استعلام کنید.
+            </p>
+          {% endif %}
+
+          {# ⚠️ این دکمه پرداخت نیست و نباید شبیه پرداخت به نظر برسد.
+             ثبت سفارش آنلاین روی این سایت وجود ندارد؛ سفارش با تماس
+             نهایی می‌شود. #}
+          <div class="cart-summary__contact">
+            <p class="cart-summary__lead">برای ثبت سفارش با فروشنده تماس بگیرید.</p>
+
+            <a class="btn btn--block cart-summary__call"
+               href="tel:{{ seller.mobileTel }}"
+               aria-label="تماس با فروشنده برای ثبت سفارش">
+              تماس برای ثبت سفارش
+              <bdi class="num cart-summary__number">{{ seller.mobile }}</bdi>
+            </a>
+
+            <a class="btn btn--ghost btn--block"
+               href="https://wa.me/{{ seller.whatsapp }}"
+               target="_blank" rel="noopener noreferrer"
+               aria-label="ارسال سبد خرید در واتساپ">
+              ارسال سفارش در واتساپ
+            </a>
+
+            <p class="cart-summary__note">
+              تلفن ثابت:
+              <a href="tel:{{ seller.phoneTel }}"><bdi class="num">{{ seller.phone }}</bdi></a>
+            </p>
+          </div>
+
+          <a class="cart-summary__back" href="/products">ادامهٔ خرید</a>
+        </aside>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

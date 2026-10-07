@@ -207,6 +207,29 @@ export function createProductRepository(db) {
   }
 
   /** همهٔ تصویرهای یک محصول، به ترتیب نمایش. */
+  /**
+   * چند محصول با کد کالا — منبعِ معتبرِ قیمت برای سبد خرید.
+   *
+   * ⚠️ سبد هرگز قیمت را از مرورگر نمی‌گیرد. کوکی فقط کد کالا و تعداد
+   *    دارد؛ قیمت همیشه از همین‌جا خوانده می‌شود.
+   *
+   * فقط محصول فعال در دستهٔ فعال برمی‌گردد، پس کالایی که از ویترین
+   * برداشته شده خودبه‌خود از سبد می‌افتد.
+   *
+   * کوئری پارامتری است (= ANY($1)) و ورودی هرچه باشد به‌عنوان داده
+   * فرستاده می‌شود، نه به‌عنوان SQL.
+   */
+  async function findManyBySkus(skus) {
+    const list = [...new Set((skus || []).filter((s) => typeof s === 'string' && s))];
+    if (list.length === 0) return [];
+    const res = await db.query(
+      `SELECT ${PRODUCT_COLUMNS} ${FROM_JOINS}
+       WHERE p.sku = ANY($1) AND p.is_active = TRUE AND c.is_active = TRUE`,
+      [list]
+    );
+    return res.rows;
+  }
+
   async function imagesFor(productId) {
     const res = await db.query(
       `SELECT id, image_id, alt_text, width, height, is_primary, sort_order
@@ -622,7 +645,7 @@ export function createProductRepository(db) {
   }
 
   return {
-    list, findBySlug, imagesFor, vehiclesFor, vehicleIdsFor, search,
+    list, findBySlug, findManyBySkus, imagesFor, vehiclesFor, vehicleIdsFor, search,
     adminList, findById, create, update, remove, setActive, adjustStock,
     setVehicles, refreshSearchTextForBrand,
   };

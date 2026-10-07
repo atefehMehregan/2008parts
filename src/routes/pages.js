@@ -9,6 +9,8 @@
 import express from 'express';
 import { createHomeController } from '../controllers/homeController.js';
 import { createPageController } from '../controllers/pageController.js';
+import { createCartController } from '../controllers/cartController.js';
+import { requireCsrf } from '../middleware/security.js';
 
 export function createPageRouter(repositories) {
   const router = express.Router();
@@ -22,6 +24,15 @@ export function createPageRouter(repositories) {
      برای نگه‌داشتنش. پیوند به صفحهٔ خالی بدتر از نبودِ پیوند است. */
   router.get('/about', p.about);
   router.get('/contact', p.contact);
+
+  /* سبد خرید مهمان. خواندن آزاد است؛ هر تغییری POST است و پشت CSRF.
+     همان requireCsrf موجود استفاده می‌شود (double-submit)، نه یک
+     پیاده‌سازی دوم. */
+  const cart = createCartController(repositories);
+  router.get('/cart', cart.index);
+  router.post('/cart/add', requireCsrf, cart.add);
+  router.post('/cart/update', requireCsrf, cart.update);
+  router.post('/cart/remove', requireCsrf, cart.remove);
 
   return router;
 }

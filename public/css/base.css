@@ -667,8 +667,10 @@ a:hover { color: var(--c-brand-strong); }
    auto-fit نیست: ترتیب ستون‌ها معنا دارد و نباید بازچینش شود. */
 .site-footer__grid {
   display: grid;
-  grid-template-columns: 1.8fr repeat(4, minmax(0, 1fr));
-  gap: var(--s-6);
+  /* شش ستون: برند، دسترسی سریع، دسته‌ها، برندها، راهنما، ارتباط.
+     ستون اول پهن‌تر است چون نشان و یک پاراگراف دارد. */
+  grid-template-columns: 1.6fr repeat(5, minmax(0, 1fr));
+  gap: var(--s-5);
   padding-block: var(--s-7);
 }
 .site-footer__list--plain { color: #93a1ad; }
@@ -1982,4 +1984,284 @@ a:hover { color: var(--c-brand-strong); }
 @media (max-width: 560px) {
   .contact-list__row { grid-template-columns: 1fr; gap: var(--s-1); }
   .prose h2 { margin-block-start: var(--s-6); }
+}
+
+/* ═══════════════════════════════════ ۱۵. سبد خرید ═══ */
+
+/* --- نشان سبد در هدر --- */
+.cart-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  /* هدف لمس ۴۴ پیکسل — کوچک‌تر از این روی موبایل قابل اتکا نیست. */
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.7rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  color: var(--c-ink-2);
+  text-decoration: none;
+  flex: none;
+}
+.cart-link:hover { border-color: var(--c-brand); color: var(--c-brand); background: var(--c-brand-soft); }
+.cart-link:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.cart-link.is-filled { border-color: var(--c-brand); color: var(--c-brand); }
+.cart-link__icon {
+  width: 22px; height: 22px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.cart-link__count {
+  min-width: 1.4rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: var(--r-pill);
+  background: var(--c-brand);
+  color: var(--c-brand-ink);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* --- افزودن به سبد، روی صفحهٔ محصول --- */
+.add-to-cart {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--s-3);
+}
+.add-to-cart__qty {
+  width: 5rem;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--r-sm);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font: inherit;
+  text-align: center;
+}
+.add-to-cart__qty:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 1px; }
+.add-to-cart__btn { flex: 1 1 12rem; justify-content: center; }
+
+/* --- صفحهٔ سبد --- */
+.cart {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: var(--s-6);
+  align-items: start;
+}
+.cart__items { display: flex; flex-direction: column; gap: var(--s-3); min-width: 0; }
+
+.cart-line {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) auto;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-4);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+}
+.cart-line__media {
+  display: block;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--c-sunken);
+}
+.cart-line__media img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.cart-line__body { min-width: 0; }
+.cart-line__brand { margin: 0 0 var(--s-1); font-size: var(--t-xs); color: var(--c-ink-3); }
+.cart-line__name { margin: 0 0 var(--s-1); font-size: var(--t-md); font-weight: 600; line-height: 1.6; }
+.cart-line__name a { color: var(--c-ink); text-decoration: none; }
+.cart-line__name a:hover { color: var(--c-brand); }
+.cart-line__sku { margin: 0 0 var(--s-2); font-size: var(--t-xs); color: var(--c-ink-3); }
+.cart-line__unit { margin: 0; font-size: var(--t-sm); color: var(--c-ink-2); }
+.cart-line__unit--ask { color: var(--c-ink-3); }
+.cart-line__warn { margin: var(--s-2) 0 0; font-size: var(--t-xs); color: var(--c-warn); }
+
+.cart-line__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s-2);
+}
+.cart-qty { display: flex; align-items: center; gap: var(--s-2); }
+.cart-qty__input {
+  width: 4.2rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--r-sm);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font: inherit;
+  font-size: var(--t-sm);
+  text-align: center;
+}
+.cart-qty__input:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 1px; }
+.cart-line__remove {
+  border: 0;
+  background: none;
+  padding: 0.3rem 0.2rem;
+  color: var(--c-err);
+  font: inherit;
+  font-size: var(--t-xs);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.cart-line__remove:hover { color: var(--c-accent-strong); }
+.cart-line__remove:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.cart-line__total { margin: 0; font-size: var(--t-lg); color: var(--c-ink); }
+
+/* --- جمع سبد --- */
+.cart-summary {
+  position: sticky;
+  top: var(--s-4);
+  padding: var(--s-5);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+}
+.cart-summary__title { margin: 0 0 var(--s-4); font-size: var(--t-lg); font-weight: 700; }
+.cart-summary__rows { margin: 0 0 var(--s-4); }
+.cart-summary__rows > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-block: var(--s-2);
+  font-size: var(--t-sm);
+  color: var(--c-ink-2);
+}
+.cart-summary__rows dt, .cart-summary__rows dd { margin: 0; }
+.cart-summary__total {
+  border-block-start: 1px solid var(--c-line);
+  margin-block-start: var(--s-2);
+  padding-block-start: var(--s-3) !important;
+  font-size: var(--t-md) !important;
+  color: var(--c-ink) !important;
+}
+.cart-summary__total strong { font-size: var(--t-xl); }
+.cart-summary__note { margin: var(--s-3) 0 0; font-size: var(--t-xs); color: var(--c-ink-3); line-height: 1.9; }
+.cart-summary__contact {
+  margin-block-start: var(--s-4);
+  padding-block-start: var(--s-4);
+  border-block-start: 1px solid var(--c-line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.cart-summary__lead { margin: 0 0 var(--s-1); font-size: var(--t-sm); color: var(--c-ink-2); }
+/* دکمهٔ تماس عمدا سبز نیست و شکل «پرداخت» ندارد: این یک تماس تلفنی
+   است، نه تسویه‌حساب. */
+.cart-summary__call { gap: var(--s-2); flex-wrap: wrap; }
+.cart-summary__number { font-size: var(--t-sm); opacity: 0.9; }
+.cart-summary__back {
+  display: inline-block;
+  margin-block-start: var(--s-4);
+  color: var(--c-brand);
+  font-size: var(--t-sm);
+  text-decoration: none;
+}
+.cart-summary__back:hover { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .cart { grid-template-columns: 1fr; }
+  .cart-summary { position: static; }
+}
+@media (max-width: 560px) {
+  .cart-line { grid-template-columns: 72px minmax(0, 1fr); }
+  /* کنترل‌ها زیر متن، تمام‌عرض — نه فشرده در یک ستون باریک. */
+  .cart-line__controls {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    padding-block-start: var(--s-3);
+    border-block-start: 1px solid var(--c-line);
+  }
+}
+
+/* ═══════════════════════ ۱۶. دکمه‌های شناور تماس ═══ */
+
+/* سه پیوند ساده با CSS خودِ پروژه — بدون ابزارک شخص ثالث و بدون اسکریپت.
+   inset-inline-end یعنی در فارسی سمت چپ می‌نشینند و در LTR سمت راست،
+   بدون قاعدهٔ جداگانه. */
+.float-contact {
+  position: fixed;
+  inset-inline-end: var(--s-4);
+  inset-block-end: var(--s-4);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  /* ظرف نباید کلیک را بگیرد؛ فقط خود دکمه‌ها. */
+  pointer-events: none;
+}
+.float-contact__btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  /* ۵۲ پیکسل: راحت برای انگشت، کوچک‌تر از آنکه محتوا را بپوشاند. */
+  min-width: 52px;
+  min-height: 52px;
+  padding: 0 0.95rem;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  text-decoration: none;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  box-shadow: 0 6px 18px -8px rgba(18, 26, 36, 0.55);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.float-contact__btn:hover { transform: translateY(-2px); filter: brightness(1.08); color: #ffffff; }
+.float-contact__btn:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+.float-contact__icon {
+  width: 24px; height: 24px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.float-contact__dot { fill: currentColor; stroke: none; }
+.float-contact__text { white-space: nowrap; }
+
+/* رنگ‌ها: نمادِ هر سرویس شناختنی بماند، ولی تخت و هم‌خانوادهٔ پالت سایت
+   — نه گرادیان‌های تبلیغاتی. متن سفید روی هر سه بالای ۴٫۵ است. */
+.float-contact__btn--instagram { background: #a4306a; }
+.float-contact__btn--whatsapp  { background: #116b4e; }
+.float-contact__btn--phone     { background: var(--c-brand); }
+
+/* روی صفحهٔ کوچک فقط نماد می‌ماند: سه برچسب متنی عرض زیادی می‌گیرند و
+   روی محتوای محصول می‌افتند. برچسب دسترس‌پذیر سر جایش می‌ماند. */
+@media (max-width: 640px) {
+  .float-contact {
+    inset-inline-end: var(--s-3);
+    inset-block-end: var(--s-3);
+    gap: var(--s-2);
+  }
+  .float-contact__btn { padding: 0; justify-content: center; min-width: 50px; min-height: 50px; }
+  .float-contact__text {
+    /* همان الگوی sr-only — از دید پنهان، برای صفحه‌خوان باقی. */
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap; border: 0;
+  }
+}
+
+/* دکمه‌ها fixed هستند، پس روی آخرین چیزِ قابل اسکرول می‌نشینند. روی
+   موبایل ستونشان حدود ۱۷۰ پیکسل ارتفاع دارد و بدون این فاصله، پایین
+   فوتر (و در صفحهٔ سبد، پیوند «ادامهٔ خرید») همیشه زیرشان می‌ماند و
+   هیچ‌جوری دیده نمی‌شود.
+
+   فاصله به فوتر داده می‌شود، نه به body: اگر به body بدهیم، زمینهٔ
+   تیرهٔ فوتر کوتاه می‌شود و یک نوار سفید زیرش می‌ماند. */
+@media (max-width: 640px) {
+  .site-footer__bottom { padding-block-end: 11rem; }
+}
+
+/* حرکت را برای کسی که «حرکت کمتر» خواسته خاموش کن. */
+@media (prefers-reduced-motion: reduce) {
+  .float-contact__btn:hover { transform: none; }
 }

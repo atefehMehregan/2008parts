@@ -206,14 +206,39 @@ export const config = {
      اینجا راز نیست: شمارهٔ تماس و نشانی برای نمایش عمومی‌اند. پس
      برخلاف DATABASE_URL، نبودشان در تولید خطا نمی‌دهد. */
   contact: {
-    phone:     process.env.STORE_PHONE || '',
-    mobile:    process.env.STORE_MOBILE || '',
-    email:     process.env.STORE_EMAIL || '',
-    address:   process.env.STORE_ADDRESS || '',
-    hours:     process.env.STORE_HOURS || '',
-    telegram:  process.env.STORE_TELEGRAM || '',
-    instagram: process.env.STORE_INSTAGRAM || '',
-    whatsapp:  process.env.STORE_WHATSAPP || '',
+    /* این مقدارها صاحب فروشگاه داده و صریحا برای نمایش عمومی‌اند، پس
+       اینجا پیش‌فرض دارند. راز نیستند و نبودشان در تولید خطا نمی‌دهد.
+       هر کدام با متغیر محیطی قابل جایگزینی است.
+
+       شکل ذخیره: همان‌طور که در ایران نوشته می‌شود (۰۲۱-...). شکل
+       بین‌المللی برای پیوندهای tel: و wa.me جداگانه نگه داشته می‌شود،
+       چون تبدیل خودکار «۰» ابتدایی به «+۹۸» حدس زدنی است و بهتر است
+       صریح باشد. */
+    phone:       process.env.STORE_PHONE        || '021-33333502',
+    phoneTel:    process.env.STORE_PHONE_TEL    || '+982133333502',
+    mobile:      process.env.STORE_MOBILE       || '09355292911',
+    mobileTel:   process.env.STORE_MOBILE_TEL   || '+989355292911',
+    email:       process.env.STORE_EMAIL        || 'mohammad.mozaffari616@gmail.com',
+    address:     process.env.STORE_ADDRESS      || '',
+    hours:       process.env.STORE_HOURS        || '',
+    telegram:    process.env.STORE_TELEGRAM     || '',
+    /* نشانی کامل و دست‌نخوردهٔ صفحهٔ اینستاگرام، همان‌که داده شده. */
+    instagramUrl: process.env.STORE_INSTAGRAM_URL
+      || 'https://www.instagram.com/2008parts.ir?stkn=MTJtN2h3ZDNkdWFvag%3D%3D&utm_source=qr',
+    instagramHandle: process.env.STORE_INSTAGRAM || '2008parts.ir',
+    /* واتس‌اپ: شکل بین‌المللی بدون + و بدون صفر، همان‌که wa.me می‌خواهد. */
+    whatsapp:    process.env.STORE_WHATSAPP     || '989355292911',
+  },
+
+  /* سبد خرید مهمان. هیچ حساب کاربری لازم نیست.
+     ⚠️ در کوکی فقط کد کالا و تعداد ذخیره می‌شود — هرگز قیمت. قیمت در
+     هر رندر از پایگاه داده خوانده می‌شود، پس دست‌کاری کوکی نمی‌تواند
+     قیمت را عوض کند. */
+  cart: {
+    cookieName: process.env.CART_COOKIE_NAME || '2008parts_cart',
+    maxLines:   int('CART_MAX_LINES', 50),
+    maxQty:     int('CART_MAX_QTY', 99),
+    maxAgeDays: int('CART_MAX_AGE_DAYS', 30),
   },
 
   /* پیامک — ارائه‌دهنده هنوز انتخاب نشده است (فاز بعد). */

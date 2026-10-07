@@ -30,5 +30,10 @@
     </main>
 
     {% include "partials/site-footer.njk" %}
+
+    {# دکمه‌های شناور بعد از فوتر در DOM می‌آیند تا ترتیب خواندن با
+       صفحه‌کلید و صفحه‌خوان طبیعی بماند: محتوا اول، میان‌بُرهای تماس
+       آخر. جایگاهشان با CSS تعیین می‌شود، نه با ترتیب DOM. #}
+    {% include "partials/floating-contact.njk" %}
   </body>
 </html>

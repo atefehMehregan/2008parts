@@ -68,10 +68,15 @@ test('شمارهای «دربارهٔ ما» از پایگاه داده می‌�
   assert.ok(!body.includes('>2<'), 'رقم انگلیسی خام نباید بیاید');
 });
 
-test('«دربارهٔ ما» صریح می‌گوید سفارش آنلاین هنوز نیست', async () => {
+/* حقیقت عوض شد: سبد خرید اضافه شده. آنچه *نیست* پرداخت آنلاین است و
+   صفحه باید همان را صریح بگوید — نه اینکه سکوت کند. */
+test('«دربارهٔ ما» سبد را معرفی می‌کند و نبودِ پرداخت آنلاین را صریح می‌گوید', async () => {
   const body = await html('/about');
-  assert.match(body, /سبد خرید/);
-  assert.match(body, /پیاده‌سازی نشده/);
+  assert.match(body, /href="\/cart"/, 'باید به سبد پیوند بدهد');
+  /* ⚠️ بدون \s+ نمی‌شود: جمله در قالب روی دو خط شکسته و الگوی تک‌فاصله
+     مردود می‌شد. متنِ صفحه درست بود، آزمون شکننده بود. */
+  assert.match(body, /پرداخت اینترنتی روی این سایت وجود ندارد/);
+  assert.match(body, /درگاه\s+پرداختی\s+در\s+کار\s+نیست/);
 });
 
 /* ⚠️ این آزمون روی *کلمه* قضاوت نمی‌کند، روی *ادعا*.
@@ -103,19 +108,41 @@ test('GET /contact دویست می‌دهد', async () => {
   assert.match(await res.text(), /تماس با ما/);
 });
 
-test('بدون راه ارتباطیِ ثبت‌شده، صفحه صادقانه همین را می‌گوید', async () => {
-  /* در محیط آزمون هیچ STORE_* تعریف نشده است. */
+/* حقیقت عوض شد: صاحب فروشگاه راه‌های ارتباطی واقعی را داد و در
+   پیکربندی نشستند. پس آزمونِ «هیچ کانالی ثبت نشده» منسوخ است و جایش را
+   آزمونِ «همان مقدارهای واقعی نشان داده می‌شوند» می‌گیرد.
+
+   قاعدهٔ اصلی عوض نشده: هیچ مقدارِ *ساختگی* نباید روی صفحه باشد. حالا
+   این را با مقایسهٔ صفحه و پیکربندی می‌سنجیم، نه با نبودِ هر رقم. */
+test('صفحهٔ تماس همان مقدارهای پیکربندی را نشان می‌دهد', async () => {
+  const { config } = await import('../src/config/index.js');
   const body = await html('/contact');
-  assert.match(body, /هنوز در این صفحه ثبت نشده‌اند/);
-  assert.match(body, /class="notice notice--quiet"/);
-  assert.ok(!body.includes('class="contact-list"'), 'فهرست خالی نباید رندر شود');
+
+  assert.match(body, /class="contact-list"/);
+  assert.ok(!body.includes('هنوز در این صفحه ثبت نشده‌اند'),
+    'وقتی کانال ثبت شده، پیام «ثبت نشده» نباید بیاید');
+
+  for (const v of [config.contact.phone, config.contact.mobile, config.contact.email]) {
+    assert.ok(body.includes(v), `مقدار «${v}» باید نشان داده شود`);
+  }
+  assert.ok(body.includes(`href="tel:${config.contact.phoneTel}"`), 'پیوند تلفن ثابت');
+  assert.ok(body.includes(`href="tel:${config.contact.mobileTel}"`), 'پیوند همراه');
+  assert.ok(body.includes(`href="mailto:${config.contact.email}"`), 'پیوند ایمیل');
 });
 
-test('هیچ شمارهٔ تماس یا نشانیِ نمونه‌ای روی صفحه نیست', async () => {
+test('هیچ شمارهٔ تماسی جز مقدارهای پیکربندی روی صفحه نیست', async () => {
+  const { config } = await import('../src/config/index.js');
   const body = await html('/contact');
-  /* یک رشتهٔ طولانیِ رقمی = شمارهٔ تلفنِ جاافتاده در قالب. */
-  assert.ok(!/\b0\d{9,}\b/.test(body), 'شمارهٔ تلفن ساختگی نباید باشد');
-  assert.ok(!/@\w+\.(com|ir|net)/.test(body), 'ایمیل ساختگی نباید باشد');
+  const known = new Set([
+    config.contact.phone.replace(/\D/g, ''),
+    config.contact.mobile.replace(/\D/g, ''),
+    config.contact.phoneTel.replace(/\D/g, ''),
+    config.contact.mobileTel.replace(/\D/g, ''),
+    config.contact.whatsapp.replace(/\D/g, ''),
+  ]);
+  for (const m of body.match(/\b\d{9,}\b/g) || []) {
+    assert.ok(known.has(m), `شمارهٔ ناشناخته روی صفحه: ${m}`);
+  }
 });
 
 test('صفحهٔ تماس به جست‌وجو و فهرست قطعات راه می‌دهد', async () => {

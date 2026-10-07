@@ -422,7 +422,9 @@ test('صفحهٔ هر محصول قیمت جعلی نمی‌دهد و استعل
     assert.match(html, /استعلام موجودی/, `«${p.name}» وضعیت استعلامی ندارد`);
     assert.doesNotMatch(html, /قابل سفارش/, `«${p.name}» ادعای قابل سفارش کرد`);
     assert.doesNotMatch(html, /ناموجود/, `«${p.name}» ادعای ناموجود کرد`);
-    assert.match(html, /قیمت و موجودی این قطعه هنوز نهایی نشده/);
+    /* متن کادر خرید با آمدن سبد عوض شد؛ قولِ آزمون همان است:
+       صفحه باید صریح بگوید قیمت ثبت نشده و باید استعلام شود. */
+    assert.match(html, /قیمت این قطعه هنوز ثبت نشده و باید استعلام شود/);
     /* سازگاری باید با همان مرز شواهد گفته شود. */
     assert.match(html, /تأیید شود/);
   }
@@ -443,11 +445,24 @@ test('صفحهٔ دسته هم قطعه‌ها را با استعلام قیمت
   assert.ok(html.includes('فیلتر روغن'));
 });
 
-test('دکمهٔ «افزودن به سبد» اضافه نشده است', async () => {
+/* این آزمون قبلا نبودِ دکمه را تضمین می‌کرد، چون سبدی وجود نداشت.
+   حالا سبد هست و دکمه باید باشد — ولی همان قولِ قدیمی زیرش باقی است:
+   صفحهٔ محصول هیچ قیمتی به سرور نمی‌فرستد و هیچ پرداخت آنلاینی ندارد. */
+test('دکمهٔ «افزودن به سبد خرید» هست و هیچ قیمتی نمی‌فرستد', async () => {
   const p = products[0];
   const html = await text(`/product/${encodeURIComponent(p.slug)}`);
-  assert.doesNotMatch(html, /افزودن به سبد/);
-  assert.doesNotMatch(html, /add-to-cart/);
+  assert.match(html, /افزودن به سبد خرید/);
+  assert.match(html, /class="add-to-cart"/);
+  assert.match(html, /action="\/cart\/add"/);
+
+  /* فرم فقط _csrf و sku و qty دارد. هر فیلد دیگری — خصوصا قیمت — خطاست. */
+  const form = html.match(/<form class="add-to-cart"[\s\S]*?<\/form>/)[0];
+  const names = [...form.matchAll(/name="([^"]+)"/g)].map((m) => m[1]).sort();
+  assert.deepEqual(names, ['_csrf', 'qty', 'sku']);
+  assert.doesNotMatch(form, /price|toman/i, 'فرم نباید هیچ فیلد قیمتی داشته باشد');
+
+  /* و هیچ ادعای پرداخت آنلاینی روی صفحه نیست. */
+  assert.doesNotMatch(html, /درگاه پرداخت/);
 });
 
 /* ══════════════════════════════════════ ۴. آنچه در پایگاه داده نشست */

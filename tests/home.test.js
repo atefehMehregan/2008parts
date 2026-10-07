@@ -259,15 +259,25 @@ test('نام محصول در صفحهٔ اصلی فرار داده می‌شود
 
 /* ═════════════════════════════ ۵. هیچ پیوند مرده‌ای نیست */
 
-test('صفحهٔ اصلی به سبد خرید، تسویه یا حساب کاربری پیوند نمی‌دهد', async () => {
+/* قاعده همان است — پیوند به چیزی که وجود ندارد نباید باشد — ولی حقیقت
+   عوض شده: /cart حالا یک مسیر واقعی است، پس از این فهرست بیرون آمده.
+   بقیه هنوز وجود ندارند و نباید پیوند شوند. */
+test('صفحهٔ اصلی به تسویه یا حساب کاربری پیوند نمی‌دهد', async () => {
   const catId = await insertCategory(db);
   await insertProduct(db, { categoryId: catId, slug: 'p1', sku: 'S1' });
 
   const html = await homeHtml();
-  for (const dead of ['/cart', '/checkout', '/login', '/account', '/register', '/orders']) {
+  for (const dead of ['/checkout', '/login', '/account', '/register', '/orders', '/payment']) {
     assert.ok(!html.includes(`href="${dead}`), `پیوند ${dead} نباید وجود داشته باشد`);
   }
-  assert.ok(!html.includes('افزودن به سبد'), 'دکمهٔ سبد خرید هنوز نباید باشد');
+});
+
+test('نشان سبد خرید در هدر هست و به صفحهٔ سبد می‌رود', async () => {
+  const html = await homeHtml();
+  assert.match(html, /class="cart-link/);
+  assert.match(html, /href="\/cart"/);
+  /* سبد خالی عدد نشان نمی‌دهد. */
+  assert.ok(!html.includes('cart-link__count'), 'سبد خالی نباید عدد نشان دهد');
 });
 
 test('همهٔ پیوندهای صفحهٔ اصلی به مسیرهای واقعا موجود می‌روند', async () => {
@@ -287,8 +297,12 @@ test('همهٔ پیوندهای صفحهٔ اصلی به مسیرهای واقع
     /^\/category\//,
     /^\/brand\//,
     /^\/product\//,
+    /^\/cart$/,                     // سبد خرید — routes/pages.js
     /^\/about$/,                    // صفحهٔ اطلاعاتی — routes/pages.js
     /^\/contact$/,                  // صفحهٔ اطلاعاتی — routes/pages.js
+    /^tel:\+\d+$/,                  // دکمهٔ شناور تماس
+    /^https:\/\/wa\.me\/\d+$/,       // دکمهٔ شناور واتس‌اپ
+    /^https:\/\/www\.instagram\.com\//, // دکمهٔ شناور اینستاگرام
     /^\/css\//,                     // شیوه‌نامه
     /^\/img\//,                     // نشان برند و favicon
   ];

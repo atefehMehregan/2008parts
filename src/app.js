@@ -12,6 +12,7 @@ import nunjucks from 'nunjucks';
 import path from 'node:path';
 import { config, ROOT } from './config/index.js';
 import { extraSecurityHeaders, csrfToken, notFound, errorHandler } from './middleware/security.js';
+import { cartCount } from './controllers/cartController.js';
 import { generalLimiter, loginLimiter, uploadLimiter } from './middleware/rateLimit.js';
 import { healthRouter } from './routes/health.js';
 import { createPageRouter } from './routes/pages.js';
@@ -108,6 +109,16 @@ export function createApp({
   });
 
   app.use(csrfToken);
+
+  /* شمار سبد برای هدر. فقط کوکی را می‌شمارد و به پایگاه داده نمی‌زند. */
+  app.use(cartCount);
+
+  /* راه‌های ارتباطی برای دکمه‌های شناور و فوتر. مقدارهای عمومی‌اند و از
+     پیکربندی می‌آیند، نه از متن ثابت داخل قالب‌ها. */
+  app.use((req, res, next) => {
+    res.locals.contact = config.contact;
+    next();
+  });
 
   /* متغیرهای مشترک همه قالب‌ها. */
   app.use((req, res, next) => {

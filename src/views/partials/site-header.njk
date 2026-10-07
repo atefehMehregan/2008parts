@@ -171,6 +171,26 @@
         </li>
       </ul>
     </nav>
+
+    {# سبد خرید. شمار از res.locals.cartCount می‌آید که میان‌افزار
+       cartCount روی هر درخواست از کوکی می‌خواند — پس بعد از افزودن،
+       حذف، تغییر تعداد، تازه‌کردن صفحه و جابه‌جایی بین صفحه‌ها درست
+       می‌ماند، بدون هیچ جاوااسکریپتی.
+
+       وقتی سبد خالی است عدد نشان داده نمی‌شود (نه «۰»): یک نشانِ خالی
+       از عددِ صفر تمیزتر است و صفحه‌خوان هم همین را می‌گوید. #}
+    <a class="cart-link{% if cartCount > 0 %} is-filled{% endif %}" href="/cart"
+       aria-label="سبد خرید{% if cartCount > 0 %} — {{ cartCount | faDigits }} قلم{% else %} — خالی{% endif %}">
+      <svg class="cart-link__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M3 4h2.2l1 2m0 0 2.1 8.2a1.6 1.6 0 0 0 1.55 1.2h7.1a1.6 1.6 0 0 0 1.55-1.18L20.5 8H6.2" />
+        <circle cx="10" cy="19.4" r="1.5" />
+        <circle cx="17.4" cy="19.4" r="1.5" />
+      </svg>
+      {% if cartCount > 0 %}
+        <span class="cart-link__count num" aria-hidden="true">{{ cartCount | faDigits }}</span>
+      {% endif %}
+      <span class="sr-only">سبد خرید</span>
+    </a>
   </div>
 
 </header>

@@ -62,15 +62,24 @@ export function createPageController({ products, categories, brands }) {
 
          href برای تلفن و ایمیل ساخته می‌شود تا روی موبایل قابل زدن باشد؛
          برای نشانی و ساعت کاری href معنا ندارد و null می‌ماند. */
+      /* ⚠️ پیوند tel: از شکل *بین‌المللیِ* صریح ساخته می‌شود (phoneTel /
+         mobileTel)، نه از همان رشته‌ای که نمایش داده می‌شود.
+
+         پیش از این از مقدار نمایشی ساخته می‌شد و نتیجه tel:021-33333502
+         بود: روی گوشیِ داخل کشور کار می‌کند، ولی برای تماس از خارج یا
+         روی دستگاهی که کد کشور ندارد مبهم است. نمایش فارسیِ محلی
+         می‌ماند، پیوند بین‌المللی می‌شود. */
       const channels = [
-        c.phone     && { key: 'phone',     label: 'تلفن ثابت',    value: c.phone,     href: `tel:${c.phone.replace(/\s+/g, '')}`,      isNum: true },
-        c.mobile    && { key: 'mobile',    label: 'همراه',        value: c.mobile,    href: `tel:${c.mobile.replace(/\s+/g, '')}`,     isNum: true },
-        c.whatsapp  && { key: 'whatsapp',  label: 'واتس‌اپ',      value: c.whatsapp,  href: `https://wa.me/${c.whatsapp.replace(/[^0-9]/g, '')}`, isNum: true },
-        c.telegram  && { key: 'telegram',  label: 'تلگرام',       value: c.telegram,  href: `https://t.me/${c.telegram.replace(/^@/, '')}` },
-        c.instagram && { key: 'instagram', label: 'اینستاگرام',   value: c.instagram, href: `https://instagram.com/${c.instagram.replace(/^@/, '')}` },
-        c.email     && { key: 'email',     label: 'ایمیل',        value: c.email,     href: `mailto:${c.email}` },
-        c.address   && { key: 'address',   label: 'نشانی',        value: c.address,   href: null },
-        c.hours     && { key: 'hours',     label: 'ساعت کاری',    value: c.hours,     href: null },
+        c.phone     && { key: 'phone',     label: 'تلفن ثابت',  value: c.phone,     href: `tel:${c.phoneTel || c.phone}`,  isNum: true },
+        c.mobile    && { key: 'mobile',    label: 'همراه',      value: c.mobile,    href: `tel:${c.mobileTel || c.mobile}`, isNum: true },
+        c.whatsapp  && { key: 'whatsapp',  label: 'واتس‌اپ',    value: c.mobile || c.whatsapp,
+                         href: `https://wa.me/${c.whatsapp.replace(/[^0-9]/g, '')}`, isNum: true, external: true },
+        c.instagramHandle && { key: 'instagram', label: 'اینستاگرام', value: c.instagramHandle,
+                         href: c.instagramUrl, external: true },
+        c.telegram  && { key: 'telegram',  label: 'تلگرام',     value: c.telegram,  href: `https://t.me/${c.telegram.replace(/^@/, '')}`, external: true },
+        c.email     && { key: 'email',     label: 'ایمیل',      value: c.email,     href: `mailto:${c.email}` },
+        c.address   && { key: 'address',   label: 'نشانی',      value: c.address,   href: null },
+        c.hours     && { key: 'hours',     label: 'ساعت کاری',  value: c.hours,     href: null },
       ].filter(Boolean);
 
       res.render('pages/contact', {

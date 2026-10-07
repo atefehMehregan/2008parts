@@ -41,7 +41,7 @@
                 {% if ch.href %}
                   {# bdi برای شماره و نشانی لاتین لازم است: بدون آن، رقم‌ها
                      و نشانی در متن راست‌به‌چپ جابه‌جا دیده می‌شوند. #}
-                  <a href="{{ ch.href }}"><bdi{% if ch.isNum %} class="num"{% endif %}>{{ ch.value }}</bdi></a>
+                  <a href="{{ ch.href }}"{% if ch.external %} target="_blank" rel="noopener noreferrer"{% endif %}><bdi{% if ch.isNum %} class="num"{% endif %}>{{ ch.value }}</bdi></a>
                 {% else %}
                   <bdi{% if ch.isNum %} class="num"{% endif %}>{{ ch.value }}</bdi>
                 {% endif %}
@@ -72,10 +72,12 @@
         </p>
       {% endif %}
 
-      <h2>سفارش آنلاین</h2>
+      <h2>سفارش</h2>
       <p>
-        ثبت سفارش و پرداخت اینترنتی هنوز روی این سایت پیاده‌سازی نشده است.
-        توضیح بیشتر در <a href="/about">دربارهٔ ما</a>.
+        قطعه‌ها را می‌توانید به <a href="/cart">سبد خرید</a> اضافه کنید، ولی
+        پرداخت اینترنتی وجود ندارد و درگاه پرداختی در کار نیست؛ سفارش با
+        همین شماره‌ها نهایی می‌شود. توضیح بیشتر در
+        <a href="/about">دربارهٔ ما</a>.
       </p>
     </div>
   </div>
