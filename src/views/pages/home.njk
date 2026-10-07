@@ -13,76 +13,52 @@
 
 {# --------------------------------------------------------------- هیرو
 
-   چیدمان دو ستونی و راست‌به‌چپ: متن از سمت راست (شروعِ خواندن فارسی)
-   و تصویر در سمت چپ. این آینهٔ مکانیکیِ یک قالب چپ‌به‌راست نیست —
-   متن جایی است که چشم فارسی‌زبان اول نگاه می‌کند.
+   نوار تیرهٔ تمام‌عرض با یک ترسیم فنیِ بزرگ در سمت چپ و متن کم در سمت
+   راست (شروع خواندن فارسی). گرافیک از لبهٔ ظرف بیرون می‌زند و .hero
+   آن را می‌برد، پس ترکیب «تمام‌صفحه» دیده می‌شود نه «کارت در قاب».
 
-   ⚠️ جای تصویر عمدا خالیِ طراحی‌شده است، نه فراموش‌شده: هیچ تصویر
-   اتومبیلی در پروژه نیست و ساختن یا برداشتنِ یکی از جای دیگر درست
-   نبود. وقتی تصویر رسید، فقط همین یک بلوک عوض می‌شود و بقیهٔ چیدمان
-   دست‌نخورده می‌ماند. #}
+   سه تصمیم که عمدی‌اند:
+
+   ۱. اینجا جست‌وجو نیست. جست‌وجوی سایت در هدر است و همان‌جا می‌ماند؛
+      دو فرم جست‌وجو روی یک صفحه، کاربر را دوبه‌شک می‌کرد.
+
+   ۲. اینجا هیچ عکس محصولی نیست. هیرو باید هویت برند را بگوید، نه یک
+      قلم از کاتالوگ را. گرافیک یک SVG دست‌نویسِ خودِ پروژه است
+      (public/img/hero-automotive-blueprint.svg)، نه عکس قطعه.
+
+   ۳. متن کم است و هیچ عددی ندارد. «پیشنهاد ویژه قطعات منتخب» یک پیام
+      بازاریابی است، نه تخفیفِ ثبت‌شده: هیچ درصدی ادعا نمی‌شود و هیچ
+      قیمتی اینجا نمایش داده نمی‌شود. قفسهٔ «محصولات با قیمت حراج» در
+      پایین همین صفحه تنها جایی است که تخفیف *واقعی* نشان داده می‌شود
+      و فقط وقتی sale_price_toman در داده باشد.
+
+   این بخش به هیچ دادهٔ پایگاه‌داده‌ای وابسته نیست، پس با کاتالوگ خالی
+   هم کامل رندر می‌شود. #}
 <section class="hero">
   <div class="container hero__inner">
-
     <div class="hero__copy">
-      {% if heroOffer %}
-        <p class="hero__eyebrow"><span class="hero__tag">پیشنهاد ویژه</span> ۲۰۰۸پارتس</p>
-      {% endif %}
+      <p class="hero__eyebrow"><span class="hero__tag">پیشنهاد ویژه قطعات منتخب</span></p>
 
-      <h1 class="hero__title">قطعات و لوازم جانبی پژو ۲۰۰۸</h1>
+      <h1 class="hero__title">قطعات مطمئن، انتخاب دقیق</h1>
+
       <p class="hero__lede">
-        قطعه را با نام فارسی، کد کالا یا شماره فنی روی خودِ قطعه پیدا کنید.
+        کاتالوگ تخصصی قطعات و لوازم جانبی پژو ۲۰۰۸.
       </p>
 
-      <form class="hero__search site-search" action="/search" method="get" role="search">
-        <label class="sr-only" for="hero-search-input">جست‌وجوی قطعه</label>
-        <input class="site-search__input" id="hero-search-input" type="search" name="q"
-               placeholder="مثلا: فیلتر روغن یا ۹۶۷۸۱۹۱۵۸۰" />
-        <button class="site-search__button" type="submit">جست‌وجو</button>
-      </form>
-
       <div class="hero__actions">
-        <a class="btn btn--primary" href="/products">دیدن همهٔ محصولات</a>
-        {% if categoryList.length %}
-          <a class="btn btn--ghost" href="#categories">مرور دسته‌بندی‌ها</a>
-        {% endif %}
+        <a class="btn" href="/products">دیدن همهٔ محصولات</a>
       </div>
     </div>
 
-    <div class="hero__visual">
-      {% if heroOffer %}
-        {# کارت پیشنهاد — محصول واقعیِ کاتالوگ، با قیمت واقعیِ همان ردیف. #}
-        <a class="hero__offer" href="/product/{{ heroOffer.slug | urlencode }}">
-          <span class="hero__offer-media">
-            <picture>
-              <source type="image/webp" srcset="/media/products/{{ heroOffer.primary_image_id }}/card.webp" />
-              <img src="/media/products/{{ heroOffer.primary_image_id }}/card.jpg"
-                   alt="{{ heroOffer.name }}" width="400" height="533" loading="eager" />
-            </picture>
-          </span>
-          <span class="hero__offer-body">
-            {% if heroOffer.brand_name %}
-              <span class="hero__offer-brand">{{ heroOffer.brand_name }}</span>
-            {% endif %}
-            <span class="hero__offer-name">{{ heroOffer.name }}</span>
-            {% if heroOffer.price_toman %}
-              <span class="hero__offer-price">
-                {% if heroOffer.sale_price_toman %}
-                  <strong class="num">{{ heroOffer.sale_price_toman | toman }}</strong>
-                  <del class="num">{{ heroOffer.price_toman | tomanPlain }}</del>
-                {% else %}
-                  <strong class="num">{{ heroOffer.price_toman | toman }}</strong>
-                {% endif %}
-              </span>
-            {% endif %}
-            <span class="hero__offer-cta">مشاهدهٔ محصول</span>
-          </span>
-        </a>
-      {% else %}
-        <div class="hero__visual-empty" aria-hidden="true"></div>
-      {% endif %}
-    </div>
+    {# ترسیم خانهٔ دوم همین گرید است، نه لایه‌ای روی متن: روی روشن‌ترین
+       خطش کنتراست متن سفید مردود می‌شود، پس روی دسکتاپ هرگز زیر متن
+       نمی‌رود. روی موبایل که ناچار پس‌زمینه می‌شود، شفافیتش پایین
+       می‌آید تا همان نقطه دوباره قبول شود.
 
+       تزئینی است: معنا را تیتر می‌رساند. پس alt خالی و از دید خوانندهٔ
+       صفحه پنهان — نه یک توضیحِ ساختگی برای یک ترسیم انتزاعی. #}
+    <img class="hero__art" src="/img/hero-automotive-blueprint.svg"
+         alt="" aria-hidden="true" width="1200" height="800" />
   </div>
 </section>
 
@@ -140,6 +116,29 @@
 </section>
 {% endif %}
 
+{# --------------------------------------------- قفسهٔ «تخفیف‌دار» #}
+{# فقط محصولی که در پایگاه داده قیمت حراجِ واقعی دارد. هیچ درصدی اینجا
+   ساخته نمی‌شود و هیچ قیمتی تغییر نمی‌کند — کنترلر با فیلتر onSale
+   می‌خواند و کارت محصول خودش قیمت حراج و قیمت خط‌خورده را نشان می‌دهد.
+   اگر هیچ حراج واقعی ثبت نشده باشد، این بخش کامل حذف می‌شود. #}
+{% if saleItems.length %}
+<section class="home-section home-section--offer">
+  <div class="container">
+    <div class="home-section__head">
+      <div>
+        <p class="home-section__eyebrow">تخفیف‌دار</p>
+        <h2 class="home-section__title">محصولات با قیمت حراج</h2>
+        <p class="home-section__text">قیمت حراج همان قیمتِ ثبت‌شده در کاتالوگ است.</p>
+      </div>
+      <a class="home-section__link" href="/products">دیدن همه</a>
+    </div>
+    <div class="product-grid">
+      {% for item in saleItems %}{% include "partials/product-card.njk" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
 {# ------------------------------------------------- قفسهٔ «تازه‌ترین» #}
 {# فقط وقتی هیچ محصول ویژه یا تازه‌ای علامت نخورده باشد؛ وگرنه همان
    محصول‌ها دو بار پشت سر هم تکرار می‌شدند. #}
@@ -171,22 +170,6 @@
     {% set emptyActionUrl = '/products' %}
     {% set emptyActionLabel = 'دیدن صفحهٔ محصولات' %}
     {% include "partials/empty-state.njk" %}
-  </div>
-</section>
-{% endif %}
-
-{# ------------------------------------------------------------ برندها #}
-{% if brandList.length %}
-<section class="home-section">
-  <div class="container">
-    <div class="home-section__head">
-      <h2 class="home-section__title">برندها</h2>
-    </div>
-    <div class="brand-strip">
-      {% for b in brandList %}
-        <a class="brand-chip" href="/brand/{{ b.slug | urlencode }}">{{ b.name }}</a>
-      {% endfor %}
-    </div>
   </div>
 </section>
 {% endif %}
@@ -232,6 +215,22 @@
   </div>
 </section>
 
+
+{# ------------------------------------------------------------ برندها #}
+{% if brandList.length %}
+<section class="home-section">
+  <div class="container">
+    <div class="home-section__head">
+      <h2 class="home-section__title">برندها</h2>
+    </div>
+    <div class="brand-strip">
+      {% for b in brandList %}
+        <a class="brand-chip" href="/brand/{{ b.slug | urlencode }}">{{ b.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
 {# ---------------------------------------------------------- فراخوان #}
 <section class="section">
   <div class="container">

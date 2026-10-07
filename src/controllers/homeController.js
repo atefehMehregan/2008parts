@@ -30,15 +30,18 @@ export function createHomeController({ products, categories, brands }) {
    */
   async function home(req, res, next) {
     try {
-      /* محصولِ پیشنهادِ هیرو. یک محصول *واقعی* از کاتالوگ، نه داده‌ی
-         ساختگی: تازه‌ترین محصولِ فعالی که تصویر دارد. اگر کاتالوگ خالی
-         بود، هیرو بی‌پیشنهاد رندر می‌شود و چیزی نمی‌شکند.
-         هیچ تخفیفی اینجا ساخته نمی‌شود: قیمتِ همان ردیف نمایش داده
-         می‌شود. اگر روزی sale_price واقعی ثبت شود، کارت خودش آن را
-         نشان می‌دهد. */
-      const [featured, fresh, latest, categoryList, brandList] = await Promise.all([
+      /* هیرو هیچ‌کدام از این‌ها را نمی‌خواهد: از زمانی که بازطراحی شد،
+         یک بلوک برندِ ثابت است با گرافیک SVG خودِ پروژه و بدون هیچ
+         محصولی. پس اگر همهٔ کوئری‌های زیر خالی برگردند، هیرو همچنان
+         کامل رندر می‌شود. */
+      const [featured, fresh, onSale, latest, categoryList, brandList] = await Promise.all([
         products.list({ filters: { isFeatured: true }, sort: 'newest', page: 1, perPage: SHELF_SIZE }),
         products.list({ filters: { isNew: true }, sort: 'newest', page: 1, perPage: SHELF_SIZE }),
+        /* قفسهٔ تخفیف‌دار. منبعش دادهٔ واقعیِ sale_price_toman است، نه
+           یک درصدِ تبلیغاتیِ ساختگی. امروز صفر ردیف دارد، پس این بخش
+           در صفحه نمی‌آید؛ هر وقت فروشنده قیمت حراج واقعی ثبت کند،
+           خودش ظاهر می‌شود. */
+        products.list({ filters: { onSale: true }, sort: 'newest', page: 1, perPage: SHELF_SIZE }),
         products.list({ sort: 'newest', page: 1, perPage: SHELF_SIZE }),
         categories.listWithCounts(),
         brands.listWithCounts(),
@@ -46,17 +49,15 @@ export function createHomeController({ products, categories, brands }) {
 
       const featuredItems = featured.items;
       const freshItems = fresh.items;
-
-      const heroOffer = [...featuredItems, ...freshItems, ...latest.items]
-        .find((p) => p.primary_image_id) ?? null;
+      const saleItems = onSale.items;
 
       res.render('pages/home', {
-        heroOffer,
         title: 'قطعات یدکی پژو ۲۰۰۸',
         metaDescription:
           '2008parts — فروشگاه اینترنتی قطعات یدکی پژو ۲۰۰۸. جست‌وجو بر اساس نام قطعه، کد کالا یا شماره فنی.',
         featuredItems,
         freshItems,
+        saleItems,
         latestItems: (featuredItems.length === 0 && freshItems.length === 0) ? latest.items : [],
         categoryList,
         brandList,

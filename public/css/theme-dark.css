@@ -62,6 +62,10 @@
 a { color: var(--c-ink-2); }
 a:hover { color: var(--c-ink); }
 
+/* در پوستهٔ تیره، زمینهٔ صفحه خودش سرمه‌ای است، پس نوارِ زغالیِ پوستهٔ
+   روشن از آن جدا نمی‌شود. اینجا نوار اطلاعیه آبیِ برند می‌ماند — در
+   پس‌زمینهٔ تیره آبی تند نیست و نوار را دیدنی می‌کند. */
+.ticker { background: var(--c-brand); color: var(--c-brand-ink); }
 .site-header { background: var(--g-brand); }
 .site-footer { background: var(--g-brand); color: var(--c-ink-2); }
 .site-footer a { color: var(--c-ink-2); }
@@ -72,11 +76,9 @@ a:hover { color: var(--c-ink); }
 .site-footer__note { color: var(--c-ink-3); }
 .site-footer__bottom { border-top: 1px solid var(--c-line); color: var(--c-ink-3); }
 
-.hero {
-  background:
-    radial-gradient(90% 120% at 100% 0%, rgba(30, 90, 138, 0.45) 0%, rgba(30, 90, 138, 0) 62%),
-    linear-gradient(170deg, #143a5c 0%, var(--c-bg) 48%, var(--c-surface-2) 100%);
-}
+/* هیرو اینجا بازنویسی نمی‌شود: نوار تیرهٔ تحریریه‌ای در هر دو پوسته
+   یکسان است و رنگ‌هایش در base.css صریح نوشته شده‌اند، نه با توکن.
+   اگر اینجا دوباره تعریف شود، گرافیک و متن از هم می‌افتند. */
 
 /* کنش اصلی روی بوم تیره: گرادیان روشن با متن سرمه‌ای. */
 .btn--onDark {

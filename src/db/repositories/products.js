@@ -144,6 +144,18 @@ export function createProductRepository(db) {
     }
     if (filters.isFeatured === true) clauses.push('p.is_featured = TRUE');
     if (filters.isNew === true) clauses.push('p.is_new = TRUE');
+    /* فقط تخفیفِ *واقعی*. هیچ تخفیفی اینجا ساخته یا حساب نمی‌شود؛ این
+       فیلتر فقط می‌خواند. اگر هیچ ردیفی قیمت حراج نداشته باشد، نتیجه
+       خالی است و قفسهٔ «تخفیف‌دار» صفحهٔ اصلی اصلا رندر نمی‌شود.
+
+       یک شرط کافی است و بقیه تکراری است، چون طرحِ پایگاه داده بقیه را
+       خودش تضمین می‌کند (migrations/002_catalog.sql):
+         * price_toman ستونی NOT NULL است،
+         * قید products_sale_below_price می‌خواهد قیمت حراج ≥ ۰ و
+           اکیدا کمتر از قیمت اصلی باشد.
+       پس هر ردیفی که قیمت حراج دارد، حتما قیمت اصلیِ بزرگ‌تری هم دارد
+       و کارت محصول چیزی برای خط زدن خواهد داشت. */
+    if (filters.onSale === true) clauses.push('p.sale_price_toman IS NOT NULL');
 
     return { sql: clauses.join(' AND '), params };
   }

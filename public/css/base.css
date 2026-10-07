@@ -439,11 +439,15 @@ a:hover { color: var(--c-brand-strong); }
 
    بدون جاوااسکریپت. بلوک سراسری prefers-reduced-motion در انتهای همین
    فایل، انیمیشن را برای کاربران حساس به حرکت خنثی می‌کند. */
+/* نوار اطلاعیه = همان «نوار باریک بالای صفحه». عمدا آبیِ برند نیست:
+   یک نوار آبیِ تمام‌عرض بالای هدرِ سفید، آبی را از دکمه‌ها می‌دزدید و
+   صفحه را سنگین می‌کرد. زغالیِ سرمه‌ایِ فوتر همان‌جا تکرار می‌شود، پس
+   صفحه از بالا و پایین با یک رنگ بسته می‌شود و آبی فقط برای کنش می‌ماند.
+   جفت رنگ همان جفتِ فوتر است: ۱۱٫۴۵ کنتراست. */
 .ticker {
-  background: var(--c-brand);
-  color: var(--c-brand-ink);
+  background: #121a24;
+  color: #c9d2db;
   overflow: hidden;
-  border-block-end: 1px solid var(--c-line);
 }
 .ticker__track {
   display: flex;
@@ -580,12 +584,17 @@ a:hover { color: var(--c-brand-strong); }
 .site-footer a { color: #e4eaf0; text-decoration: none; }
 .site-footer a:hover { color: #ffffff; text-decoration: underline; }
 
+/* پنج ستون حالا: برند، دسترسی سریع، دسته‌ها، راهنما، ارتباط.
+   ستون برند پهن‌تر است چون نشان و یک پاراگراف دارد.
+   auto-fit نیست: ترتیب ستون‌ها معنا دارد و نباید بازچینش شود. */
 .site-footer__grid {
   display: grid;
-  grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1.8fr repeat(4, minmax(0, 1fr));
   gap: var(--s-6);
   padding-block: var(--s-7);
 }
+.site-footer__list--plain { color: #93a1ad; }
+.site-footer__list--plain li { font-size: var(--t-sm); line-height: 1.9; }
 .site-footer__title {
   margin: 0 0 var(--s-3);
   font-size: var(--t-sm);
@@ -623,96 +632,111 @@ a:hover { color: var(--c-brand-strong); }
    ۱. عمق عمودی از --c-brand به --c-brand-strong
    ۲. یک هالهٔ نرم در گوشهٔ بالای سمت شروع (منطقی، پس در RTL راست است)
    ۳. توریِ بسیار کم‌رنگ — حسِ فنی/مهندسی، نه تزئین پر سر و صدا */
+/* نوار تیرهٔ هیرو. در هر دو پوسته تیره است و عمدا به توکن‌های پوسته
+   گره نخورده: این یک بلوک تحریریه‌ایِ برند است، نه سطحی از رابط که با
+   پوسته عوض شود. رنگ‌ها همان‌هایی‌اند که در SVG هم به کار رفته‌اند.
+
+   overflow پنهان است چون گرافیک عمدا از لبهٔ ظرف بیرون می‌زند. */
 .hero {
-  background: linear-gradient(180deg, var(--c-surface-2) 0%, var(--c-bg) 100%);
-  border-block-end: 1px solid var(--c-line);
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(70% 120% at 12% 50%, rgba(47, 111, 174, 0.30) 0%, rgba(47, 111, 174, 0) 60%),
+    #0d1c2e;
 }
-/* دو ستون: متن در سمت راست (شروع خواندن فارسی)، تصویر در سمت چپ.
-   از grid با نام ستون استفاده نشده چون ترتیب منطقیِ DOM همان ترتیب
-   بصری در RTL است و مرورگر خودش جا‌به‌جا می‌کند. */
+
+/* دو ستون: متن در سمت شروع (راست در فارسی)، ترسیم در سمت پایان.
+   ستون ترسیم کمی پهن‌تر است تا دایره جا بیفتد.
+
+   ⚠️ ترسیم *کنار* متن است، نه زیرِ آن. روی روشن‌ترین خط ترسیم،
+   کنتراست متن سفید ۳٫۸۷ می‌شود — یعنی مردود. تا وقتی هر کدام ستون
+   خودشان را دارند، این حالت اصلا پیش نمی‌آید. روی موبایل که ترسیم به
+   پس‌زمینه می‌رود، شفافیتش پایین می‌آید و همان نقطه به ۱۰ می‌رسد. */
 .hero__inner {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: var(--s-7);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
   align-items: center;
-  padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  gap: var(--s-6);
+  min-height: clamp(23rem, 17rem + 13vw, 34rem);
+  padding-block: var(--s-7);
 }
+
 .hero__copy { min-width: 0; }
-.hero__eyebrow {
-  margin: 0 0 var(--s-3);
-  font-size: var(--t-sm);
-  font-weight: 500;
-  color: var(--c-ink-3);
-  display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap;
-}
+
+.hero__eyebrow { margin: 0 0 var(--s-4); }
+/* برچسب پیام تبلیغاتی. آبیِ شفاف، نه قرمز: قرمز در این پالت فقط برای
+   تخفیف واقعی است و اینجا تخفیفی ثبت نشده. */
 .hero__tag {
-  background: var(--c-accent-soft);
-  color: var(--c-accent);
-  border: 1px solid var(--c-accent);
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid rgba(143, 187, 232, 0.5);
   border-radius: var(--r-pill);
-  padding: 0.15rem 0.7rem;
+  background: rgba(47, 111, 174, 0.22);
+  color: #ffffff;
+  font-size: var(--t-sm);
   font-weight: 600;
 }
+
 .hero__title {
-  margin: 0 0 var(--s-3);
-  font-size: clamp(1.8rem, 1.1rem + 2.6vw, 2.9rem);
-  line-height: 1.35;
-  color: var(--c-ink);
+  margin: 0 0 var(--s-4);
+  /* فارسی letter-spacing نمی‌گیرد: حروف به هم چسبیده‌اند و فاصله‌دادن
+     کلمه را می‌شکند. تأکید از وزن و اندازه می‌آید. */
+  font-size: clamp(2rem, 1.2rem + 3vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.4;
+  color: #ffffff;
 }
 .hero__lede {
-  margin: 0 0 var(--s-5);
-  max-width: 52ch;
-  color: var(--c-ink-2);
+  margin: 0 0 var(--s-6);
+  max-width: 34ch;
+  color: #c5d4e4;
   font-size: var(--t-lg);
+  font-weight: 500;
   line-height: 1.9;
 }
-.hero__search { max-width: 34rem; margin-bottom: var(--s-5); }
 .hero__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
 
-/* --- ستون تصویر ---------------------------------------------------
-   اینجا جای تصویر بزرگِ هیرو است. تا وقتی تصویر واقعی نرسیده، کارتِ
-   پیشنهادِ یک محصولِ واقعی همین فضا را پر می‌کند تا ستون خالی و
-   ناتمام به نظر نرسد. */
-.hero__visual { min-width: 0; display: flex; justify-content: center; }
-.hero__offer {
-  display: grid;
-  grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
-  gap: var(--s-4);
-  align-items: center;
-  width: 100%;
-  max-width: 30rem;
-  padding: var(--s-4);
-  background: var(--c-surface);
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-lg);
-  box-shadow: var(--sh-md);
-  text-decoration: none;
-  color: inherit;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+/* کنشِ هیرو سفید است، نه آبیِ برند: آبیِ برند روی این سرمه‌ای فقط ۲٫۴۰
+   جدا می‌شود و دکمه گم می‌شد. سفید روی نوار ۱۷٫۱۸ و متن سرمه‌ای روی
+   سفید ۱۷٫۵۲ می‌دهد. فقط داخل هیرو، تا دکمه‌های بقیهٔ سایت عوض نشوند. */
+.hero__actions .btn {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--c-ink);
+  padding-inline: 1.6rem;
 }
-.hero__offer:hover { border-color: var(--c-brand); box-shadow: 0 16px 40px -18px rgba(18, 26, 36, 0.3); }
-.hero__offer-media {
-  display: block;
-  aspect-ratio: 3 / 4;
-  border-radius: var(--r-md);
-  overflow: hidden;
-  background: var(--c-sunken);
+.hero__actions .btn:hover {
+  background: #e3ecf5;
+  border-color: #e3ecf5;
+  color: var(--c-ink);
 }
-.hero__offer-media img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.hero__offer-body { display: flex; flex-direction: column; gap: var(--s-2); min-width: 0; }
-.hero__offer-brand { font-size: var(--t-xs); color: var(--c-ink-3); }
-.hero__offer-name { font-weight: 600; line-height: 1.6; color: var(--c-ink); }
-.hero__offer-price { display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap; }
-.hero__offer-price strong { font-size: var(--t-xl); font-weight: 700; color: var(--c-ink); }
-.hero__offer-price del { font-size: var(--t-xs); color: var(--c-ink-3); }
-.hero__offer-cta {
-  margin-top: var(--s-1);
-  align-self: flex-start;
-  color: var(--c-brand);
-  font-weight: 600;
-  font-size: var(--t-sm);
+
+/* ترسیم فنی. از ظرف بیرون می‌زند تا به لبهٔ نمایشگر برسد و بلوک
+   «تمام‌عرض» دیده شود؛ .hero اضافه را می‌برد. ارتفاع کمی بیشتر از
+   سلول است تا بالا و پایین هم بزند و قاب‌دار به نظر نرسد. */
+/* مقدار بیرون‌زدگی. درست همان اندازه‌ای که ترسیم را از لبهٔ ظرف به لبهٔ
+   نمایشگر می‌رساند، در هر عرضی:
+     * باریک‌تر از ۱۴۴۰ → ظرف حاشیهٔ کنار ندارد، فقط padding را خنثی کن.
+     * پهن‌تر از ۱۴۴۰ → نصف اختلاف هم روی padding اضافه می‌شود.
+   با عدد ثابت (مثلا 7vw) روی نمایشگر پهن یک نوار سرمه‌ای خالی کنار
+   ترسیم می‌ماند، و روی نمایشگر باریک بیش از لازم می‌برد. */
+.hero__art {
+  --hero-bleed: max(var(--s-4), (100vw - var(--container)) / 2 + var(--s-4));
+  justify-self: stretch;
+  width: calc(100% + var(--hero-bleed));
+  margin-inline-end: calc(var(--hero-bleed) * -1);
+  height: calc(100% + var(--s-7) * 2);
+  margin-block: calc(var(--s-7) * -1);
+  object-fit: contain;
+  /* ‎left و نه inline-start: object-position جفتِ منطقی ندارد. فروشگاه
+     همیشه dir="rtl" است (در layouts/base.njk ثابت نوشته شده)، پس لبهٔ
+     چپ همان سمتِ پایانِ متن است — جایی که ترسیم باید بچسبد. */
+  object-position: left center;
+  /* روی نمایشگر خیلی پهن، گرافیک بزرگ‌تر از لازم نشود. */
+  max-height: 34rem;
+  pointer-events: none;
 }
-.hero__visual-empty { aspect-ratio: 4 / 3; width: 100%; border-radius: var(--r-lg); background: var(--c-sunken); }
 
 /* ═══════════════════════════════════════════ ۸. فهرست کاتالوگ ═══ */
 
@@ -724,8 +748,20 @@ a:hover { color: var(--c-brand-strong); }
 }
 .listing__main { min-width: 0; }
 
-.listing__head { margin-bottom: var(--s-4); }
-.listing__head .page-title { margin-bottom: var(--s-1); }
+/* عنوان و شمار محصول در یک ردیف، با خط جداکنندهٔ پایین — تا سرصفحه از
+   شبکهٔ محصول جدا دیده شود. روی عرض کم، flex-wrap شمار را زیر عنوان
+   می‌برد. */
+.listing__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+  padding-block-end: var(--s-4);
+  border-block-end: 1px solid var(--c-line);
+}
+.listing__head .page-title { margin: 0; }
 .listing__count { margin: 0; color: var(--c-ink-2); font-size: var(--t-sm); }
 
 /* --- نوار کناری --- */
@@ -1010,7 +1046,7 @@ a:hover { color: var(--c-brand-strong); }
      new  روی سطح کارت                   → سفید = ۱۳٫۵۰
    قرمزِ روشن (#e63946) اینجا به کار نمی‌رود: سفید رویش ۴٫۱۷ است. */
 .badge--sale { background: var(--c-accent); color: #ffffff; }
-.badge--new  { background: var(--c-brand); color: #ffffff; }
+.badge--new { background: var(--c-brand); color: #ffffff; }
 
 .stock { font-size: var(--t-xs); font-weight: 600; }
 .stock--in { color: var(--c-ok); }
@@ -1233,13 +1269,13 @@ a:hover { color: var(--c-brand-strong); }
 
 @media (max-width: 1000px) {
   .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .site-footer__grid { grid-template-columns: 1fr 1fr; }
+  /* پنج ستون به سه: ستون برند پهن می‌ماند، چهار ستون پیوند دو تا دو تا. */
+  .site-footer__grid { grid-template-columns: 1.4fr repeat(2, minmax(0, 1fr)); gap: var(--s-5); }
 }
 
 @media (max-width: 900px) {
-  .hero__inner { grid-template-columns: 1fr; gap: var(--s-6); padding-block: var(--s-6); }
-  /* در یک ستون، خط تأکید فاصلهٔ کمتری می‌خواهد تا متن به لبه نچسبد. */
-  .hero__copy { padding-inline-start: var(--s-4); }
+  /* قاعده‌های هیرو روی موبایل یک‌جا در بخش «واکنش‌گراییِ طراحیِ تازه»
+     پایین همین فایل جمع شده‌اند، نه اینجا. */
   .listing { grid-template-columns: 1fr; }
   .listing-sidebar { position: static; }
   .product-detail { grid-template-columns: 1fr; }
@@ -1249,6 +1285,8 @@ a:hover { color: var(--c-brand-strong); }
   .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
   .category-grid { grid-template-columns: 1fr 1fr; }
   .site-footer__grid { grid-template-columns: 1fr; gap: var(--s-5); padding-block: var(--s-6); }
+  /* کپی‌رایت و شعار روی موبایل زیر هم، نه دو سرِ یک خطِ تنگ. */
+  .site-footer__bottom { flex-direction: column; align-items: flex-start; gap: var(--s-2); }
 
   /* هدر موبایل: برند و ناوبری در یک ردیف، جست‌وجو تمام‌عرض زیر آن.
      همه با ترتیب flex — هیچ جاوااسکریپتی و هیچ منوی کشویی‌ای لازم نیست. */
@@ -1533,24 +1571,45 @@ a:hover { color: var(--c-brand-strong); }
 
 /* ═══════════════════════════ واکنش‌گراییِ طراحیِ تازه ═══ */
 
-/* هیرو زیر ۹۰۰ پیکسل تک‌ستونه می‌شود و کارت پیشنهاد زیر متن می‌نشیند. */
+/* هیرو روی موبایل: نسخهٔ فشردهٔ دسکتاپ نیست، ترکیب دیگری است.
+
+   زیر ۹۰۰ پیکسل دو ستون کنار هم جا نمی‌شود، پس ترسیم از ستون کناری
+   بیرون می‌آید و تمام نوار را به‌عنوان پس‌زمینه می‌پوشاند، و متن روی
+   آن می‌نشیند. بلوک همان‌قدر قوی می‌ماند و تیتر تمام‌عرض می‌شود.
+
+   شفافیت ۰٫۳۲ عدد دلخواه نیست: روی روشن‌ترین خط ترسیم، متن سفید با
+   شفافیت کامل ۳٫۸۷ می‌داد (مردود) و با این مقدار به بالای ۱۰ می‌رسد. */
 @media (max-width: 900px) {
   .hero__inner {
     grid-template-columns: 1fr;
-    gap: var(--s-5);
-    padding-block: var(--s-6);
+    min-height: 0;
+    padding-block: var(--s-7);
+    /* static تا بلوکِ دربرگیرندهٔ ترسیمِ absolute خودِ .hero شود و
+       گرافیک تا لبهٔ نمایشگر برسد، نه تا لبهٔ ظرفِ حاشیه‌دار. */
+    position: static;
   }
-  .hero__visual { justify-content: stretch; }
-  .hero__offer { max-width: none; }
-  .hero__lede { font-size: var(--t-md); }
+  .hero__art {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    /* هم بیرون‌زدگی و هم سقفِ ارتفاعِ دسکتاپ باید خنثی شوند: اگر تیتر
+       روی صفحهٔ باریک چند خط بشکند، نوار از ۳۴rem بلندتر می‌شود و با
+       سقفِ باقی‌مانده یک نوار سرمه‌ای خالی زیر گرافیک می‌ماند. */
+    max-height: none;
+    margin: 0;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.32;
+  }
+  /* متن باید *روی* ترسیم بیفتد، نه زیرش. */
+  .hero__copy { position: relative; z-index: 1; }
+  .hero__lede { max-width: 42ch; }
 }
 
-/* روی موبایل کارت پیشنهاد عمودی می‌شود تا تصویر خفه نشود. */
 @media (max-width: 560px) {
-  .hero__offer { grid-template-columns: 1fr; }
-  .hero__offer-media { max-width: 12rem; margin-inline: auto; }
-  .hero__offer-body { text-align: center; align-items: center; }
-  .hero__offer-cta { align-self: center; }
+  .hero__lede { font-size: var(--t-md); }
   .hero__actions .btn { flex: 1 1 auto; justify-content: center; }
 }
 
@@ -1587,4 +1646,176 @@ a:hover { color: var(--c-brand-strong); }
   .product-detail { grid-template-columns: 1fr; gap: var(--s-5); }
   .product-detail__media { position: static; }
   .product-detail__image { max-width: 22rem; margin-inline: auto; }
+}
+
+/* ═════════════════════════════════════════ ۷ب. بخش‌های صفحهٔ اصلی ═══
+
+   این قاعده‌ها هنگام بازنویسی هیرو ناخواسته حذف شده بودند و صفحهٔ اصلی
+   زیر هیرو بی‌استایل مانده بود. اینجا برگشته‌اند و برای پوستهٔ روشن
+   بازطراحی شده‌اند، نه فقط کپی‌شده. */
+
+/* ریتم عمودی: بخش‌ها نفس می‌کشند و بخش‌های «ته‌رنگ‌دار» با سطح خاکستری
+   از هم جدا می‌شوند، نه با خط. */
+.home-section { padding-block: var(--s-7); }
+.home-section--tint {
+  background: var(--c-surface-2);
+  border-block: 1px solid var(--c-line);
+}
+.home-section__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s-4); flex-wrap: wrap; margin-bottom: var(--s-5);
+}
+.home-section__title { margin: 0; font-size: var(--t-2xl); color: var(--c-ink); }
+.home-section__text { margin: var(--s-1) 0 0; color: var(--c-ink-2); font-size: var(--t-sm); }
+.home-section__link {
+  font-size: var(--t-sm); font-weight: 600; text-decoration: none;
+  color: var(--c-brand);
+}
+.home-section__link:hover { text-decoration: underline; }
+
+/* دسته‌ها — کاشی‌های پیمایش. شمار محصول یک نشانِ گرد است تا عدد با نام
+   قاطی نشود و فهرست در یک نگاه اسکن شود. */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--s-3);
+}
+.category-card {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  text-decoration: none;
+  color: var(--c-ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.category-card:hover {
+  border-color: var(--c-brand);
+  box-shadow: var(--sh-md);
+  color: var(--c-brand-strong);
+}
+.category-card__name { font-weight: 600; }
+.category-card__count {
+  flex: 0 0 auto;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--r-pill);
+  background: var(--c-brand-soft);
+  color: var(--c-brand);
+  font-size: var(--t-xs);
+  font-weight: 600;
+}
+.home-section--tint .category-card { background: var(--c-bg); }
+
+/* برندها — تراشه‌های کم‌وزن، نه کارت. */
+.brand-strip { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.brand-chip {
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-pill);
+  background: var(--c-surface);
+  color: var(--c-ink-2);
+  text-decoration: none;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.brand-chip:hover { border-color: var(--c-brand); color: var(--c-brand); }
+
+/* نوار اعتماد — چه چیزی این کاتالوگ را کار راه‌انداز می‌کند. هر کارت یک
+   قابلیتِ واقعیِ همین نسخه است، نه شعار. */
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--s-4);
+}
+.value-card {
+  padding: var(--s-5);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+}
+.home-section--tint .value-card { background: var(--c-bg); }
+.value-card__title {
+  margin: 0 0 var(--s-2);
+  font-size: var(--t-md);
+  font-weight: 600;
+  color: var(--c-ink);
+}
+.value-card__text { margin: 0; color: var(--c-ink-2); font-size: var(--t-sm); line-height: 1.9; }
+
+/* فراخوان پایانی — تنها بلوک پررنگِ صفحه. */
+.cta-band {
+  margin-block: var(--s-7);
+  padding: var(--s-6) var(--s-7);
+  border-radius: var(--r-lg);
+  background: var(--c-brand);
+  color: var(--c-brand-ink);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-5); flex-wrap: wrap;
+}
+.cta-band__title { margin: 0 0 var(--s-2); font-size: var(--t-xl); color: var(--c-brand-ink); }
+.cta-band__text { margin: 0; color: #dce9f6; max-width: 60ch; }
+
+@media (max-width: 640px) {
+  .home-section { padding-block: var(--s-6); }
+  /* ‎.cta-band padding در بخش واکنش‌گرایی تعریف شده و اینجا تکرار نمی‌شود. */
+  .cta-band .btn { width: 100%; justify-content: center; }
+}
+
+/* ═══════════════════════ ۷پ. بخش تخفیف‌دار و پالایش ویترین ═══ */
+
+/* قفسهٔ تخفیف‌دار با یک نوار قرمزِ باریک از بقیه جدا می‌شود، نه با
+   زمینهٔ قرمز: تأکیدِ تبلیغاتی باید دیده شود ولی متن را نخواند.
+   این بخش فقط وقتی رندر می‌شود که حراج واقعی در داده باشد. */
+.home-section--offer {
+  border-block-start: 3px solid var(--c-accent);
+  background: var(--c-accent-soft);
+}
+.home-section__eyebrow {
+  margin: 0 0 var(--s-1);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--c-accent-strong);
+}
+
+/* ── §13 فهرست: نوار ابزار و ستون کنار ───────────────────────────── */
+
+/* ستون کنار از ۲۴۰ به ۲۷۲ پیکسل. در بوم ۱۴۴۰ پیکسلی، ۲۴۰ برای نام
+   دسته‌های فارسیِ دوکلمه‌ای کم بود و متن می‌شکست. */
+@media (min-width: 901px) {
+  .listing { grid-template-columns: 272px minmax(0, 1fr); }
+}
+
+/* ── §5 ستون کنار روی موبایل ─────────────────────────────────────────
+   زیر ۹۰۰ پیکسل ستون بالای شبکه می‌نشیند. گروه دسته‌بندی‌ها به‌صورت
+   پیش‌فرض باز است (صفت open در قالب) و با ۱۱ دسته، شبکهٔ محصول را
+   یک صفحهٔ کامل به پایین می‌راند.
+
+   راه‌حل بدون جاوااسکریپت: فهرستِ گروهِ باز روی موبایل سقف ارتفاع
+   می‌گیرد و خودش اسکرول می‌شود. آکوردئون سالم می‌ماند، محصول‌ها در
+   نگاه اول دیده می‌شوند، و هیچ اسکریپتی لازم نیست. */
+@media (max-width: 900px) {
+  .listing-sidebar { gap: var(--s-2); }
+  .filter-group { padding: var(--s-3) var(--s-4); }
+  .filter-group[open] .filter-list {
+    max-height: 14rem;
+    overflow-y: auto;
+    /* اسکرولِ داخلی نباید اسکرول صفحه را بدزدد. */
+    overscroll-behavior: contain;
+  }
+}
+
+/* ── تورفتگیِ رشتهٔ بلند ──────────────────────────────────────────────
+   متن فارسی در فاصله‌ها می‌شکند، پس امروز هیچ‌جا سرریز ندارد. ولی نام
+   محصول، SKU و شماره فنی دادهٔ ورودی‌اند: یک شماره فنیِ ۴۰ کاراکتری
+   بدون فاصله می‌تواند کارت را از قاب بیرون بزند. این یک تور ایمنی است،
+   نه اصلاح یک خرابیِ موجود. */
+.product-card__name,
+.product-card__oem,
+.product-detail__title,
+.page-title,
+.part-number {
+  overflow-wrap: anywhere;
 }

@@ -185,6 +185,54 @@ test('وقتی محصول ویژه هست، همان محصول در قفسهٔ 
     'یک بار در قفسهٔ ویژه و یک بار در قفسهٔ تازه — نه بیشتر');
 });
 
+/* ═════════════════════════════════════ ۴ب. قفسهٔ تخفیف‌دار */
+
+/* قفسهٔ تخفیف‌دار نباید هیچ تخفیفی بسازد. تنها منبعش ستون
+   sale_price_toman است، و فقط وقتی از price_toman کمتر باشد. */
+
+test('محصول با قیمت حراج واقعی در قفسهٔ «تخفیف‌دار» می‌آید', async () => {
+  const catId = await insertCategory(db);
+  await insertProduct(db, {
+    categoryId: catId, name: 'لنت ترمز جلو', slug: 'لنت-ترمز-جلو',
+    sku: 'S10', priceToman: 4000000, salePriceToman: 3200000,
+  });
+
+  const html = await homeHtml();
+  assert.match(html, /محصولات با قیمت حراج/);
+  assert.match(html, /class="home-section home-section--offer"/);
+  assert.match(html, /لنت ترمز جلو/);
+  /* قیمت حراج به‌عنوان قیمت جاری و قیمت اصلی خط‌خورده. */
+  assert.ok(html.includes('۳٬۲۰۰٬۰۰۰ تومان'), 'قیمت حراج با رقم فارسی');
+  assert.match(html, /class="price__old num"/);
+});
+
+test('بدون قیمت حراج واقعی، قفسهٔ «تخفیف‌دار» اصلا رندر نمی‌شود', async () => {
+  const catId = await insertCategory(db);
+  await insertProduct(db, {
+    categoryId: catId, name: 'فیلتر هوا', slug: 'فیلتر-هوا',
+    sku: 'S11', priceToman: 900000,
+  });
+
+  const html = await homeHtml();
+  assert.ok(!html.includes('محصولات با قیمت حراج'), 'قفسهٔ خالی نباید بیاید');
+  assert.ok(!html.includes('home-section--offer'), 'بخش تبلیغاتی نباید بیاید');
+});
+
+/* قیمت حراجِ گران‌تر از قیمت اصلی را *پایگاه داده* رد می‌کند، نه فیلتر.
+   این آزمون همان را سند می‌کند تا اگر روزی قید برداشته شد، اینجا
+   بشکند — وگرنه کسی نمی‌فهمد که فیلتر onSale روی آن قید تکیه دارد. */
+test('قیمت حراجِ بالاتر از قیمت اصلی در سطح پایگاه داده رد می‌شود', async () => {
+  const catId = await insertCategory(db);
+  await assert.rejects(
+    () => insertProduct(db, {
+      categoryId: catId, name: 'دیسک ترمز', slug: 'دیسک-ترمز',
+      sku: 'S12', priceToman: 1000000, salePriceToman: 1500000,
+    }),
+    /products_sale_below_price|violates check/i
+  );
+});
+
+
 test('محصول غیرفعال در صفحهٔ اصلی دیده نمی‌شود', async () => {
   const catId = await insertCategory(db);
   await insertProduct(db, {

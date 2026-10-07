@@ -32,9 +32,32 @@
       </ul>
     </div>
 
+    {# دسته‌ها از همان داده‌ای می‌آیند که نوار دستهٔ هدر استفاده می‌کند
+       (res.locals.navCategories در src/app.js). پیوند واقعی است، نه فهرست
+       تزئینی. شش تای اول کافی است؛ بقیه از «همهٔ محصولات» در دسترس‌اند. #}
+    <div class="site-footer__col">
+      <h2 class="site-footer__title">دسته‌بندی‌ها</h2>
+      {% if navCategories.length %}
+        <ul class="site-footer__list">
+          {% for c in navCategories %}
+            {% if loop.index <= 6 %}
+              <li><a href="/category/{{ c.slug | urlencode }}">{{ c.name }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if navCategories.length > 6 %}
+            <li><a href="/products">همهٔ دسته‌ها</a></li>
+          {% endif %}
+        </ul>
+      {% else %}
+        <p class="site-footer__note">هنوز دسته‌بندی‌ای ثبت نشده است.</p>
+      {% endif %}
+    </div>
+
+    {# این سه مورد راهنما هستند، نه پیوند. با کلاس --plain ظاهرشان هم
+       همین را می‌گوید تا کاربر بی‌جهت رویشان کلیک نکند. #}
     <div class="site-footer__col">
       <h2 class="site-footer__title">راهنمای پیدا کردن قطعه</h2>
-      <ul class="site-footer__list">
+      <ul class="site-footer__list site-footer__list--plain">
         <li>جست‌وجو با نام فارسی قطعه</li>
         <li>جست‌وجو با کد کالا</li>
         <li>جست‌وجو با شماره فنی (OEM)</li>
