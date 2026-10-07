@@ -226,17 +226,51 @@
 
 
 {# ------------------------------------------------------------ برندها #}
+{# نشان برندها، نه فهرست متنی. منوی متنی «برندها» از هدر برداشته شده و
+   حضور بصری برندها اینجا — پایین صفحه، پیش از فوتر — جمع شده است.
+
+   نشان هر برند از public/img/brands/<اسلاگ>.<پسوند> می‌آید
+   (services/brandLogos.js). برندی که فایل نشان ندارد یک کاشیِ نامِ
+   طراحی‌شده می‌گیرد: نه جای خالی، نه تصویر شکسته، و نه همان «فهرست
+   متنی» که قرار بود برداشته شود.
+
+   ⚠️ هیچ نشانِ شخص ثالثی در این مخزن کشیده یا دانلود نشده است. نشان
+   خودروسازها و سازندگان قطعه علامت تجاری ثبت‌شده است؛ فایلش را باید
+   صاحب سایت با اجازهٔ خودش بگذارد. #}
 {% if brandList.length %}
-<section class="home-section">
+<section class="home-section home-section--tint" id="brands">
   <div class="container">
     <div class="home-section__head">
-      <h2 class="home-section__title">برندها</h2>
+      <div>
+        <h2 class="home-section__title">برندها</h2>
+        <p class="home-section__text">سازندگان قطعه‌های موجود در این کاتالوگ</p>
+      </div>
     </div>
-    <div class="brand-strip">
+
+    <ul class="brand-logos">
       {% for b in brandList %}
-        <a class="brand-chip" href="/brand/{{ b.slug | urlencode }}">{{ b.name }}</a>
+        <li>
+          <a class="brand-logo" href="/brand/{{ b.slug | urlencode }}"
+             aria-label="قطعات {{ b.name }}">
+            {% if b.logoUrl %}
+              {# نشان واقعی هست: فقط تصویر، بدون هیچ نوشتهٔ زیرش.
+                 alt نام برند را دارد، پس صفحه‌خوان آن را می‌گوید بدون
+                 اینکه متنی دیده شود. #}
+              <img class="brand-logo__img" src="{{ b.logoUrl }}" alt="{{ b.name }}"
+                   loading="lazy" decoding="async" />
+            {% else %}
+              {# ⚠️ هیچ فایل نشانی برای این برند روی دیسک نیست.
+                 جانشین، کاشیِ نام است — نه به‌عنوان طراحی دلخواه، بلکه
+                 چون چیز دیگری برای نشان دادن وجود ندارد. به‌محض اینکه
+                 فایل در public/img/brands/<اسلاگ>.svg گذاشته شود، همین
+                 شاخه کنار می‌رود و تصویر جایش را می‌گیرد.
+                 راهنمای نام‌گذاری: public/img/brands/README.md #}
+              <span class="brand-logo__wordmark">{{ b.name }}</span>
+            {% endif %}
+          </a>
+        </li>
       {% endfor %}
-    </div>
+    </ul>
   </div>
 </section>
 {% endif %}

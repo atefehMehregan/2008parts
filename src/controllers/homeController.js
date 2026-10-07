@@ -11,6 +11,8 @@
  *     صفحه همان را صادقانه می‌گوید — نه کارت‌های نمونه.
  * ==========================================================================*/
 
+import { withLogos } from '../services/brandLogos.js';
+
 /* تعداد قلم در هر قفسهٔ صفحهٔ اصلی. چهار ستون در دسکتاپ، دو ردیف. */
 export const SHELF_SIZE = 8;
 
@@ -60,7 +62,10 @@ export function createHomeController({ products, categories, brands }) {
         saleItems,
         latestItems: (featuredItems.length === 0 && freshItems.length === 0) ? latest.items : [],
         categoryList,
-        brandList,
+        /* بخش برندها نشان نشان می‌دهد، نه متن. withLogos فایل موجود در
+           public/img/brands/ را به اسلاگ هر برند می‌چسباند؛ برندِ
+           بی‌فایل کاشیِ نام می‌گیرد، نه تصویر شکسته. */
+        brandList: withLogos(brandList),
         totalProducts: latest.total,
         catalogueEmpty: latest.total === 0,
       });

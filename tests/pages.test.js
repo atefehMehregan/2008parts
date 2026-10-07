@@ -159,9 +159,61 @@ test('هر دو صفحه در هدر و فوتر پیوند دارند', async (
   assert.match(body, /href="\/contact"/);
 });
 
-test('صفحهٔ جاری در ناوبری علامت می‌خورد', async () => {
+/* ناوبری هدر حالا فقط پنج خانوادهٔ خودرو است، پس /about دیگر آنجا
+   علامت نمی‌خورد. قولی که باقی می‌ماند: صفحه هنوز از فوتر در دسترس
+   است و مسیر نقشهٔ صفحه (breadcrumb) جای کاربر را می‌گوید. */
+test('صفحهٔ «دربارهٔ ما» از فوتر در دسترس است و مسیر صفحه را نشان می‌دهد', async () => {
   const body = await html('/about');
-  assert.match(body, /href="\/about" aria-current="page"/);
+  const footer = footerOf(body);
+  assert.match(footer, /href="\/about"/, 'باید در فوتر پیوند داشته باشد');
+  assert.match(body, /class="breadcrumb"/);
+  assert.match(body, /aria-current="page"/, 'قلم آخر مسیر صفحه باید علامت بخورد');
+});
+
+/* فوتر اطلاعات تماس واقعی را نشان می‌دهد و همان‌ها را از پیکربندی
+   می‌گیرد — نه متن ثابت. اگر کسی مقدار را در قالب hard-code کند، این
+   آزمون با عوض شدن پیکربندی می‌شکند و خبر می‌دهد. */
+test('فوتر شماره و ایمیل واقعی را قابل کلیک نشان می‌دهد', async () => {
+  const { config } = await import('../src/config/index.js');
+  const footer = footerOf(await html('/'));
+
+  assert.ok(footer.includes(config.contact.phone), 'تلفن ثابت باید دیده شود');
+  assert.ok(footer.includes(config.contact.mobile), 'همراه باید دیده شود');
+  assert.ok(footer.includes(config.contact.email), 'ایمیل باید دیده شود');
+
+  assert.ok(footer.includes(`href="tel:${config.contact.phoneTel}"`));
+  assert.ok(footer.includes(`href="tel:${config.contact.mobileTel}"`));
+  assert.ok(footer.includes(`href="mailto:${config.contact.email}"`));
+
+  /* متن منسوخ نباید مانده باشد. */
+  assert.ok(!footer.includes('هنوز ثبت نشده'), 'جملهٔ قدیمی باید رفته باشد');
+});
+
+/* ⚠️ برش فوتر باید تا </footer> باشد، نه تا ته سند: دکمه‌های شناور
+   *بعد* از فوتر در DOM می‌آیند و با برشِ تا انتها، نشانی اینستاگرامِ
+   آن‌ها به حساب فوتر گذاشته می‌شد — نسخهٔ اول همین آزمون دقیقا به
+   همین دلیل مردود شد، در حالی که فوتر درست بود. */
+function footerOf(body) {
+  const a = body.indexOf('<footer');
+  const b = body.indexOf('</footer>', a);
+  return body.slice(a, b);
+}
+
+test('فوتر هیچ نشانی، شبکهٔ اجتماعی یا شمارهٔ ساختگی اضافه نمی‌کند', async () => {
+  const { config } = await import('../src/config/index.js');
+  const footer = footerOf(await html('/'));
+  const known = new Set([
+    config.contact.phone.replace(/\D/g, ''),
+    config.contact.mobile.replace(/\D/g, ''),
+    config.contact.phoneTel.replace(/\D/g, ''),
+    config.contact.mobileTel.replace(/\D/g, ''),
+  ]);
+  for (const m of footer.match(/\b\d{9,}\b/g) || []) {
+    assert.ok(known.has(m), `شمارهٔ ناشناخته در فوتر: ${m}`);
+  }
+  for (const w of ['نشانی:', 'آدرس:', 'instagram.com', 't.me/']) {
+    assert.ok(!footer.includes(w), `«${w}» ساختگی است و نباید در فوتر باشد`);
+  }
 });
 
 test('«مقالات» هیچ‌جا پیوند نشده، چون چنین مسیری وجود ندارد', async () => {

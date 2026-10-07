@@ -353,12 +353,23 @@ a:hover { color: var(--c-brand-strong); }
   border-bottom: 1px solid var(--c-line);
 }
 
+/* نوار هدر عمدا پهن‌تر از بقیهٔ صفحه است.
+
+   ‎--container (۱۴۴۰) برای ستون‌های محتوا درست است، ولی برای نوار هدر
+   کم بود: نشان، جست‌وجو، پنج قلم ناوبری و سبد همه در ۱۴۴۰ پیکسل به هم
+   می‌چسبیدند. این یک max-width محلی است، نه تغییرِ توکن سراسری — پس
+   چیدمان هیچ صفحهٔ دیگری عوض نمی‌شود.
+
+   فاصله‌ها: gap از ۱rem به ۲rem، padding افقی از ۱rem به ۲rem، و ارتفاع
+   از ۷۲ به ۸۸ پیکسل. هیچ عنصری بزرگ‌تر نشده؛ فقط فاصله‌ها بازتر شده. */
 .site-header__bar {
   display: flex;
   align-items: center;
-  gap: var(--s-4);
-  min-height: 72px;
-  padding-block: var(--s-3);
+  gap: var(--s-6);
+  max-width: 1680px;
+  min-height: 88px;
+  padding-inline: var(--s-6);
+  padding-block: var(--s-4);
   flex-wrap: wrap;
 }
 
@@ -396,8 +407,10 @@ a:hover { color: var(--c-brand-strong); }
 /* --- جست‌وجوی هدر --- */
 .site-search {
   display: flex;
-  flex: 1 1 320px;
-  max-width: 520px;
+  /* پایهٔ ۳۶۰ و سقف ۵۶۰: جای کافی برای «نام قطعه، کد کالا یا شماره فنی»
+     بدون اینکه ناوبری را به خط بعد بیندازد. */
+  flex: 1 1 360px;
+  max-width: 560px;
   min-width: 0;
   border: 1px solid var(--c-line-strong);
   border-radius: var(--r-md);
@@ -519,17 +532,23 @@ a:hover { color: var(--c-brand-strong); }
 /* --- ردیف دسته‌ها ---------------------------------------------------
    روی موبایل افقی اسکرول می‌شود: بدون همبرگر، بدون جاوااسکریپت. */
 /* --- ناوبری --- */
-.site-nav { margin-inline-start: auto; }
+.site-nav { margin-inline-start: auto; min-width: 0; }
 .site-nav__list {
   display: flex;
-  gap: var(--s-1);
+  align-items: center;
+  /* پنج قلم با نام فارسی بلند؛ ۰٫۵rem فاصله بین آن‌ها لازم است تا به هم
+     نچسبند، و flex-wrap تا روی عرض میانی به خط دوم بروند نه فشرده شوند. */
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  justify-content: flex-end;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 .site-nav__link {
   display: block;
-  padding: 0.45rem 0.85rem;
+  white-space: nowrap;
+  padding: 0.5rem 0.9rem;
   border-radius: var(--r-md);
   color: var(--c-ink-2);
   text-decoration: none;
@@ -538,110 +557,6 @@ a:hover { color: var(--c-brand-strong); }
 }
 .site-nav__link:hover { color: var(--c-brand); background: var(--c-brand-soft); }
 .site-nav__link.is-current { color: var(--c-brand); background: var(--c-brand-soft); }
-
-/* --- منوهای گروه‌شدهٔ ناوبری -----------------------------------------
-   جانشین ردیف قدیمیِ cat-bar که یازده دسته را به‌صورت تخت کنار «خانه» و
-   «محصولات» می‌چید. هیچ مقصدی حذف نشد؛ گروه شد.
-
-   ⚠️ این بلوک عمدا *بعد* از .site-nav__link آمده. وقتی بالاتر بود،
-   ‎.site-nav__link{display:block} روی ‎.nav-menu__summary{display:flex}
-   را می‌پوشاند — هم‌ویژگی بودند و ترتیب منبع تصمیم می‌گرفت — و فلشِ
-   کنار عنوان از جا در می‌رفت. */
-.nav-menu { position: static; }
-
-/* عنوان منو هم‌شکلِ پیوندهای ناوبری است، ولی کلاس آن‌ها را نمی‌گیرد تا
-   دوباره گرفتار همان تداخلِ display نشود. */
-.nav-menu__summary {
-  display: flex;
-  align-items: center;
-  gap: var(--s-2);
-  padding: 0.45rem 0.85rem;
-  border-radius: var(--r-md);
-  color: var(--c-ink-2);
-  font-weight: 500;
-  font-size: var(--t-sm);
-  cursor: pointer;
-  list-style: none;
-  white-space: nowrap;
-}
-.nav-menu__summary::-webkit-details-marker { display: none; }
-.nav-menu__summary::after {
-  content: '';
-  width: 0.45rem; height: 0.45rem;
-  border-inline-end: 2px solid currentColor;
-  border-block-end: 2px solid currentColor;
-  /* با transform می‌چرخد، نه با جهت — پس در RTL هم درست می‌افتد. */
-  transform: rotate(45deg) translate(-1px, -1px);
-  transition: transform 0.15s ease;
-  flex: none;
-  opacity: 0.75;
-}
-.nav-menu__summary:hover { color: var(--c-brand); background: var(--c-brand-soft); }
-.nav-menu__summary:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
-.nav-menu[open] > .nav-menu__summary { color: var(--c-brand); background: var(--c-brand-soft); }
-.nav-menu[open] > .nav-menu__summary::after { transform: rotate(-135deg); }
-
-/* پنل تمام‌عرضِ زیر هدر، نه کشوی باریک: یازده دسته در یک ستون به فهرستی
-   بلند و اسکرول‌دار تبدیل می‌شد. روی محتوا می‌افتد و آن را پایین هل
-   نمی‌دهد، پس باز و بسته شدن چیدمان را نمی‌پراند. */
-.nav-menu__panel {
-  position: absolute;
-  inset-inline: 0;
-  top: 100%;
-  z-index: 30;
-  background: var(--c-surface);
-  border-block: 1px solid var(--c-line);
-  box-shadow: var(--sh-md);
-}
-.nav-menu__inner { padding-block: var(--s-5); }
-.nav-menu__heading {
-  margin: 0 0 var(--s-3);
-  font-size: var(--t-xs);
-  font-weight: 600;
-  color: var(--c-ink-3);
-}
-.nav-menu__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--s-1) var(--s-4);
-  list-style: none;
-  margin: 0 0 var(--s-4);
-  padding: 0;
-}
-.nav-menu__link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
-  padding: 0.5rem 0.7rem;
-  border-radius: var(--r-sm);
-  color: var(--c-ink-2);
-  text-decoration: none;
-  font-size: var(--t-sm);
-}
-.nav-menu__link:hover { background: var(--c-brand-soft); color: var(--c-brand-strong); }
-.nav-menu__link.is-current { background: var(--c-brand-soft); color: var(--c-brand-strong); font-weight: 600; }
-.nav-menu__name { min-width: 0; }
-/* شمار محصول — همان قرصِ کم‌رنگِ کارت دسته در صفحهٔ اصلی. */
-.nav-menu__count {
-  flex: none;
-  padding: 0.05rem 0.5rem;
-  border-radius: var(--r-pill);
-  background: var(--c-brand-soft);
-  color: var(--c-brand-strong);
-  font-size: var(--t-xs);
-}
-.nav-menu__all {
-  display: inline-block;
-  padding-block-start: var(--s-3);
-  border-block-start: 1px solid var(--c-line);
-  width: 100%;
-  color: var(--c-brand);
-  font-weight: 600;
-  font-size: var(--t-sm);
-  text-decoration: none;
-}
-.nav-menu__all:hover { text-decoration: underline; }
 
 /* ═══════════════════════════════════════════════════════ ۶. فوتر ═══ */
 
@@ -1346,6 +1261,16 @@ a:hover { color: var(--c-brand-strong); }
 
 /* ═══════════════════════════════════ ۱۳. واکنش‌گرایی فروشگاه ═══ */
 
+/* تبلت و لپ‌تاپ باریک: نشان + جست‌وجو + پنج قلم ناوبری + سبد در یک ردیف
+   جا نمی‌شوند. flex-wrap خودش ناوبری را به خط دوم می‌برد، ولی اینجا
+   صریح تمام‌عرض می‌شود تا وسطِ ردیف معلق نماند و فاصله‌اش درست باشد. */
+@media (max-width: 1200px) {
+  .site-nav { flex-basis: 100%; margin-inline-start: 0; }
+  .site-nav__list { justify-content: flex-start; }
+  .site-header__bar { padding-block: var(--s-3); min-height: 0; row-gap: var(--s-3); }
+}
+
+
 @media (max-width: 1000px) {
   .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   /* پنج ستون به سه: ستون برند پهن می‌ماند، چهار ستون پیوند دو تا دو تا. */
@@ -1367,20 +1292,26 @@ a:hover { color: var(--c-brand-strong); }
   /* کپی‌رایت و شعار روی موبایل زیر هم، نه دو سرِ یک خطِ تنگ. */
   .site-footer__bottom { flex-direction: column; align-items: flex-start; gap: var(--s-2); }
 
-  /* هدر موبایل سه ردیف می‌شود: برند، ناوبری، جست‌وجو. فقط با ترتیب
-     flex — بدون همبرگر و بدون جاوااسکریپت.
+  /* هدر موبایل سه ردیف می‌شود: برند+سبد، جست‌وجو، ناوبری. فقط با
+     ترتیب flex — بدون همبرگر و بدون جاوااسکریپت.
 
-     ناوبری ردیف خودش را می‌گیرد چون با آمدن «دسته‌بندی‌ها» سه آیتم شد
-     و کنار نشانِ برند در ۳۷۵ پیکسل جا نمی‌شد.
+     ناوبری ردیف خودش را می‌گیرد و *آخر* می‌آید: پنج نام خودرو در عرض
+     ۳۷۵ پیکسل دو خط می‌شوند، و اگر بالای جست‌وجو بنشینند، کادر جست‌وجو
+     را به پایینِ تاشو می‌رانند. ناوبری پنهان نمی‌شود — فقط جایش عوض
+     می‌شود — و هر پنج قلم قابل لمس می‌مانند.
 
-     پنل دسته‌ها اینجا قاعدهٔ جداگانه نمی‌خواهد: به .site-header لنگر
-     انداخته، نه به آیتم ناوبری، پس در هر عرضی خودش تمام‌عرض است و
-     ستون‌هایش با auto-fill کم و زیاد می‌شوند. */
-  .site-header__bar { gap: var(--s-3); min-height: 0; }
-  .site-nav { order: 2; flex-basis: 100%; margin-inline-start: 0; }
-  .site-nav__list { flex-wrap: wrap; }
-  .site-search { order: 3; flex-basis: 100%; max-width: none; }
-  .nav-menu__inner { padding-block: var(--s-4); }
+     justify-content روی موبایل از flex-end به flex-start برمی‌گردد تا
+     دو خطِ ناوبری هم‌تراز لبهٔ شروع (راست در فارسی) بمانند. */
+  .site-header__bar {
+    gap: var(--s-3);
+    min-height: 0;
+    padding-inline: var(--s-4);
+  }
+  .site-search { order: 2; flex-basis: 100%; max-width: none; }
+  .site-nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+  .site-nav__list { flex-wrap: wrap; justify-content: flex-start; gap: var(--s-1); }
+  /* هدف لمس: ۴۴ پیکسل ارتفاع برای هر قلم ناوبری. */
+  .site-nav__link { padding: 0.6rem 0.8rem; }
 
   .listing-toolbar { flex-direction: column; align-items: stretch; }
   .listing-toolbar__field { min-width: 0; }
@@ -1796,19 +1727,88 @@ a:hover { color: var(--c-brand-strong); }
 .home-section--tint .category-card { background: var(--c-bg); }
 
 /* برندها — تراشه‌های کم‌وزن، نه کارت. */
-.brand-strip { display: flex; flex-wrap: wrap; gap: var(--s-2); }
-.brand-chip {
-  padding: 0.45rem 1rem;
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-pill);
-  background: var(--c-surface);
-  color: var(--c-ink-2);
-  text-decoration: none;
-  font-size: var(--t-sm);
-  font-weight: 500;
-  transition: border-color 0.15s ease, color 0.15s ease;
+/* --- نشان برندها ------------------------------------------------------
+   جانشین .brand-strip/.brand-chip که فهرستِ متنی بود. کاشی‌های هم‌اندازه
+   با فاصلهٔ یکسان؛ از همان واژگان کارت سایت (سطح، خط، شعاع) استفاده
+   می‌کند، نه یک سبک تازه.
+
+   auto-fill با کمینهٔ ۱۵۰ پیکسل: روی دسکتاپ شش‌تایی، روی تبلت سه‌تایی و
+   روی موبایل دوتایی می‌چیند — بدون قاعدهٔ جداگانه برای هر اندازه. */
+.brand-logos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--s-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.brand-chip:hover { border-color: var(--c-brand); color: var(--c-brand); }
+.brand-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  /* ارتفاع ثابت تا کاشی‌ها هم‌تراز بمانند، چه نشانِ پهن داشته باشند و
+     چه بلند. */
+  min-height: 118px;
+  padding: var(--s-4) var(--s-3);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  text-decoration: none;
+  color: var(--c-ink-2);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.brand-logo:hover {
+  border-color: var(--c-brand);
+  box-shadow: var(--sh-md);
+  transform: translateY(-2px);
+  color: var(--c-brand-strong);
+}
+.brand-logo:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+
+/* نشان‌ها اندازهٔ یکسان می‌گیرند: قاب ثابت و contain، پس نشانِ پهن و
+   نشانِ مربع هر دو داخل همان قاب می‌نشینند و بزرگ‌تر از هم دیده
+   نمی‌شوند. */
+/* قاب ثابت + contain: نسبت ابعاد هر نشان حفظ می‌شود و هیچ‌کدام کشیده
+   یا بریده نمی‌شود. همهٔ نشان‌ها در یک قابِ یک‌اندازه می‌نشینند، پس
+   نشانِ پهن و نشانِ مربع هم‌وزن دیده می‌شوند.
+   بدون نوشتهٔ زیرِ نشان، قاب بلندتر از قبل است (۵۶ در برابر ۴۴). */
+.brand-logo__img {
+  display: block;
+  width: 100%;
+  max-width: 132px;
+  height: 56px;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* جانشینِ نشان، تا وقتی فایلی روی دیسک نیست. کاشیِ طراحی‌شده است، نه
+   متنِ لخت: ارتفاعش برابر قاب نشان است تا چیدمان با آمدن فایل نپرد. */
+.brand-logo__wordmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 56px;
+  padding-inline: var(--s-2);
+  border-radius: var(--r-sm);
+  background: var(--c-surface-2);
+  color: var(--c-ink-3);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+}
+
+@media (max-width: 560px) {
+  .brand-logos { grid-template-columns: repeat(auto-fill, minmax(122px, 1fr)); gap: var(--s-2); }
+  .brand-logo { min-height: 104px; padding: var(--s-3) var(--s-2); gap: var(--s-2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-logo:hover { transform: none; }
+}
 
 /* نوار اعتماد — چه چیزی این کاتالوگ را کار راه‌انداز می‌کند. هر کارت یک
    قابلیتِ واقعیِ همین نسخه است، نه شعار. */
@@ -2264,4 +2264,35 @@ a:hover { color: var(--c-brand-strong); }
 /* حرکت را برای کسی که «حرکت کمتر» خواسته خاموش کن. */
 @media (prefers-reduced-motion: reduce) {
   .float-contact__btn:hover { transform: none; }
+}
+
+/* --- اطلاعات تماس در فوتر ---------------------------------------------
+   از همان واژگان ستون‌های فوتر استفاده می‌کند؛ فقط هر قلم یک نماد
+   کوچک کنار خودش دارد تا تلفن/همراه/ایمیل در یک نگاه تفکیک شوند. */
+.site-footer__contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-3);
+}
+.site-footer__contact a {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  /* هدف لمس روی موبایل؛ شماره باید با انگشت قابل زدن باشد. */
+  min-height: 32px;
+  color: #e4eaf0;
+  text-decoration: none;
+  font-size: var(--t-sm);
+  /* ایمیل بلند است و روی ستون باریک فوتر باید بشکند، نه سرریز کند. */
+  overflow-wrap: anywhere;
+}
+.site-footer__contact a:hover { color: #ffffff; text-decoration: underline; }
+.site-footer__contact a:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }
+.site-footer__icon {
+  width: 17px; height: 17px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0.7;
 }

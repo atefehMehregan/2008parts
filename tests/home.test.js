@@ -127,12 +127,21 @@ test('دسته‌ها با تعداد محصول و پیوند درست نمای
   assert.match(html, /class="category-card__count num">۱</, 'شمارش با رقم فارسی');
 });
 
-test('برندها به‌صورت نوار نمایش داده می‌شوند', async () => {
+/* نوارِ متنیِ برندها جایش را به بخش نشان‌ها داد. مقصدها همان‌اند. */
+test('برندها به‌صورت بخش نشان نمایش داده می‌شوند', async () => {
   await insertBrand(db, { name: 'برند آزمون', slug: 'برند-آزمون' });
   const html = await homeHtml();
-  assert.match(html, /class="brand-strip"/);
-  assert.match(html, /برند آزمون/);
+  assert.match(html, /class="brand-logos"/);
+  assert.match(html, /class="brand-logo"/);
   assert.match(html, new RegExp(`href="/brand/${encodeURIComponent('برند-آزمون')}"`));
+  /* نام برند باید در دسترسِ صفحه‌خوان باشد — در aria-label پیوند. */
+  assert.match(html, /aria-label="قطعات برند آزمون"/);
+});
+
+test('نوار متنیِ قدیمیِ برندها دیگر نیست', async () => {
+  const html = await homeHtml();
+  assert.ok(!html.includes('brand-strip'));
+  assert.ok(!html.includes('brand-chip'));
 });
 
 /* ═══════════════════════════════════════════════ ۴. قفسه‌ها */
@@ -300,7 +309,8 @@ test('همهٔ پیوندهای صفحهٔ اصلی به مسیرهای واقع
     /^\/cart$/,                     // سبد خرید — routes/pages.js
     /^\/about$/,                    // صفحهٔ اطلاعاتی — routes/pages.js
     /^\/contact$/,                  // صفحهٔ اطلاعاتی — routes/pages.js
-    /^tel:\+\d+$/,                  // دکمهٔ شناور تماس
+    /^tel:\+\d+$/,                  // دکمهٔ شناور تماس و شماره‌های فوتر
+    /^mailto:[^@]+@[^@]+$/,         // ایمیل فوتر
     /^https:\/\/wa\.me\/\d+$/,       // دکمهٔ شناور واتس‌اپ
     /^https:\/\/www\.instagram\.com\//, // دکمهٔ شناور اینستاگرام
     /^\/css\//,                     // شیوه‌نامه

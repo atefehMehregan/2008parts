@@ -84,17 +84,52 @@
       </ul>
     </div>
 
+    {# ارتباط با ما — مقدارهای واقعی، از پیکربندی (config.contact).
+
+       جملهٔ «هنوز ثبت نشده» برداشته شد: دیگر درست نیست.
+
+       پیوندهای «صفحهٔ تماس» و «دربارهٔ ما» هم از این ستون برداشته شدند
+       چون هر دو همین حالا در ستون «دسترسی سریع» هستند — تکرارشان اینجا
+       اطلاعات تماس را شلوغ می‌کرد. هیچ مقصدی از دست نرفته.
+
+       شماره و ایمیل داخل <bdi dir="ltr"> می‌نشینند: در متن راست‌به‌چپ،
+       رشتهٔ لاتین/رقمی بدون آن جابه‌جا دیده می‌شود (خط تیره یا @ به سر
+       دیگر می‌پرد).
+
+       پیوند tel: شکل بین‌المللی دارد و نمایش شکل محلی — همان تصمیمی که
+       در صفحهٔ تماس هم گرفته شد: tel:021-... برای تماس از بیرون کشور
+       مبهم است. #}
     <div class="site-footer__col">
       <h2 class="site-footer__title">ارتباط با ما</h2>
-      {# حالا صفحهٔ تماس وجود دارد، پس این ستون به آن پیوند می‌دهد.
-         جملهٔ «هنوز ثبت نشده» می‌ماند تا وقتی که واقعا راه ارتباطی‌ای در
-         پیکربندی ثبت شود — همان چیزی که خودِ صفحهٔ تماس هم می‌گوید. #}
-      <p class="site-footer__note">
-        راه‌های ارتباطی هنوز ثبت نشده‌اند و به‌محض نهایی شدن اعلام می‌شوند.
-      </p>
-      <ul class="site-footer__list">
-        <li><a href="/contact">صفحهٔ تماس</a></li>
-        <li><a href="/about">دربارهٔ ما</a></li>
+      <ul class="site-footer__contact">
+        <li>
+          <a href="tel:{{ contact.phoneTel }}" aria-label="تلفن ثابت {{ contact.phone }}">
+            <svg class="site-footer__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M6.3 3.5h3L10.6 7 8.8 8.8a12 12 0 0 0 6.4 6.4L17 13.4l3.5 1.3v3a2 2 0 0 1-2.2 2
+                       A15.5 15.5 0 0 1 4.3 5.7a2 2 0 0 1 2-2.2z" />
+            </svg>
+            <bdi class="num" dir="ltr">{{ contact.phone }}</bdi>
+          </a>
+        </li>
+        <li>
+          <a href="tel:{{ contact.mobileTel }}" aria-label="تلفن همراه {{ contact.mobile }}">
+            <svg class="site-footer__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" />
+              <path d="M10.5 5.6h3" />
+              <circle cx="12" cy="18.2" r="1.1" />
+            </svg>
+            <bdi class="num" dir="ltr">{{ contact.mobile }}</bdi>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:{{ contact.email }}" aria-label="ایمیل {{ contact.email }}">
+            <svg class="site-footer__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
+              <path d="M3.2 6.2 12 13l8.8-6.8" />
+            </svg>
+            <bdi dir="ltr">{{ contact.email }}</bdi>
+          </a>
+        </li>
       </ul>
     </div>
   </div>

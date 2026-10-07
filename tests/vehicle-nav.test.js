@@ -52,10 +52,10 @@ after(async () => {
 
 const text = async (p) => (await fetch(BASE + p)).text();
 
-test('بدون خودروی ثبت‌شده، منوی «خودروها» رندر نمی‌شود', async () => {
+test('بدون خودروی ثبت‌شده، ناوبری خودرو رندر نمی‌شود', async () => {
   const html = await text('/');
-  assert.ok(!html.includes('>خودروها<'), 'منوی خالی نباید بیاید');
-  assert.ok(!html.includes('قطعات بر اساس خودرو'));
+  assert.ok(!html.includes('قطعات بر اساس خودرو'), 'ناوبری خالی نباید بیاید');
+  assert.ok(!html.includes('class="site-nav"'));
 });
 
 test('با خودروی ثبت‌شده، منو با برچسب «قطعات <نام>» و شمار واقعی می‌آید', async () => {
@@ -68,12 +68,11 @@ test('با خودروی ثبت‌شده، منو با برچسب «قطعات <�
   await products.setVehicles(p2, [id]);
 
   const html = await text('/');
-  assert.match(html, />خودروها</);
-  assert.match(html, /قطعات بر اساس خودرو/);
+  /* ناوبری تخت است، نه کشویی: پنج خانوادهٔ خودرو مستقیم در ردیف هدر. */
   assert.match(html, /قطعات پژو ۲۰۰۸/);
   assert.match(html, /href="\/products\?vehicle=/);
-  /* شمار از پایگاه داده می‌آید، نه عدد دستی. */
-  assert.match(html, /nav-menu__count num">۲</);
+  assert.match(html, /aria-label="ناوبری اصلی — قطعات بر اساس خودرو"/);
+  assert.ok(!html.includes('nav-menu__summary'), 'کشوی قدیمی نباید باشد');
 });
 
 /* ⚠️ قولِ اصلی: پالایه واقعا پالایش می‌کند. */
