@@ -664,20 +664,6 @@ a:hover { color: var(--c-brand-strong); }
 
 .hero__copy { min-width: 0; }
 
-.hero__eyebrow { margin: 0 0 var(--s-4); }
-/* برچسب پیام تبلیغاتی. آبیِ شفاف، نه قرمز: قرمز در این پالت فقط برای
-   تخفیف واقعی است و اینجا تخفیفی ثبت نشده. */
-.hero__tag {
-  display: inline-block;
-  padding: 0.3rem 0.9rem;
-  border: 1px solid rgba(143, 187, 232, 0.5);
-  border-radius: var(--r-pill);
-  background: rgba(47, 111, 174, 0.22);
-  color: #ffffff;
-  font-size: var(--t-sm);
-  font-weight: 600;
-}
-
 .hero__title {
   margin: 0 0 var(--s-4);
   /* فارسی letter-spacing نمی‌گیرد: حروف به هم چسبیده‌اند و فاصله‌دادن
@@ -698,18 +684,31 @@ a:hover { color: var(--c-brand-strong); }
 .hero__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
 
 /* کنشِ هیرو سفید است، نه آبیِ برند: آبیِ برند روی این سرمه‌ای فقط ۲٫۴۰
-   جدا می‌شود و دکمه گم می‌شد. سفید روی نوار ۱۷٫۱۸ و متن سرمه‌ای روی
-   سفید ۱۷٫۵۲ می‌دهد. فقط داخل هیرو، تا دکمه‌های بقیهٔ سایت عوض نشوند. */
+   جدا می‌شود و دکمه گم می‌شد. سفید روی نوار ۱۷٫۱۸ می‌دهد.
+   فقط داخل هیرو، تا دکمه‌های بقیهٔ سایت عوض نشوند.
+
+   ⚠️ رنگ متن صریح است و var(--c-ink) نیست. آن توکن در پوستهٔ تیره به
+   #ffffff برمی‌گردد (متنِ روشن روی زمینهٔ تیره)، و چون زمینهٔ خودِ این
+   دکمه سفید است، نتیجه سفید روی سفید می‌شد: کنتراست ۱٫۰۰ و دکمه‌ای
+   کاملا بی‌متن. نوار هیرو در هر دو پوسته یکسان است، پس رنگ متنش هم
+   باید ثابت باشد، نه وابسته به پوسته. */
 .hero__actions .btn {
   background: #ffffff;
   border-color: #ffffff;
-  color: var(--c-ink);
+  color: #121a24;
   padding-inline: 1.6rem;
 }
-.hero__actions .btn:hover {
+.hero__actions .btn:hover,
+.hero__actions .btn:focus-visible {
   background: #e3ecf5;
   border-color: #e3ecf5;
-  color: var(--c-ink);
+  color: #121a24;
+}
+/* حلقهٔ فوکوس روی نوار تیره باید *روشن* باشد؛ --c-focus آبیِ برند است و
+   روی سرمه‌ای دیده نمی‌شود. */
+.hero__actions .btn:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
 }
 
 /* ترسیم فنی. از ظرف بیرون می‌زند تا به لبهٔ نمایشگر برسد و بلوک
