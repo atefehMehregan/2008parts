@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"
+     width="1200" height="800" role="presentation" aria-hidden="true">
+  <title>ترسیم فنی انتزاعی — مجموعهٔ توپی و دیسک ترمز</title>
+
+  <!-- ==========================================================================
+       گرافیک هیروی صفحهٔ اصلی ۲۰۰۸پارتس.
+
+       این فایل در خودِ مخزن نوشته شده، مثل logo.svg و watermark-2008parts.svg:
+       پروژه برای دارایی‌های برند قرارداد «SVG دست‌نویس در public/img/» دارد و
+       همین قرارداد اینجا دنبال شده است. هیچ تصویری از بیرون برداشته نشده و
+       هیچ عکس محصولی استفاده نشده.
+
+       چه چیزی کشیده شده: یک مجموعهٔ توپی/دیسک ترمز در نمای روبه‌رو، به سبک
+       نقشهٔ فنی — حلقه‌های هم‌مرکز، کانال‌های تهویه، سوراخ‌های خنک‌کاری،
+       دایرهٔ پیچ، و یک کالیپر. دو لایهٔ محو و جابه‌جا شده پشت آن، حس «نمای
+       انفجاری» می‌دهد. هیچ خودروی کاملی در تصویر نیست و هیچ نشان یا آرم
+       خودروسازی به کار نرفته: شکل‌ها انتزاعی و عمومی‌اند.
+
+       چرا بردار و نه عکس: بی‌نهایت تیز روی هر نمایشگر، ۸ کیلوبایت در شبکه،
+       و رنگ‌هایش از همین پالت سایت می‌آیند.
+
+       ⚠️ هیچ متنی داخل این فایل نیست. SVG که با <img> بار می‌شود به فونت‌های
+       صفحه دسترسی ندارد، پس تیتر فارسی در HTML می‌ماند — آنجا وزیرمتن و
+       انتخابِ متن و خوانندهٔ صفحه درست کار می‌کنند.
+
+       ⚠️ عددی روی خطوط اندازه‌گذاری نوشته نشده. علامت‌ها تزئینی‌اند و نباید
+       مثل مشخصهٔ فنیِ یک قطعهٔ واقعی خوانده شوند.
+
+       پالت (هم‌خانوادهٔ توکن‌های سایت، چون SVG به var() دسترسی ندارد):
+         #0d1c2e بوم تیره   #bcd9f5 خط اصلی   #8fbbe8 خط دوم
+         #9ec8ef خط محو     #2f6fae آبی برند  #112437 سطح فرورفته
+       ====================================================================== -->
+
+  <defs>
+    <!-- تابش ملایم پشت دیسک، تا مرکز ترکیب وزن پیدا کند. -->
+    <radialGradient id="hb-glow" cx="27.5%" cy="50%" r="42%">
+      <stop offset="0%"   stop-color="#2f6fae" stop-opacity="0.55"/>
+      <stop offset="55%"  stop-color="#2f6fae" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#2f6fae" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- شبکهٔ نقشه. -->
+    <pattern id="hb-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0 H0 V48" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <pattern id="hb-grid-fine" width="12" height="12" patternUnits="userSpaceOnUse">
+      <path d="M12 0 H0 V12" fill="none" stroke="#ffffff" stroke-opacity="0.025" stroke-width="0.5"/>
+    </pattern>
+
+    <!-- شبکه از سمت گرافیک پررنگ است و به سمت متن محو می‌شود، تا تیتر روی
+         زمینهٔ آرام بنشیند. ماسک با آلفای گرادیان کار می‌کند. -->
+    <linearGradient id="hb-fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="42%"  stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="78%"  stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="hb-fade-mask">
+      <rect x="0" y="0" width="1200" height="800" fill="url(#hb-fade)"/>
+    </mask>
+
+    <!-- حلقه‌های لایهٔ انفجاری؛ دو بار با جابه‌جایی و شفافیت کم‌تر صدا زده می‌شود. -->
+    <g id="hb-ghost">
+      <circle cx="330" cy="400" r="230" fill="none" stroke="#9ec8ef" stroke-width="2"/>
+      <circle cx="330" cy="400" r="152" fill="none" stroke="#9ec8ef" stroke-width="1.5"/>
+      <circle cx="330" cy="400" r="86"  fill="none" stroke="#9ec8ef" stroke-width="1.5"/>
+    </g>
+  </defs>
+
+  <!-- ۱. تابش و شبکه ========================================================= -->
+  <rect x="0" y="0" width="1200" height="800" fill="url(#hb-glow)"/>
+  <g mask="url(#hb-fade-mask)">
+    <rect x="0" y="0" width="1200" height="800" fill="url(#hb-grid-fine)"/>
+    <rect x="0" y="0" width="1200" height="800" fill="url(#hb-grid)"/>
+  </g>
+
+  <!-- ۲. دو کمانِ بلند که از گوشهٔ پایین تا بالا کشیده می‌شوند. هندسهٔ محو،
+          برای اینکه ترکیب فقط یک دایرهٔ تنها نباشد. -->
+  <g fill="none" stroke="#8fbbe8" stroke-opacity="0.12" stroke-width="1.5">
+    <path d="M -40 790 C 190 650 330 300 520 20"/>
+    <path d="M 60 800 C 300 660 450 320 650 30"/>
+  </g>
+
+  <!-- ۳. لایه‌های انفجاری پشت دیسک =========================================== -->
+  <use href="#hb-ghost" transform="translate(-108 -64)" opacity="0.09"/>
+  <use href="#hb-ghost" transform="translate(-54 -32)"  opacity="0.16"/>
+
+  <!-- ۴. مجموعهٔ اصلی: دیسک ترمز و توپی، نمای روبه‌رو ======================== -->
+  <g>
+    <!-- خط مرکزی افقی و عمودی، مثل نقشه -->
+    <g stroke="#9ec8ef" stroke-opacity="0.14" stroke-width="1" stroke-dasharray="14 9">
+      <line x1="20"  y1="400" x2="640" y2="400"/>
+      <line x1="330" y1="90"  x2="330" y2="710"/>
+    </g>
+
+    <!-- لبهٔ بیرونی رینگ -->
+    <circle cx="330" cy="400" r="268" fill="none" stroke="#9ec8ef" stroke-opacity="0.22" stroke-width="1.5"/>
+    <circle cx="330" cy="400" r="256" fill="none" stroke="#9ec8ef" stroke-opacity="0.13" stroke-width="1"/>
+
+    <!-- سوراخ‌های خنک‌کاری. یک دایره با نقطه‌چینِ گرد: هر «خط‌تیره» با طول
+         تقریبا صفر و سرِ گرد، یک نقطهٔ دایره‌ای می‌شود. ۴۰ نقطه دور محیط،
+         پس گام = ۱۵۲۶٫۸۱ ÷ ۴۰ = ۳۸٫۱۷. -->
+    <circle cx="330" cy="400" r="243" fill="none"
+            stroke="#8fbbe8" stroke-opacity="0.42" stroke-width="7"
+            stroke-linecap="round" stroke-dasharray="0.01 38.17"/>
+
+    <!-- صفحهٔ دیسک -->
+    <circle cx="330" cy="400" r="230" fill="none" stroke="#bcd9f5" stroke-opacity="0.55" stroke-width="2.5"/>
+
+    <!-- کانال‌های تهویهٔ داخل دیسک. همان ترفند نقطه‌چین، این بار با خط‌تیرهٔ
+         بلند و قلمِ کلفت: نتیجه بلوک‌های شعاعی است. ۲۸ کانال،
+         گام = ۱۲۰۶٫۳۷ ÷ ۲۸ = ۴۳٫۰۹، خط‌تیره ۱۹ و فاصله ۲۴٫۰۹. -->
+    <circle cx="330" cy="400" r="192" fill="none"
+            stroke="#8fbbe8" stroke-opacity="0.20" stroke-width="64"
+            stroke-dasharray="19 24.09"/>
+
+    <circle cx="330" cy="400" r="152" fill="none" stroke="#bcd9f5" stroke-opacity="0.50" stroke-width="2"/>
+    <circle cx="330" cy="400" r="118" fill="none" stroke="#9ec8ef" stroke-opacity="0.30" stroke-width="1.5"/>
+
+    <!-- فلنج توپی -->
+    <circle cx="330" cy="400" r="86" fill="#112437" fill-opacity="0.55"
+            stroke="#bcd9f5" stroke-opacity="0.60" stroke-width="2"/>
+
+    <!-- دایرهٔ پیچ و پنج پیچ -->
+    <circle cx="330" cy="400" r="60" fill="none"
+            stroke="#8fbbe8" stroke-opacity="0.28" stroke-width="1" stroke-dasharray="5 6"/>
+    <g fill="#0d1c2e" stroke="#bcd9f5" stroke-opacity="0.70" stroke-width="1.8">
+      <circle cx="330.00" cy="340.00" r="11"/>
+      <circle cx="387.06" cy="381.46" r="11"/>
+      <circle cx="365.27" cy="448.54" r="11"/>
+      <circle cx="294.73" cy="448.54" r="11"/>
+      <circle cx="272.94" cy="381.46" r="11"/>
+    </g>
+
+    <!-- سوراخ مرکزی -->
+    <circle cx="330" cy="400" r="32" fill="#0d1c2e"
+            stroke="#bcd9f5" stroke-opacity="0.70" stroke-width="2"/>
+    <circle cx="330" cy="400" r="4" fill="#bcd9f5" fill-opacity="0.6"/>
+  </g>
+
+  <!-- ۵. کالیپر: یک قطعهٔ کمانی روی لبهٔ دیسک. مختصات از همان رابطهٔ
+          x = ۳۳۰ + R·cos θ و y = ۴۰۰ + R·sin θ برای θ از ۲۰۰ تا ۲۵۰ درجه
+          حساب شده، پس کمان‌ها دقیقا روی حلقه‌ها می‌نشینند.
+          آبیِ برند است و نه قرمز: در این پالت قرمز فقط معنای تخفیف دارد. -->
+  <path d="M 95.08 314.49 A 250 250 0 0 1 244.49 165.08
+           L 262.96 215.82 A 196 196 0 0 0 145.82 332.96 Z"
+        fill="#2f6fae" fill-opacity="0.45"
+        stroke="#a8cdf0" stroke-opacity="0.55" stroke-width="1.5"/>
+  <path d="M 78.00 304.00 A 268 268 0 0 1 234.00 148.00"
+        fill="none" stroke="#a8cdf0" stroke-opacity="0.30" stroke-width="1.5"/>
+
+  <!-- ۶. یک مجموعهٔ کوچک‌تر (بلبرینگ) برای تفاوت مقیاس و تعادل ترکیب ========== -->
+  <g transform="translate(628 646)">
+    <circle r="74" fill="none" stroke="#9ec8ef" stroke-opacity="0.20" stroke-width="1.5"/>
+    <circle r="56" fill="none" stroke="#bcd9f5" stroke-opacity="0.38" stroke-width="2"/>
+    <!-- ساچمه‌ها: ۱۴ نقطه روی محیط r=۴۲، گام = ۲π·۴۲ ÷ ۱۴ = ۱۸٫۸۵ -->
+    <circle r="42" fill="none" stroke="#8fbbe8" stroke-opacity="0.45" stroke-width="9"
+            stroke-linecap="round" stroke-dasharray="0.01 18.85"/>
+    <circle r="26" fill="none" stroke="#bcd9f5" stroke-opacity="0.38" stroke-width="2"/>
+    <circle r="10" fill="#112437" fill-opacity="0.6"
+            stroke="#bcd9f5" stroke-opacity="0.45" stroke-width="1.5"/>
+  </g>
+
+  <!-- ۷. علامت‌های نقشه: مقیاس کنار، خط اندازه پایین، صلیب‌های ثبت.
+          هیچ عددی ندارند — تزئینی‌اند، نه مشخصهٔ فنی. -->
+  <g stroke="#8fbbe8" stroke-opacity="0.28" stroke-width="1" fill="none">
+    <!-- مقیاس عمودی در حاشیه -->
+    <line x1="34" y1="120" x2="34" y2="680"/>
+    <line x1="28" y1="120" x2="40" y2="120"/><line x1="28" y1="680" x2="40" y2="680"/>
+    <line x1="30" y1="190" x2="38" y2="190"/><line x1="30" y1="260" x2="38" y2="260"/>
+    <line x1="30" y1="330" x2="38" y2="330"/><line x1="28" y1="400" x2="42" y2="400"/>
+    <line x1="30" y1="470" x2="38" y2="470"/><line x1="30" y1="540" x2="38" y2="540"/>
+    <line x1="30" y1="610" x2="38" y2="610"/>
+
+    <!-- خط اندازه زیر مجموعه، با سرهای مورب -->
+    <line x1="62" y1="744" x2="598" y2="744"/>
+    <path d="M 62 738 L 74 744 L 62 750"/>
+    <path d="M 598 738 L 586 744 L 598 750"/>
+    <line x1="62"  y1="730" x2="62"  y2="758"/>
+    <line x1="598" y1="730" x2="598" y2="758"/>
+  </g>
+  <g stroke="#9ec8ef" stroke-opacity="0.22" stroke-width="1" fill="none">
+    <!-- صلیب‌های ثبت -->
+    <path d="M 70 70 h 22 M 81 59 v 22"/>
+    <path d="M 700 70 h 22 M 711 59 v 22"/>
+    <path d="M 70 730 h 22 M 81 719 v 22"/>
+  </g>
+</svg>

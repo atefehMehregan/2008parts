@@ -26,6 +26,13 @@ export const AUDIT_ACTIONS = {
   PRODUCT_ACTIVE_CHANGED: 'catalog.product.active',
   PRODUCT_STOCK_CHANGED: 'catalog.product.stock',
 
+  /* تصویر محصول — فاز ۵. «افزودن» از «حذف» جدا می‌ماند چون دومی
+     برگشت‌ناپذیر است و گزارش بعدی باید این دو را از هم جدا کند. */
+  PRODUCT_IMAGE_ADDED: 'catalog.product.image.added',
+  PRODUCT_IMAGE_UPDATED: 'catalog.product.image.updated',
+  PRODUCT_IMAGE_PRIMARY: 'catalog.product.image.primary',
+  PRODUCT_IMAGE_DELETED: 'catalog.product.image.deleted',
+
   CATEGORY_CREATED: 'catalog.category.created',
   CATEGORY_UPDATED: 'catalog.category.updated',
   CATEGORY_DELETED: 'catalog.category.deleted',
@@ -35,6 +42,14 @@ export const AUDIT_ACTIONS = {
   BRAND_UPDATED: 'catalog.brand.updated',
   BRAND_DELETED: 'catalog.brand.deleted',
   BRAND_ACTIVE_CHANGED: 'catalog.brand.active',
+
+  /* خودرو — فاز ۶. سازگاری محصول با خودرو جداگانه ثبت می‌شود چون
+     تغییرش روی آنچه مشتری می‌بیند اثر مستقیم دارد. */
+  VEHICLE_CREATED: 'catalog.vehicle.created',
+  VEHICLE_UPDATED: 'catalog.vehicle.updated',
+  VEHICLE_DELETED: 'catalog.vehicle.deleted',
+  VEHICLE_ACTIVE_CHANGED: 'catalog.vehicle.active',
+  PRODUCT_VEHICLES_CHANGED: 'catalog.product.vehicles',
 };
 
 export function createAuditLog(db) {

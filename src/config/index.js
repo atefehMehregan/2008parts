@@ -60,12 +60,27 @@ function sslSetting() {
   return isProd ? { rejectUnauthorized: true } : false;
 }
 
+/* پوستهٔ ظاهری. دو مقدار معتبر دارد و نه بیشتر:
+ *   light  پیش‌فرض — روشن و تمیز (base.css تنها)
+ *   dark   سرمه‌ای (base.css + theme-dark.css)
+ * مقدار ناشناخته بی‌صدا به پیش‌فرض برمی‌گردد: یک غلط تایپی در .env نباید
+ * فروشگاه را بی‌استایل کند، ولی باید دیده شود، پس هشدار چاپ می‌شود. */
+const THEMES = ['light', 'dark'];
+function themeSetting() {
+  const raw = (process.env.THEME || '').trim().toLowerCase();
+  if (!raw) return 'light';
+  if (THEMES.includes(raw)) return raw;
+  console.warn(`[config] THEME ناشناخته: «${raw}». یکی از ${THEMES.join(' | ')} را بگذارید. فعلا light.`);
+  return 'light';
+}
+
 export const config = {
   env,
   isProd,
   isTest,
   port: int('PORT', 3000),
   host: process.env.HOST || '127.0.0.1',
+  theme: themeSetting(),
 
   database: {
     url: databaseUrl,
@@ -77,8 +92,14 @@ export const config = {
 
   /* کوکی نشست — پیاده‌سازی کامل نشست در فاز بعد. */
   cookie: {
-    sessionName: process.env.SESSION_COOKIE_NAME || 'pars_session',
-    csrfName: process.env.CSRF_COOKIE_NAME || 'pars_csrf',
+    /* نام کوکی‌ها با برند هم‌خوان شد: pars_* → 2008parts_*.
+       هزینهٔ این تغییر آگاهانه پذیرفته شد: مرورگرها کوکیِ قبلی را با نام
+       قدیمی نگه می‌دارند و سرور دیگر آن را نمی‌خواند، پس هر نشستِ باز
+       (از جمله نشست مدیر) یک بار باطل می‌شود و ورود دوباره لازم است.
+       رقمِ آغازین مشکلی ندارد: در RFC 6265 نامِ کوکی یک token است و
+       token رقم را در هر جایگاهی می‌پذیرد. */
+    sessionName: process.env.SESSION_COOKIE_NAME || '2008parts_session',
+    csrfName: process.env.CSRF_COOKIE_NAME || '2008parts_csrf',
     /* در تولید حتما Secure. SameSite=Lax چون فرانت و بک‌اند هم‌دامنه‌اند. */
     secure: isProd,
     sameSite: 'lax',
@@ -90,8 +111,8 @@ export const config = {
      کوتاه‌تر. SESSION_DAYS (۳۰ روز) برای حساب مشتری است و هرگز نباید
      ورود مدیر را اداره کند. */
   admin: {
-    cookieName: process.env.ADMIN_COOKIE_NAME || 'pars_admin_session',
-    csrfCookieName: process.env.ADMIN_CSRF_COOKIE_NAME || 'pars_admin_csrf',
+    cookieName: process.env.ADMIN_COOKIE_NAME || '2008parts_admin_session',
+    csrfCookieName: process.env.ADMIN_CSRF_COOKIE_NAME || '2008parts_admin_csrf',
     /* کوکی مدیر فقط زیر /admin فرستاده می‌شود، پس روی صفحه‌های عمومی
        کاتالوگ اصلا روی سیم نمی‌رود. */
     cookiePath: '/admin',
@@ -128,16 +149,41 @@ export const config = {
     /* فقط همین نوع‌ها پذیرفته می‌شوند و تشخیص از روی بایت‌های ابتدایی فایل
        انجام می‌شود، نه پسوند نام فایل. */
     allowedImageMime: ['image/jpeg', 'image/png', 'image/webp'],
+
+    /* ------------------------------------------------ تصویر محصول (فاز ۵) */
+    /* سقف تعداد فایل در یک درخواست. multer خودش این را اعمال می‌کند، پس
+       فایل نهم اصلا خوانده نمی‌شود. */
+    maxFilesPerRequest: int('UPLOAD_MAX_FILES_PER_REQUEST', 8),
+    /* سقف تصویر برای هر محصول. گالری محصول یدکی به بیش از این نیاز ندارد. */
+    maxImagesPerProduct: int('UPLOAD_MAX_IMAGES_PER_PRODUCT', 8),
+    /* کمینهٔ ضلع بزرگ‌تر تصویر ورودی. زیر این اندازه، مشتق ۴۰۰ پیکسلیِ
+       کارت محصول پر نمی‌شود و تصویر وسط یک بوم سفید شناور می‌ماند. */
+    minImageDimension: int('UPLOAD_MIN_IMAGE_DIMENSION', 400),
+    /* سقف تعداد پیکسل تصویر ورودی. پیش‌فرض خود sharp حدود ۲۶۸ مگاپیکسل
+       است که برای فایل ۵ مگابایتیِ فشرده بیش از حد سخاوتمند است: یک PNG
+       کوچک می‌تواند به گیگابایت‌ها حافظه باز شود. این سقف صریح، همان
+       حملهٔ «بمب فشرده‌سازی» را می‌بندد. */
+    maxImagePixels: int('UPLOAD_MAX_IMAGE_PIXELS', 50_000_000),
   },
 
   images: {
     watermarkEnabled: bool('WATERMARK_ENABLED', true),
+    /* نشانِ برند که روی مشتق‌ها می‌نشیند. فایل پروژه است، نه ورودی کاربر. */
+    watermarkFile: process.env.WATERMARK_FILE || path.join(ROOT, 'public', 'img', 'watermark-2008parts.svg'),
     /* اندازه‌های مشتق — مربع ۱:۱، چون قطعات نسبت ابعادی بسیار متفاوتی دارند. */
+    /* بوم مشتق‌ها ۳:۴ است، نه مربع.
+       اندازه‌گیری: هر ۵۳ عکس کاتالوگ فقط دو نسبت دارند — ۱۹ عکسِ خودِ
+       فروشگاه دقیقا ۳:۴ (۱۹۲۰×۲۵۶۰) و ۳۴ عکس قدیمی دقیقا ۱:۱. با بوم
+       مربع، عکس‌های ۳:۴ فقط ۷۵٪ عرض قاب را می‌گرفتند و ۲۵٪ سفیدِ خالی
+       داخل خودِ فایل پخته می‌شد. با بوم ۳:۴ همان عکس‌ها تمام عرض را
+       می‌گیرند (حدود ۳۳٪ بزرگ‌تر) و عکس‌های مربع هم عرضشان کم نمی‌شود،
+       فقط بالا و پایین فضای خالی می‌گیرند.
+       ارتفاع صریح نوشته شده تا قرارداد روشن باشد و آزمون آن را ببندد. */
     sizes: [
-      { name: 'thumb', width: 160 },
-      { name: 'card', width: 400 },
-      { name: 'detail', width: 800 },
-      { name: 'zoom', width: 1600 },
+      { name: 'thumb', width: 160, height: 213 },
+      { name: 'card', width: 400, height: 533 },
+      { name: 'detail', width: 800, height: 1067 },
+      { name: 'zoom', width: 1600, height: 2133 },
     ],
     webpQuality: int('IMAGE_WEBP_QUALITY', 82),
     jpegQuality: int('IMAGE_JPEG_QUALITY', 84),
@@ -148,6 +194,26 @@ export const config = {
     generalMax: int('RATE_LIMIT_GENERAL_MAX', 300),
     loginMax: int('RATE_LIMIT_LOGIN_MAX', 5),
     uploadMax: int('RATE_LIMIT_UPLOAD_MAX', 10),
+  },
+
+  /* راه‌های ارتباطی فروشگاه — صفحهٔ «تماس با ما».
+
+     همه عمدا خالی‌اند و هیچ‌کدام ساختگی نیست. صفحهٔ تماس فقط همان‌هایی
+     را نشان می‌دهد که واقعا مقدار دارند و دربارهٔ بقیه صریح می‌گوید که
+     هنوز ثبت نشده‌اند. برای پر کردن، همین متغیرهای محیطی را بدهید؛
+     هیچ تغییری در کد لازم نیست.
+
+     اینجا راز نیست: شمارهٔ تماس و نشانی برای نمایش عمومی‌اند. پس
+     برخلاف DATABASE_URL، نبودشان در تولید خطا نمی‌دهد. */
+  contact: {
+    phone:     process.env.STORE_PHONE || '',
+    mobile:    process.env.STORE_MOBILE || '',
+    email:     process.env.STORE_EMAIL || '',
+    address:   process.env.STORE_ADDRESS || '',
+    hours:     process.env.STORE_HOURS || '',
+    telegram:  process.env.STORE_TELEGRAM || '',
+    instagram: process.env.STORE_INSTAGRAM || '',
+    whatsapp:  process.env.STORE_WHATSAPP || '',
   },
 
   /* پیامک — ارائه‌دهنده هنوز انتخاب نشده است (فاز بعد). */
@@ -173,7 +239,7 @@ export function assertDatabaseConfigured() {
   if (!config.database.url) {
     throw new Error(
       'DATABASE_URL تعریف نشده است. یک رشته اتصال PostgreSQL در فایل .env بگذارید. ' +
-      'نمونه: postgresql://user:password@127.0.0.1:5432/pars2008'
+      'نمونه: postgresql://user:password@127.0.0.1:5432/2008parts'
     );
   }
   return true;

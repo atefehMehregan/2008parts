@@ -85,7 +85,7 @@ function validatePassword(password) {
 }
 
 async function main() {
-  console.log('\n=== ساخت حساب مدیر ۲۰۰۸پارس ===\n');
+  console.log('\n=== ساخت حساب مدیر 2008parts ===\n');
 
   /* پیش از هر پرسشی، از برقرار بودن اتصال مطمئن می‌شویم تا کاربر رمز را
      بی‌جهت وارد نکند. */

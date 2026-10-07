@@ -12,9 +12,9 @@ import nunjucks from 'nunjucks';
 import path from 'node:path';
 import { config, ROOT } from './config/index.js';
 import { extraSecurityHeaders, csrfToken, notFound, errorHandler } from './middleware/security.js';
-import { generalLimiter, loginLimiter } from './middleware/rateLimit.js';
+import { generalLimiter, loginLimiter, uploadLimiter } from './middleware/rateLimit.js';
 import { healthRouter } from './routes/health.js';
-import { pageRouter } from './routes/pages.js';
+import { createPageRouter } from './routes/pages.js';
 import { createCatalogRouter } from './routes/catalog.js';
 import { createAdminRouter } from './routes/admin.js';
 import { createAdminAuthService } from './services/adminAuth.js';
@@ -24,6 +24,7 @@ import { createAdminSessionRepository } from './db/repositories/adminSessions.js
 import { createLoginAttemptRepository } from './db/repositories/loginAttempts.js';
 import * as productionRepositories from './db/repositories/index.js';
 import * as productionDb from './db/index.js';
+import { storage as defaultStorage } from './services/storage.js';
 import { faDigits, formatToman, formatJalali } from './services/format.js';
 
 /**
@@ -35,7 +36,9 @@ import { faDigits, formatToman, formatJalali } from './services/format.js';
  *   PGlite تزریق می‌کنند — همان الگوی فاز ۱الف، تا لایهٔ اتصال
  *   تولید (src/db/index.js) دست‌نخورده بماند.
  */
-export function createApp({ repositories = productionRepositories, db = null } = {}) {
+export function createApp({
+  repositories = productionRepositories, db = null, storage = defaultStorage,
+} = {}) {
   const app = express();
 
   /* پشت پراکسی (IIS/ARR یا Nginx) آی‌پی واقعی در X-Forwarded-For است. */
@@ -108,11 +111,46 @@ export function createApp({ repositories = productionRepositories, db = null } =
 
   /* متغیرهای مشترک همه قالب‌ها. */
   app.use((req, res, next) => {
-    res.locals.storeName = 'پارس ۲۰۰۸';
-    res.locals.storeNameLatin = '2008Pars';
+    /* نام برند یک شکل دارد و فقط همین: 2008parts. پیش از این دو خط بود
+       (نام فارسی + نام لاتین) و همان ساختار دو ادعای برندی می‌ساخت.
+       اکنون نام لاتین خالی است تا برند دقیقا یک بار دیده شود؛ قالب‌ها
+       دست‌نخورده‌اند و span خالی چیزی رندر نمی‌کند. */
+    res.locals.storeName = '2008parts';
+    res.locals.storeNameLatin = '';
+    /* پوسته از پیکربندی می‌آید، نه از درخواست: انتخاب رنگ یک تصمیم
+       استقرار است، نه ترجیح کاربر. قالب فقط همین را می‌خواند. */
+    res.locals.theme = config.theme;
     res.locals.currentPath = req.path;
     res.locals.year = new Date().getFullYear();
     next();
+  });
+
+  /* دسته‌ها برای منوی هدر — روی *همهٔ* صفحه‌ها لازم است، نه فقط صفحهٔ
+     اصلی. عمدا شکست‌پذیرِ نرم است: اگر پایگاه داده در دسترس نباشد منو
+     خالی می‌ماند ولی صفحه بالا می‌آید. سرویس باید بدون پایگاه داده هم
+     بالا بیاید (همان قاعده‌ای که /health روی آن بنا شده). */
+  app.use(async (req, res, next) => {
+    res.locals.navCategories = [];
+    res.locals.navBrands = [];
+    /* فایل‌های استاتیک و بخش مدیر به این منو نیازی ندارند. */
+    if (req.path.startsWith('/admin') || req.path.startsWith('/media')) return next();
+    try {
+      /* ‎listWithCounts و نه listActive: منوی هدر کنار نام هر دسته شمار
+         محصول را هم نشان می‌دهد، و listActive آن ستون را برنمی‌گرداند —
+         نتیجه‌اش یازده قرصِ خالی در منو بود. اگر مخزنِ تزریق‌شده این
+         متد را نداشت، به listActive برمی‌گردیم و منو بدون شمار می‌آید؛
+         خالی ماندنِ کل منو بدتر از نبودِ عدد است. */
+      const cats = repositories?.categories;
+      if (cats?.listWithCounts) res.locals.navCategories = await cats.listWithCounts();
+      else if (cats?.listActive) res.locals.navCategories = await cats.listActive();
+
+      const brands = repositories?.brands;
+      if (brands?.listWithCounts) res.locals.navBrands = await brands.listWithCounts();
+      else if (brands?.listActive) res.locals.navBrands = await brands.listActive();
+    } catch (err) {
+      console.error('[nav] خواندن منوی ناوبری شکست خورد:', err.code || err.message);
+    }
+    return next();
   });
 
   /* --------------------------------------------------- فایل‌های استاتیک */
@@ -131,7 +169,7 @@ export function createApp({ repositories = productionRepositories, db = null } =
 
   /* ------------------------------------------------------------ مسیرها */
   app.use('/', healthRouter);
-  app.use('/', pageRouter);
+  app.use('/', createPageRouter(repositories));
   app.use('/', createCatalogRouter(repositories));
 
   /* بخش مدیر. مخزن‌های احراز هویت از همان اجراکنندهٔ پایگاه داده ساخته
@@ -148,6 +186,10 @@ export function createApp({ repositories = productionRepositories, db = null } =
     authService: adminAuthService,
     audit: adminAudit,
     loginLimiter,
+    uploadLimiter,
+    /* لایهٔ ذخیره‌سازی تصویر. پیش‌فرض، پیاده‌سازی فایل‌سیستم محلی
+       (توسعه/پیش‌نمایش). جایگزینی‌اش فقط همان ماژول را عوض می‌کند. */
+    storage,
     /* همان مخزن‌هایی که کاتالوگ عمومی استفاده می‌کند — از همان مسیر
        تزریق. بخش مدیر لایهٔ دسترسی به دادهٔ جداگانه‌ای نمی‌سازد. */
     repositories,

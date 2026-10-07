@@ -1,0 +1,214 @@
+/* ============================================================================
+ * theme-blue.css — پوستهٔ آبیِ روشن
+ * ----------------------------------------------------------------------------
+ * این فایل یک *لایهٔ روی* base.css است، نه جایگزین آن. بعد از base.css بار
+ * می‌شود و فقط همان چیزهایی را که با پوستهٔ پیش‌فرض (Auros، سبزآبیِ تیره)
+ * تفاوت دارند بازنویسی می‌کند: ۳۰ توکن و ۳۰ قاعده.
+ *
+ * چرا لایه و نه یک base.css دوم:
+ *   نسخهٔ آبی تا امروز یک کپیِ کاملِ ۱۴۲۰ خطی بیرون از مخزن بود. هر
+ *   اصلاح مشترک باید دو بار انجام می‌شد و همین تازگی یک بار گزید: اصلاحِ
+ *   نوار پیام متحرک باید دستی در هر دو نسخه تکرار می‌شد. با این ساختار،
+ *   اصلاح مشترک یک بار در base.css انجام می‌شود و هر دو رنگ می‌گیرند؛
+ *   اینجا فقط *تفاوت رنگ* می‌ماند.
+ *
+ * ترتیب بار شدن مهم است: گزینش‌گرها همان گزینش‌گرهای base.css‌اند با همان
+ * ویژگی (specificity)، پس برندهٔ تساوی، فایلی است که دیرتر آمده باشد.
+ * هیچ !important و هیچ گزینش‌گر مصنوعی لازم نیست.
+ *
+ * روشن کردن: THEME=blue در .env (پیش‌فرض auros است).
+ *
+ * توکن‌های مخصوص Auros (--g-aurora، --c-on-aurora، --c-slate-deep،
+ * --g-biolum) اینجا پاک نمی‌شوند؛ لازم هم نیست: هر چهار مصرف‌کنندهٔ آن‌ها
+ * (.btn--onDark، .btn--onDark:hover، .badge، .badge--sale) در همین فایل
+ * بازنویسی شده‌اند، پس مقدارشان هرگز روی پوستهٔ آبی دیده نمی‌شود.
+ * ==========================================================================*/
+
+:root {
+  --c-bg: #e8f0f8;
+  --c-surface: #f5f9fd;
+  --c-surface-2: #dce8f4;
+  --c-ink: #14181d;
+  --c-ink-2: #41505f;
+  --c-ink-3: #546376;
+  --c-line: #c7d9ea;
+  --c-line-strong: #a6c1da;
+  --c-brand: #123a5e;
+  --c-brand-strong: #0d2a45;
+  --c-brand-soft: #d8e6f4;
+  --c-brand-ink: #ffffff;
+  --c-accent: #b4441f;
+  --c-accent-soft: #fbeee9;
+  --c-ok: #10507d;
+  --c-ok-soft: #e8f1f9;
+  --c-ok-line: #bcd4e6;
+  --c-warn: #8a5a10;
+  --c-warn-soft: #fdf7e8;
+  --c-warn-line: #e8d7a8;
+  --c-err: #9b2c17;
+  --c-err-soft: #fdf0ee;
+  --c-err-line: #e6c4bd;
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+  --sh-sm: 0 1px 2px rgba(16, 24, 32, 0.06);
+  --sh-md: 0 8px 24px -12px rgba(16, 24, 32, 0.28);
+  --container: 1200px;
+  --font: 'Vazirmatn', system-ui, 'Segoe UI', Tahoma, 'Iranian Sans', sans-serif;
+}
+
+/* --- قاعده‌هایی که توکن تنها حلشان نمی‌کند -----------------------------
+   بوم روشن در برابر بوم تیره چند تصمیم را برمی‌گرداند: پیوند روی
+   زمینهٔ روشن باید رنگ برند بگیرد نه خاکستریِ متن، متن نشان روی
+   زمینهٔ تیرهٔ برند باید سفید باشد نه تیره، و فوتر در هر دو پوسته
+   تیره است پس رنگ‌هایش صریح‌اند و به توکن سطح وابسته نیستند. */
+body {
+  margin: 0;
+  background-color: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--font);
+  font-size: var(--t-md);
+  line-height: 1.8;          /* فارسی به فضای عمودی بیشتری نیاز دارد */
+  /* هیچ صفحه‌ای نباید افقی بلغزد. */
+  overflow-x: hidden;
+}
+h1, h2, h3, h4 { line-height: 1.5; text-wrap: balance; }
+a { color: var(--c-brand); }
+a:hover { color: var(--c-brand-strong); }
+:focus-visible {
+  outline: 2px solid var(--c-brand);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--c-brand);
+  border-color: var(--c-line-strong);
+}
+.btn--onDark {
+  background: var(--c-surface);
+  border-color: var(--c-surface);
+  color: var(--c-brand);
+}
+.btn--onDark:hover {
+  background: var(--c-brand-soft);
+  border-color: var(--c-brand-soft);
+  color: var(--c-brand-strong);
+}
+.brand__name { font-weight: 700; font-size: var(--t-lg); }
+/* --- هدر و فوتر ------------------------------------------------------
+   پوستهٔ پیش‌فرض (سرمه‌ای) هدر و فوتر را با گرادیان نشان رنگ می‌کند.
+   در پوستهٔ روشن این کار جواب نمی‌دهد: متنِ تیرهٔ این پوسته روی گرادیان
+   سرمه‌ای نسبت ۱٫۰۲ تا ۲٫۸۵ می‌داد — نامرئی. پس هر دو به همان
+   سطح‌هایی برمی‌گردند که این پوسته برایشان طراحی شده بود:
+     هدر  سطحِ روشن  (#f5f9fd) با متن تیره
+     فوتر سطحِ تیرهٔ --c-ink (#14181d) با متن روشنِ پایین‌تر
+   گرادیان نشان یک قابلیتِ پوستهٔ تیره است، نه عمومی. */
+.site-header { background: var(--c-surface); }
+.site-footer { background: var(--c-ink); }
+
+.site-footer {
+  margin-top: var(--s-8);
+  background: var(--c-ink);
+  color: #c9d2db;
+  font-size: var(--t-sm);
+}
+.site-footer a { color: #e4eaf0; text-decoration: none; }
+.site-footer a:hover { color: #ffffff; text-decoration: underline; }
+.site-footer__title {
+  margin: 0 0 var(--s-3);
+  font-size: var(--t-sm);
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+.site-footer__brand .brand__name { color: #ffffff; }
+.site-footer__brand .brand__latin { color: #93a1ad; }
+.site-footer__note { margin: 0; color: #93a1ad; font-size: var(--t-xs); }
+.site-footer__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-block: var(--s-4);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+  color: #93a1ad;
+  font-size: var(--t-xs);
+}
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 120% at 100% 0%, rgba(90, 150, 205, 0.30) 0%, rgba(90, 150, 205, 0) 60%),
+    linear-gradient(170deg, #17486f 0%, var(--c-brand) 45%, var(--c-brand-strong) 100%);
+  color: var(--c-brand-ink);
+}
+.hero__lede {
+  margin: 0 0 var(--s-6);
+  max-width: 48ch;
+  color: #cfdcea;
+  font-size: var(--t-md);
+  line-height: 1.9;
+}
+.hero__panel {
+  position: relative;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border-radius: var(--r-lg);
+  padding: var(--s-6) var(--s-5) var(--s-5);
+  /* سایهٔ عمیق‌تر + یک خط نازک روشن: کارت روی زمینهٔ تیره «شناور» شود. */
+  box-shadow: 0 24px 48px -24px rgba(5, 20, 35, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.cta-band__text { margin: 0; color: #d3dfea; max-width: 60ch; }
+.product-card:hover { border-color: var(--c-line-strong); box-shadow: var(--sh-sm); }
+.price__now { font-size: var(--t-md); font-weight: 700; color: var(--c-ink); }
+.badge {
+  position: absolute;
+  inset-block-start: var(--s-2);
+  inset-inline-start: var(--s-2);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--r-sm);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: #fff;
+}
+.badge--sale { background: var(--c-accent); }
+.badge--new { background: var(--c-brand); }
+.buy-card__price .price__now { font-size: var(--t-2xl); }
+.btn--warn:hover { background: #fbf0d4; }
+.btn--danger {
+  background: var(--c-err); color: #fff; border: 1px solid var(--c-err);
+  border-radius: var(--radius); padding: 0.45rem 1rem; font: inherit; cursor: pointer;
+}
+.field--invalid .field__input { border-color: #c98a7c; }
+
+/* --- بازگرداندن تصمیم‌های مخصوص Auros ---------------------------------
+   این‌ها «کمبود» نیستند، «زیادی»‌اند: قاعده‌هایی در base.css که برای بوم
+   تیره اضافه شده‌اند و اگر صاف نشوند، روی پوستهٔ آبی هم اعمال می‌مانند.
+   دو موردشان خطای خوانایی واقعی بودند:
+     .badge--new  متنِ تیره (--c-ink) روی زمینهٔ تیرهٔ برند
+     .badge--sale متنِ تیره (--c-on-aurora) روی قرمزِ تیرهٔ تأکید
+   بقیه تفاوت ظاهری‌اند، ولی اگر بمانند پوستهٔ آبی دقیقا همان چیزی نیست
+   که تأیید شده بود. */
+
+/* فاصله‌گذاری حرف روی متن فارسی مجاز نیست: حروف فارسی به هم می‌چسبند و
+   tracking آن‌ها را از هم می‌پاشد. در Auros تیترها لاتین‌وار تنظیم شده‌اند؛
+   اینجا برمی‌گردد به حالت طبیعی. */
+h1, h2, h3, h4 { letter-spacing: normal; }
+.brand__name { letter-spacing: normal; }
+.price__now { letter-spacing: normal; }
+
+/* کارت در پوستهٔ آبی هنگام hover فقط سایه می‌گیرد؛ زمینه عوض نمی‌شود. */
+.product-card:hover { background: var(--c-surface); }
+
+/* دکمهٔ روی زمینهٔ تیره: وزن و فیلتر Auros برداشته می‌شود. */
+.btn--onDark { font-weight: 600; }
+.btn--onDark:hover { filter: none; }
+
+/* نشان‌ها: در پوستهٔ آبی هر دو زمینهٔ تیره دارند، پس متن سفید است و
+   هیچ‌کدام کادر ندارند. */
+.badge--sale { color: #fff; }   /* base.css اکنون قرمزِ تیره می‌دهد؛ سفید درست است */
+.badge--new  { color: #fff; border: 0; }
+
+.buy-card__price .price__now { line-height: normal; }

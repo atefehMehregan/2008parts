@@ -1,0 +1,92 @@
+/* ============================================================================
+ * theme-dark.css — پوستهٔ سرمه‌ای
+ * ----------------------------------------------------------------------------
+ * لایهٔ روی base.css، نه جایگزین آن. پس از base.css بار می‌شود و فقط
+ * چیزهایی را که با پوستهٔ روشنِ پیش‌فرض فرق دارند بازنویسی می‌کند.
+ *
+ * این همان پالتی است که از روی نشان تجاری ساخته شده بود. وقتی پوستهٔ
+ * روشن پیش‌فرض شد، این یکی حذف نشد؛ به اینجا منتقل شد تا هر دو قابل
+ * نمایش بمانند.
+ *
+ * روشن کردن: THEME=dark در .env (پیش‌فرض light است).
+ *
+ * ترتیب بار شدن مهم است: گزینش‌گرها همان گزینش‌گرهای base.css با همان
+ * ویژگی‌اند، پس برندهٔ تساوی فایلی است که دیرتر آمده.
+ * ==========================================================================*/
+
+:root {
+  --c-bg:          #0a1a2f;   /* سرمه‌ای — بوم صفحه، بالای نشان */
+  --c-surface:     #12304d;   /* کارت برآمده */
+  --c-surface-2:   #06101d;   /* سطح فرورفته */
+  --c-ink:         #ffffff;   /* تیتر و ناوبری */
+  --c-ink-2:       #c5d6e6;   /* متن بدنه */
+  --c-ink-3:       #bdd0e2;
+  --c-slate-deep:  #5b7391;
+  --c-line:        rgba(255, 255, 255, 0.10);
+  --c-line-strong: #41607f;
+  --c-brand:        #1e5a8a;   /* آبیِ متوسط — پایین نشان، پُرکنندهٔ کنش */
+  --c-brand-strong: #154a73;   /* hover: یک پله عمیق‌تر */
+  --c-brand-soft:   rgba(30, 90, 138, 0.22);
+  --c-brand-ink:    #ffffff;   /* سفید روی برند = ۷٫۲۸ */
+  --g-brand: linear-gradient(180deg, #0a1a2f 0%, #1e5a8a 100%);
+       --c-accent        #e63946  فقط تزئینِ غیرمتنی (نوار ۳ پیکسلی، لبه)
+       --c-accent-strong #c1121f  زمینهٔ پرشده که متن سفید روی آن می‌نشیند
+  --c-accent:        #e63946;
+  --c-accent-strong: #c1121f;
+  --c-accent-soft:   rgba(230, 57, 70, 0.14);
+  --g-aurora: linear-gradient(90deg,
+  --g-biolum: linear-gradient(90deg, #1e5a8a 0%, #cfe6fb 100%);
+  --c-on-aurora: #0a1a2f;      /* متن سرمه‌ای روی گرادیان روشن = ۱۷٫۴۸ */
+  --c-focus: #9fd4ff;
+  --c-ok:        #8fc7ef;
+  --c-ok-soft:   rgba(143, 199, 239, 0.12);
+  --c-ok-line:   rgba(143, 199, 239, 0.35);
+  --c-warn:      #e8c98a;
+  --c-warn-soft: rgba(232, 201, 138, 0.12);
+  --c-warn-line: rgba(232, 201, 138, 0.35);
+  --c-err:       #ff8a94;
+  --c-err-soft:  rgba(255, 138, 148, 0.12);
+  --c-err-line:  rgba(255, 138, 148, 0.38);
+  --c-sunken: #06101d;
+  --g-brand: linear-gradient(180deg, #0a1a2f 0%, #1e5a8a 100%);
+  --c-focus: #9fd4ff;
+  --sh-sm: none;
+  --sh-md: none;
+}
+
+/* --- قاعده‌هایی که توکن تنها حلشان نمی‌کند ---------------------------
+   بوم تیره چند تصمیم را برمی‌گرداند: پیوند روی زمینهٔ تیره باید خاکستریِ
+   روشن باشد نه آبیِ برند، هدر و فوتر گرادیان نشان را می‌گیرند، و کنشِ
+   اصلی به‌جای پُرکنندهٔ تخت، گرادیان روشن با متن تیره می‌شود. */
+
+a { color: var(--c-ink-2); }
+a:hover { color: var(--c-ink); }
+
+/* در پوستهٔ تیره، زمینهٔ صفحه خودش سرمه‌ای است، پس نوارِ زغالیِ پوستهٔ
+   روشن از آن جدا نمی‌شود. اینجا نوار اطلاعیه آبیِ برند می‌ماند — در
+   پس‌زمینهٔ تیره آبی تند نیست و نوار را دیدنی می‌کند. */
+.ticker { background: var(--c-brand); color: var(--c-brand-ink); }
+.site-header { background: var(--g-brand); }
+.site-footer { background: var(--g-brand); color: var(--c-ink-2); }
+.site-footer a { color: var(--c-ink-2); }
+.site-footer a:hover { color: var(--c-ink); }
+.site-footer__title { color: var(--c-ink); }
+.site-footer__brand .brand__name { color: var(--c-ink); }
+.site-footer__brand .brand__latin { color: var(--c-ink-3); }
+.site-footer__note { color: var(--c-ink-3); }
+.site-footer__bottom { border-top: 1px solid var(--c-line); color: var(--c-ink-3); }
+
+/* هیرو اینجا بازنویسی نمی‌شود: نوار تیرهٔ تحریریه‌ای در هر دو پوسته
+   یکسان است و رنگ‌هایش در base.css صریح نوشته شده‌اند، نه با توکن.
+   اگر اینجا دوباره تعریف شود، گرافیک و متن از هم می‌افتند. */
+
+/* کنش اصلی روی بوم تیره: گرادیان روشن با متن سرمه‌ای. */
+.btn--onDark {
+  background: var(--g-aurora);
+  border-color: transparent;
+  color: var(--c-on-aurora);
+}
+.btn--onDark:hover { filter: brightness(1.06); color: var(--c-on-aurora); }
+
+.product-card:hover { border-color: var(--c-line-strong); background: var(--c-surface); box-shadow: none; }
+.badge--new { background: var(--c-surface); color: var(--c-ink); border: 1px solid var(--c-line); }

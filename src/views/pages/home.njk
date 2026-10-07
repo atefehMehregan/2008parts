@@ -1,35 +1,259 @@
 {% extends "layouts/base.njk" %}
 
+{# ============================================================================
+   صفحهٔ اصلی فروشگاه.
+
+   هر بخش فقط وقتی رندر می‌شود که دادهٔ واقعی داشته باشد. هیچ کارت نمونه،
+   هیچ محصول ساختگی و هیچ عدد تزئینی‌ای اینجا نیست: با کاتالوگ خالی،
+   صفحه همچنان یک فروشگاه کامل به نظر می‌رسد و صادقانه می‌گوید هنوز
+   محصولی ثبت نشده است.
+   ========================================================================= #}
+
 {% block content %}
-<section class="section">
-  <div class="container">
-    <p class="eyebrow">فاز ۰ — پایه فنی</p>
-    <h1 class="page-title">{{ tagline }}</h1>
-    <p class="lede">
-      این صفحه فقط برای تأیید پایه فنی است: زبان فارسی، جهت راست‌به‌چپ،
-      رمزگذاری UTF-8 و چیدمان واکنش‌گرا. طراحی و محتوای واقعی فروشگاه در
-      فازهای بعد ساخته می‌شود.
-    </p>
 
-    <dl class="facts">
-      <div class="facts__row">
-        <dt>نمونه قیمت</dt>
-        <dd class="num">{{ 12500000 | toman }}</dd>
-      </div>
-      <div class="facts__row">
-        <dt>نمونه رقم فارسی</dt>
-        <dd class="num">{{ "1403" | faDigits }}</dd>
-      </div>
-      <div class="facts__row">
-        <dt>نمونه شماره فنی</dt>
-        <dd><bdi class="part-number">9678191580</bdi></dd>
-      </div>
-    </dl>
+{# --------------------------------------------------------------- هیرو
 
-    <p class="note">
-      شماره‌های فنی داخل متن فارسی با <code>&lt;bdi&gt;</code> محصور می‌شوند تا
-      جهت‌شان در چیدمان راست‌به‌چپ به‌هم نریزد.
-    </p>
+   نوار تیرهٔ تمام‌عرض با یک ترسیم فنیِ بزرگ در سمت چپ و متن کم در سمت
+   راست (شروع خواندن فارسی). گرافیک از لبهٔ ظرف بیرون می‌زند و .hero
+   آن را می‌برد، پس ترکیب «تمام‌صفحه» دیده می‌شود نه «کارت در قاب».
+
+   سه تصمیم که عمدی‌اند:
+
+   ۱. اینجا جست‌وجو نیست. جست‌وجوی سایت در هدر است و همان‌جا می‌ماند؛
+      دو فرم جست‌وجو روی یک صفحه، کاربر را دوبه‌شک می‌کرد.
+
+   ۲. اینجا هیچ عکس محصولی نیست. هیرو باید هویت برند را بگوید، نه یک
+      قلم از کاتالوگ را. گرافیک یک SVG دست‌نویسِ خودِ پروژه است
+      (public/img/hero-automotive-blueprint.svg)، نه عکس قطعه.
+
+   ۳. متن کم است و هیچ عددی ندارد. «پیشنهاد ویژه قطعات منتخب» یک پیام
+      بازاریابی است، نه تخفیفِ ثبت‌شده: هیچ درصدی ادعا نمی‌شود و هیچ
+      قیمتی اینجا نمایش داده نمی‌شود. قفسهٔ «محصولات با قیمت حراج» در
+      پایین همین صفحه تنها جایی است که تخفیف *واقعی* نشان داده می‌شود
+      و فقط وقتی sale_price_toman در داده باشد.
+
+   این بخش به هیچ دادهٔ پایگاه‌داده‌ای وابسته نیست، پس با کاتالوگ خالی
+   هم کامل رندر می‌شود. #}
+<section class="hero">
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      {# پیام کمپین، نه شعار برند. شعار قبلی («قطعات مطمئن، انتخاب دقیق»)
+         برداشته شد و جای آن را همین پیام گرفت؛ برچسب کوچکِ بالای تیتر هم
+         حذف شد چون دقیقا همین متن را تکرار می‌کرد.
+
+         ⚠️ هیچ درصدی اینجا نوشته نمی‌شود. امروز صفر محصول قیمت حراج
+         ثبت‌شده دارد (sale_price_toman)، پس «۲۰٪ تخفیف» یک عدد ساختگی
+         می‌بود. وقتی تخفیف واقعی ثبت شود، قفسهٔ «محصولات با قیمت حراج»
+         پایین همین صفحه خودش ظاهر می‌شود و عدد واقعی را نشان می‌دهد. #}
+      <h1 class="hero__title">پیشنهاد ویژه قطعات منتخب</h1>
+
+      <p class="hero__lede">
+        کاتالوگ تخصصی قطعات و لوازم جانبی پژو ۲۰۰۸
+      </p>
+
+      {# برچسب «قطعات منتخب» عمدا روی دکمه نیامد: مجموعهٔ «منتخب»ی در
+         داده وجود ندارد و دکمه به فهرست کامل می‌رود، پس آن برچسب
+         مقصد را اشتباه معرفی می‌کرد. #}
+      <div class="hero__actions">
+        <a class="btn" href="/products">مشاهده محصولات</a>
+      </div>
+    </div>
+
+    {# ترسیم خانهٔ دوم همین گرید است، نه لایه‌ای روی متن: روی روشن‌ترین
+       خطش کنتراست متن سفید مردود می‌شود، پس روی دسکتاپ هرگز زیر متن
+       نمی‌رود. روی موبایل که ناچار پس‌زمینه می‌شود، شفافیتش پایین
+       می‌آید تا همان نقطه دوباره قبول شود.
+
+       تزئینی است: معنا را تیتر می‌رساند. پس alt خالی و از دید خوانندهٔ
+       صفحه پنهان — نه یک توضیحِ ساختگی برای یک ترسیم انتزاعی. #}
+    <img class="hero__art" src="/img/hero-automotive-blueprint.svg"
+         alt="" aria-hidden="true" width="1200" height="800" />
   </div>
 </section>
+
+{# -------------------------------------------------------- دسته‌بندی‌ها #}
+{% if categoryList.length %}
+<section class="home-section home-section--tint" id="categories">
+  <div class="container">
+    <div class="home-section__head">
+      <div>
+        <h2 class="home-section__title">دسته‌بندی‌ها</h2>
+        <p class="home-section__text">از دسته شروع کنید یا مستقیم جست‌وجو کنید.</p>
+      </div>
+      <a class="home-section__link" href="/products">همهٔ محصولات</a>
+    </div>
+
+    <div class="category-grid">
+      {% for c in categoryList %}
+        <a class="category-card" href="/category/{{ c.slug | urlencode }}">
+          <span class="category-card__name">{{ c.name }}</span>
+          <span class="category-card__count num">{{ c.product_count | faDigits }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ------------------------------------------------------ قفسهٔ «ویژه» #}
+{% if featuredItems.length %}
+<section class="home-section">
+  <div class="container">
+    <div class="home-section__head">
+      <h2 class="home-section__title">محصولات ویژه</h2>
+      <a class="home-section__link" href="/products">دیدن همه</a>
+    </div>
+    <div class="product-grid">
+      {% for item in featuredItems %}{% include "partials/product-card.njk" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ------------------------------------------------------- قفسهٔ «تازه» #}
+{% if freshItems.length %}
+<section class="home-section">
+  <div class="container">
+    <div class="home-section__head">
+      <h2 class="home-section__title">تازه به کاتالوگ اضافه شد</h2>
+      <a class="home-section__link" href="/products?sort=newest">دیدن همه</a>
+    </div>
+    <div class="product-grid">
+      {% for item in freshItems %}{% include "partials/product-card.njk" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# --------------------------------------------- قفسهٔ «تخفیف‌دار» #}
+{# فقط محصولی که در پایگاه داده قیمت حراجِ واقعی دارد. هیچ درصدی اینجا
+   ساخته نمی‌شود و هیچ قیمتی تغییر نمی‌کند — کنترلر با فیلتر onSale
+   می‌خواند و کارت محصول خودش قیمت حراج و قیمت خط‌خورده را نشان می‌دهد.
+   اگر هیچ حراج واقعی ثبت نشده باشد، این بخش کامل حذف می‌شود. #}
+{% if saleItems.length %}
+<section class="home-section home-section--offer">
+  <div class="container">
+    <div class="home-section__head">
+      <div>
+        <p class="home-section__eyebrow">تخفیف‌دار</p>
+        <h2 class="home-section__title">محصولات با قیمت حراج</h2>
+        <p class="home-section__text">قیمت حراج همان قیمتِ ثبت‌شده در کاتالوگ است.</p>
+      </div>
+      <a class="home-section__link" href="/products">دیدن همه</a>
+    </div>
+    <div class="product-grid">
+      {% for item in saleItems %}{% include "partials/product-card.njk" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ------------------------------------------------- قفسهٔ «تازه‌ترین» #}
+{# فقط وقتی هیچ محصول ویژه یا تازه‌ای علامت نخورده باشد؛ وگرنه همان
+   محصول‌ها دو بار پشت سر هم تکرار می‌شدند. #}
+{% if latestItems.length %}
+<section class="home-section">
+  <div class="container">
+    <div class="home-section__head">
+      <div>
+        <h2 class="home-section__title">تازه‌ترین محصول‌ها</h2>
+        <p class="home-section__text">
+          <span class="num">{{ totalProducts | faDigits }}</span> محصول در کاتالوگ
+        </p>
+      </div>
+      <a class="home-section__link" href="/products">دیدن همه</a>
+    </div>
+    <div class="product-grid">
+      {% for item in latestItems %}{% include "partials/product-card.njk" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# --------------------------------------------------- کاتالوگ خالی #}
+{% if catalogueEmpty %}
+<section class="home-section">
+  <div class="container">
+    {% set emptyTitle = 'هنوز محصولی ثبت نشده است' %}
+    {% set emptyText = 'کاتالوگ در حال آماده‌سازی است. به‌زودی قطعات پژو ۲۰۰۸ اینجا نمایش داده می‌شوند.' %}
+    {% set emptyActionUrl = '/products' %}
+    {% set emptyActionLabel = 'دیدن صفحهٔ محصولات' %}
+    {% include "partials/empty-state.njk" %}
+  </div>
+</section>
+{% endif %}
+
+{# ------------------------------------------------------- چرا اینجا #}
+{# فقط توانایی‌های واقعی همین نسخه. هیچ ادعایی دربارهٔ ارسال، گارانتی
+   یا پشتیبانی — چون هیچ‌کدام هنوز پیاده نشده‌اند. #}
+<section class="home-section home-section--tint">
+  <div class="container">
+    <div class="home-section__head">
+      <h2 class="home-section__title">کار کردن با این کاتالوگ</h2>
+    </div>
+    <div class="value-grid">
+      <div class="value-card">
+        <h3 class="value-card__title">جست‌وجو با شماره فنی</h3>
+        <p class="value-card__text">
+          شماره فنی را همان‌طور که روی قطعه نوشته شده وارد کنید؛ خط تیره،
+          فاصله و رقم فارسی فرقی نمی‌کند.
+        </p>
+      </div>
+      <div class="value-card">
+        <h3 class="value-card__title">فقط پژو ۲۰۰۸</h3>
+        <p class="value-card__text">
+          کاتالوگ روی قطعات همین خودرو متمرکز است، نه یک فروشگاه عمومی
+          با هزاران قطعهٔ بی‌ربط.
+        </p>
+      </div>
+      <div class="value-card">
+        <h3 class="value-card__title">اطلاعات سازگاری</h3>
+        <p class="value-card__text">
+          هر قطعه می‌تواند یادداشت سازگاری و فهرست خودروهای سازگار داشته
+          باشد تا پیش از خرید مطمئن شوید.
+        </p>
+      </div>
+      <div class="value-card">
+        <h3 class="value-card__title">فارسی و شفاف</h3>
+        <p class="value-card__text">
+          نام قطعه، دسته‌بندی و نشانی صفحه‌ها فارسی است و قیمت‌ها با رقم
+          فارسی و واحد تومان نمایش داده می‌شوند.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{# ------------------------------------------------------------ برندها #}
+{% if brandList.length %}
+<section class="home-section">
+  <div class="container">
+    <div class="home-section__head">
+      <h2 class="home-section__title">برندها</h2>
+    </div>
+    <div class="brand-strip">
+      {% for b in brandList %}
+        <a class="brand-chip" href="/brand/{{ b.slug | urlencode }}">{{ b.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{# ---------------------------------------------------------- فراخوان #}
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h2 class="cta-band__title">دنبال قطعهٔ مشخصی هستید؟</h2>
+        <p class="cta-band__text">
+          کل کاتالوگ را ببینید یا نام قطعه، کد کالا و شماره فنی را در کادر
+          جست‌وجوی بالای صفحه بنویسید.
+        </p>
+      </div>
+      <a class="btn btn--onDark" href="/products">رفتن به کاتالوگ</a>
+    </div>
+  </div>
+</section>
+
 {% endblock %}

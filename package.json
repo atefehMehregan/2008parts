@@ -1,9 +1,9 @@
 {
-  "name": "pars2008",
+  "name": "2008parts",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "2008Pars — Peugeot 2008 spare parts store (Persian, RTL)",
+  "description": "2008parts — Peugeot 2008 spare parts store (Persian, RTL)",
   "engines": {
     "node": ">=20.9.0"
   },
@@ -22,6 +22,7 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.2.0",
+    "multer": "^2.4.0",
     "nunjucks": "^3.2.4",
     "pg": "^8.23.0",
     "sharp": "^0.35.4"
