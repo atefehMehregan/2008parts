@@ -6,7 +6,7 @@
     <meta name="description" content="{{ metaDescription | default('فروشگاه اینترنتی قطعات یدکی پژو ۲۰۰۸') }}" />
     {# رنگ نوار مرورگر موبایل باید با پوستهٔ فعال بخواند. پیش از این
        روی آبی ثابت بود و در پوستهٔ تیره با خود صفحه نمی‌خواند. #}
-    <meta name="theme-color" content="{% if theme == 'blue' %}#123a5e{% else %}#0a1a2f{% endif %}" />
+    <meta name="theme-color" content="{% if theme == 'dark' %}#0a1a2f{% else %}#ffffff{% endif %}" />
     <title>{{ title }} | {{ storeName }}</title>
     {# نشان برند. SVG برای مرورگرهای امروزی، و PNG مات برای آیکون iOS —
        iOS آیکون شفاف را روی زمینهٔ سیاه می‌نشاند. #}
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/css/base.css" />
     {# پوستهٔ آبی یک لایهٔ روی base.css است و فقط تفاوت رنگ را دارد، پس
        باید *بعد* از آن بیاید. با THEME=auros هیچ درخواست اضافی نمی‌رود. #}
-    {% if theme == 'blue' %}<link rel="stylesheet" href="/css/theme-blue.css" />{% endif %}
+    {% if theme == 'dark' %}<link rel="stylesheet" href="/css/theme-dark.css" />{% endif %}
   </head>
 
   <body>

@@ -68,80 +68,64 @@
 
 :root {
   /* ===================================================================
-     پوستهٔ «۲۰۰۸پارتس» — آبیِ نشان تجاری
+     پوستهٔ روشنِ ۲۰۰۸پارتس — پیش‌فرض
 
-     پالت از خودِ نشان می‌آید: سرمه‌ایِ تیره در بالا که به آبیِ متوسط
-     در پایین محو می‌شود، به‌اضافهٔ قرمزِ چراغ‌خطر به‌عنوان تأکید.
+     سفید و خاکستریِ خیلی روشن برای سطح، زغالیِ سرمه‌ای برای متن، و یک
+     آبیِ خودرویی مهارشده برای کنش. قرمز فقط برای تخفیف و حراج.
+     بدون گرادیانِ تزئینی، بدون شیشه‌ای‌سازی، بدون سایهٔ سنگین.
 
-     پشتهٔ سطح سه پله از یک خانوادهٔ سرمه‌ای است:
-       #06101d  فرورفته (فوتر، چاهِ عمیق)
-       #0a1a2f  بوم صفحه — همان سرمه‌ایِ بالای نشان
-       #12304d  کارتِ برآمده
+     هر جفتِ متن/زمینه‌ای که واقعا در رابط پیش می‌آید اندازه‌گیری شده و
+     از ۴٫۵ رد می‌شود؛ کم‌رنگ‌ترین متن روی تیره‌ترین سطحِ روشن ۵٫۰۲ است.
 
-     هیچ سبز یا فیروزه‌ای در این پالت نیست. نسخهٔ قبلی (Auros) کامل
-     برداشته شد.
+     پوستهٔ سرمه‌ایِ قبلی حذف نشده: به theme-dark.css منتقل شده و با
+     THEME=dark بار می‌شود.
      =================================================================== */
 
-  /* --- سطح و متن --- */
-  --c-bg:          #0a1a2f;   /* سرمه‌ای — بوم صفحه، بالای نشان */
-  --c-surface:     #12304d;   /* کارت برآمده */
-  --c-surface-2:   #06101d;   /* سطح فرورفته */
-  --c-ink:         #ffffff;   /* تیتر و ناوبری */
-  --c-ink-2:       #c5d6e6;   /* متن بدنه */
-  /* متن کم‌تأکید. این مقدار عمدا روشن‌تر از حدِ لازم روی بوم است، چون
-     هدر و فوتر گرادیان‌اند و این متن باید روی روشن‌ترین نقطهٔ گرادیان
-     (#1e5a8a) هم از ۴٫۵ رد شود — آنجا ۴٫۶۱ می‌شود. */
-  --c-ink-3:       #bdd0e2;
-  /* خاکستریِ آبی‌فام: ته‌رنگ سطح و خط پررنگ. جانشین #707777 قدیمی. */
-  --c-slate-deep:  #5b7391;
-  --c-line:        rgba(255, 255, 255, 0.10);
-  --c-line-strong: #41607f;
+  /* --- سطح --- */
+  --c-bg:          #ffffff;   /* بوم صفحه */
+  --c-surface:     #ffffff;   /* کارت */
+  --c-surface-2:   #f4f6f9;   /* سطح خاکستریِ ملایم */
+  --c-sunken:      #eef1f5;   /* فرورفته: جای تصویر، ردیف نوبتی */
 
-  /* --- برند و کنش --- */
-  --c-brand:        #1e5a8a;   /* آبیِ متوسط — پایین نشان، پُرکنندهٔ کنش */
-  --c-brand-strong: #154a73;   /* hover: یک پله عمیق‌تر */
-  --c-brand-soft:   rgba(30, 90, 138, 0.22);
-  --c-brand-ink:    #ffffff;   /* سفید روی برند = ۷٫۲۸ */
+  /* --- متن --- */
+  --c-ink:         #121a24;   /* تیتر و متن اصلی — ۱۷٫۵۲ روی سفید */
+  --c-ink-2:       #46556a;   /* متن دوم — ۷٫۵۹ */
+  --c-ink-3:       #59687c;   /* کم‌تأکید — ۵٫۶۸ روی سفید، ۵٫۰۲ روی فرورفته */
 
-  /* گرادیان نشان — هدر و فوتر. سرمه‌ای در بالا، آبی در پایین، همان
-     جهتِ خودِ نشان، تا لوگو در هدر بی‌درز بنشیند. */
-  --g-brand: linear-gradient(180deg, #0a1a2f 0%, #1e5a8a 100%);
+  /* --- خط --- */
+  --c-line:        #e3e8ee;
+  --c-line-strong: #c9d2dc;
+  --c-slate-deep:  #8c99a8;
 
-  /* تأکید: قرمزِ چراغ‌خطرِ نشان.
-     دو مقدار، نه یکی — و این تفکیک عمدی است:
-       --c-accent        #e63946  فقط تزئینِ غیرمتنی (نوار ۳ پیکسلی، لبه)
-       --c-accent-strong #c1121f  زمینهٔ پرشده که متن سفید روی آن می‌نشیند
-     سفید روی #e63946 نسبت ۴٫۱۷ می‌دهد — مردودِ AA. پس نشانِ «حراج»
-     مقدار تیره‌تر را می‌گیرد (۶٫۲۲) و قرمزِ روشن فقط تزئین می‌ماند. */
-  --c-accent:        #e63946;
-  --c-accent-strong: #c1121f;
-  --c-accent-soft:   rgba(230, 57, 70, 0.14);
+  /* --- برند --- */
+  --c-brand:        #1a5a94;   /* آبیِ خودرویی مهارشده */
+  --c-brand-strong: #134670;   /* hover */
+  --c-brand-soft:   #e9f1f9;
+  --c-brand-ink:    #ffffff;   /* ۷٫۱۶ روی برند */
 
-  /* گرادیان روشن برای کنش اصلی روی بوم تیره. باید *روشن* باشد وگرنه
-     دکمه روی هیروِ تیره دیده نمی‌شود؛ پس آبیِ بسیار روشن تا سفید. */
-  --g-aurora: linear-gradient(90deg,
-     #cfe6fb 0%, #eaf4ff 26.25%, #ffffff 47.57%, #dce9f8 88.96%);
-  --g-biolum: linear-gradient(90deg, #1e5a8a 0%, #cfe6fb 100%);
-  --c-on-aurora: #0a1a2f;      /* متن سرمه‌ای روی گرادیان روشن = ۱۷٫۴۸ */
+  /* --- تأکید تبلیغاتی --- */
+  --c-accent:        #c1121f;   /* فقط تخفیف و حراج */
+  --c-accent-strong: #a10e19;
+  --c-accent-soft:   #fdecee;
+  --c-on-aurora:     #121a24;
 
-  /* رنگ حلقهٔ تمرکز. پیش از این یک نعناییِ روشن بود. */
-  --c-focus: #9fd4ff;
+  /* گرادیان‌ها عمدا خنثی‌اند: در پوستهٔ روشن، کنشِ اصلی رنگِ تخت دارد. */
+  --g-brand:  linear-gradient(180deg, #ffffff 0%, #f4f6f9 100%);
+  --g-aurora: linear-gradient(90deg, #ffffff 0%, #f4f6f9 100%);
+  --g-biolum: linear-gradient(90deg, #1a5a94 0%, #e9f1f9 100%);
 
-  /* --- وضعیت ---
-     «موفق» عمدا سبز *نیست*: درخواست صریح این بود که هیچ سبزی در سایت
-     نماند. آبیِ روشن جایش را گرفته و معنا از متن و جای پیام می‌آید، نه
-     از رنگ. اگر روزی سبزِ متعارف برای «موفق» لازم شد، فقط همین سه
-     توکن باید عوض شوند.
-     «هشدار» کهربایی است و سبز نبوده، پس دست‌نخورده ماند. */
-  --c-ok:        #8fc7ef;
-  --c-ok-soft:   rgba(143, 199, 239, 0.12);
-  --c-ok-line:   rgba(143, 199, 239, 0.35);
-  --c-warn:      #e8c98a;
-  --c-warn-soft: rgba(232, 201, 138, 0.12);
-  --c-warn-line: rgba(232, 201, 138, 0.35);
-  --c-err:       #ff8a94;
-  --c-err-soft:  rgba(255, 138, 148, 0.12);
-  --c-err-line:  rgba(255, 138, 148, 0.38);
+  --c-focus: #1a5a94;
+
+  /* --- وضعیت --- */
+  --c-ok:        #136b43;
+  --c-ok-soft:   #e8f5ee;
+  --c-ok-line:   #bcdcc9;
+  --c-warn:      #8a5a10;
+  --c-warn-soft: #fdf7e8;
+  --c-warn-line: #e8d7a8;
+  --c-err:       #a10e19;
+  --c-err-soft:  #fdecee;
+  --c-err-line:  #f0c4c8;
 
   /* --- فاصله --- */
   --s-1: 0.25rem;
@@ -167,14 +151,14 @@
      کوچک، ۱۶ پیکسل برای کارت. هیچ گوشهٔ گردتر از ۱۶ پیکسل.
      --r-pill فقط برای چیزهایی می‌ماند که واقعا دایره‌اند (نقطه‌ها). */
   --r-sm: 6px;
-  --r-md: 6px;
+  --r-md: 10px;
   --r-lg: 16px;
   --r-pill: 999px;
 
   /* بدون سایه. عمق از پشتهٔ سطح می‌آید، نه از ارتفاعِ کاغذی.
      توکن‌ها می‌مانند تا ۱۳۰۰ خط CSS نشکند، ولی مقدارشان none است. */
-  --sh-sm: none;
-  --sh-md: none;
+  --sh-sm: 0 1px 2px rgba(18, 26, 36, 0.06);
+  --sh-md: 0 10px 30px -16px rgba(18, 26, 36, 0.22);
 
   --container: 1440px;
 
@@ -224,18 +208,19 @@ body {
 
 /* تیترها فشرده — کنتراست ۱٫۲ تیتر در برابر ۱٫۷ بدنه، ریتم تایپی پوسته. */
 h1, h2, h3, h4 {
+  letter-spacing: normal;
   /* وزن صریح: با فونت سفارشی، تکیه بر پیش‌فرضِ مرورگر یعنی ممکن است
      مرورگر به‌جای فیسِ Bold واقعی، یک بولدِ جعلی بسازد. */
   font-weight: 700;
-  line-height: 1.2; text-wrap: balance; letter-spacing: -0.02em;
+  line-height: 1.35; text-wrap: balance;
 }
 
 img { max-width: 100%; }
 
 /* پیوند: Silver Mist در حالت عادی، Platinum روی hover.
    --c-brand (Liquid Kelp) روی بوم تیره عملا نادیدنی است. */
-a { color: var(--c-ink-2); }
-a:hover { color: var(--c-ink); }
+a { color: var(--c-brand); }
+a:hover { color: var(--c-brand-strong); }
 
 /* تمرکز همیشه دیده می‌شود — روی هر عنصری، در هر بخشی. */
 :focus-visible {
@@ -328,15 +313,16 @@ a:hover { color: var(--c-ink); }
    پوسته صریح می‌گوید: گرادیان فقط روی CTA اصلی، نه زمینه، نه متن،
    نه چیزی بزرگ‌تر از یک دکمه. متن تیره روی گرادیان روشن می‌نشیند. */
 .btn--onDark {
-  background: var(--g-aurora);
-  border-color: transparent;
-  color: var(--c-on-aurora);
-  font-weight: 500;
+  background: var(--c-brand);
+  border-color: var(--c-brand);
+  color: var(--c-brand-ink);
+  font-weight: 600;
 }
 .btn--onDark:hover {
   /* گرادیان جابه‌جا نمی‌شود؛ فقط کمی روشن‌تر می‌شود. */
-  filter: brightness(1.06);
-  color: var(--c-on-aurora);
+  background: var(--c-brand-strong);
+  border-color: var(--c-brand-strong);
+  color: var(--c-brand-ink);
 }
 
 /* دکمهٔ دومِ روی زمینهٔ تیره: هم‌شکلِ ghost ولی با خطِ روشن.
@@ -359,7 +345,7 @@ a:hover { color: var(--c-ink); }
 /* هدر گرادیانِ نشان را می‌گیرد تا لوگو بی‌درز در آن بنشیند:
    سرمه‌ای در بالا، آبی در پایین — همان جهت خودِ نشان. */
 .site-header {
-  background: var(--g-brand);
+  background: var(--c-surface);
   border-bottom: 1px solid var(--c-line);
 }
 
@@ -396,7 +382,7 @@ a:hover { color: var(--c-ink); }
 .brand__text { display: flex; flex-direction: column; line-height: 1.3; }
 /* «2008parts» لاتین است، پس tracking پوسته اینجا بی‌خطر اعمال می‌شود.
    روی متن فارسی هرگز — حروف فارسی به هم می‌چسبند و فاصله می‌شکندشان. */
-.brand__name { font-weight: 500; font-size: var(--t-lg); letter-spacing: 0.08em; }
+.brand__name { font-weight: 700; font-size: var(--t-lg); }
 .brand__latin {
   font-size: var(--t-xs);
   letter-spacing: 0.16em;
@@ -582,14 +568,17 @@ a:hover { color: var(--c-ink); }
    روشن کار می‌کند (آنجا ink تیره است). در پوستهٔ تیره ink سفید بود، پس
    فوتر سفید می‌شد با متنِ روشن رویش: نسبت ۱٫۰۰ تا ۲٫۶۷ — عملا نامرئی.
    این یک ایرادِ موجود بود، نه چیزی که با تغییر پالت ساخته شود. */
+/* فوتر عمدا تیره است: در صفحهٔ روشن، یک نوارِ تیره پایین صفحه را
+   می‌بندد و مرز محتوا را روشن می‌کند. رنگ‌هایش صریح‌اند، نه وابسته به
+   توکن‌های سطح، چون آن توکن‌ها اینجا وارونه‌اند. */
 .site-footer {
   margin-top: var(--s-8);
-  background: var(--g-brand);
-  color: var(--c-ink-2);
+  background: #121a24;
+  color: #c9d2db;
   font-size: var(--t-sm);
 }
-.site-footer a { color: var(--c-ink-2); text-decoration: none; }
-.site-footer a:hover { color: var(--c-ink); text-decoration: underline; }
+.site-footer a { color: #e4eaf0; text-decoration: none; }
+.site-footer a:hover { color: #ffffff; text-decoration: underline; }
 
 .site-footer__grid {
   display: grid;
@@ -600,7 +589,7 @@ a:hover { color: var(--c-ink); }
 .site-footer__title {
   margin: 0 0 var(--s-3);
   font-size: var(--t-sm);
-  color: var(--c-ink);
+  color: #ffffff;
   letter-spacing: 0.04em;
 }
 .site-footer__text { margin: 0 0 var(--s-3); max-width: 46ch; line-height: 1.9; }
@@ -610,18 +599,18 @@ a:hover { color: var(--c-ink); }
   width: 40px; height: 40px; border-radius: 7px;
   margin-bottom: var(--s-3);
 }
-.site-footer__brand .brand__name { color: var(--c-ink); }
-.site-footer__brand .brand__latin { color: var(--c-ink-3); }
-.site-footer__note { margin: 0; color: var(--c-ink-3); font-size: var(--t-xs); }
+.site-footer__brand .brand__name { color: #ffffff; }
+.site-footer__brand .brand__latin { color: #93a1ad; }
+.site-footer__note { margin: 0; color: #93a1ad; font-size: var(--t-xs); }
 
 .site-footer__bottom {
-  border-top: 1px solid var(--c-line);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-block: var(--s-4);
   display: flex;
   justify-content: space-between;
   gap: var(--s-4);
   flex-wrap: wrap;
-  color: var(--c-ink-3);
+  color: #93a1ad;
   font-size: var(--t-xs);
 }
 .site-footer__bottom p { margin: 0; }
@@ -635,200 +624,95 @@ a:hover { color: var(--c-ink); }
    ۲. یک هالهٔ نرم در گوشهٔ بالای سمت شروع (منطقی، پس در RTL راست است)
    ۳. توریِ بسیار کم‌رنگ — حسِ فنی/مهندسی، نه تزئین پر سر و صدا */
 .hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background:
-    radial-gradient(90% 120% at 100% 0%, rgba(30, 90, 138, 0.45) 0%, rgba(30, 90, 138, 0) 62%),
-    linear-gradient(170deg, #143a5c 0%, var(--c-bg) 48%, var(--c-surface-2) 100%);
-  color: var(--c-brand-ink);
+  background: linear-gradient(180deg, var(--c-surface-2) 0%, var(--c-bg) 100%);
+  border-block-end: 1px solid var(--c-line);
 }
-/* توریِ فنی. opacity پایین نگه داشته می‌شود تا متن همیشه خوانا بماند. */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 72px),
-    repeating-linear-gradient(0deg,  rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 72px);
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 85%);
-}
-
+/* دو ستون: متن در سمت راست (شروع خواندن فارسی)، تصویر در سمت چپ.
+   از grid با نام ستون استفاده نشده چون ترتیب منطقیِ DOM همان ترتیب
+   بصری در RTL است و مرورگر خودش جا‌به‌جا می‌کند. */
 .hero__inner {
-  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   gap: var(--s-7);
   align-items: center;
-  padding-block: clamp(var(--s-7), 6vw, 5.5rem);
+  padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem);
 }
-
-/* خط تأکید در ابتدای ستون متن. border-inline-start منطقی است، پس در
-   RTL خودبه‌خود سمت راست می‌نشیند. */
-.hero__copy {
-  border-inline-start: 3px solid var(--c-accent);
-  padding-inline-start: var(--s-5);
+.hero__copy { min-width: 0; }
+.hero__eyebrow {
+  margin: 0 0 var(--s-3);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--c-ink-3);
+  display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap;
 }
-
-/* تیتر، کانون بصری است: بزرگ‌تر، فشرده‌تر، با شکستِ متوازن. */
+.hero__tag {
+  background: var(--c-accent-soft);
+  color: var(--c-accent);
+  border: 1px solid var(--c-accent);
+  border-radius: var(--r-pill);
+  padding: 0.15rem 0.7rem;
+  font-weight: 600;
+}
 .hero__title {
-  margin: 0 0 var(--s-4);
-  font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3rem);
+  margin: 0 0 var(--s-3);
+  font-size: clamp(1.8rem, 1.1rem + 2.6vw, 2.9rem);
   line-height: 1.35;
-  font-weight: 700;   /* ۸۰۰ وجود ندارد؛ مرورگر جعلش می‌کرد */
-  letter-spacing: -0.01em;
-  text-wrap: balance;
+  color: var(--c-ink);
 }
 .hero__lede {
-  margin: 0 0 var(--s-6);
-  max-width: 48ch;
+  margin: 0 0 var(--s-5);
+  max-width: 52ch;
   color: var(--c-ink-2);
-  font-size: var(--t-md);
+  font-size: var(--t-lg);
   line-height: 1.9;
 }
+.hero__search { max-width: 34rem; margin-bottom: var(--s-5); }
 .hero__actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
-/* دکمه‌های هیرو کمی درشت‌تر از دکمهٔ معمولی — وزنِ یک فراخوان اصلی. */
-.hero__actions .btn { padding: 0.72rem 1.5rem; }
 
-/* کارت جست‌وجوی سمتِ دیگرِ هیرو: مسیر اصلیِ پیدا کردن قطعه. */
-.hero__panel {
-  position: relative;
-  background: var(--c-surface);
-  color: var(--c-ink);
-  border-radius: var(--r-lg);
-  padding: var(--s-6) var(--s-5) var(--s-5);
-  /* سایهٔ عمیق‌تر + یک خط نازک روشن: کارت روی زمینهٔ تیره «شناور» شود. */
-  border: 1px solid var(--c-line);
-}
-/* نوار تأکید بالای کارت — همان رنگ تأکیدِ خط تیتر، برای پیوند بصری. */
-.hero__panel::before {
-  content: '';
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: var(--s-5);
-  height: 3px;
-  border-radius: 0 0 var(--r-sm) var(--r-sm);
-  background: var(--c-accent);
-}
-.hero__panel-title { margin: 0 0 var(--s-2); font-size: var(--t-lg); }
-.hero__panel-text { margin: 0 0 var(--s-4); color: var(--c-ink-2); font-size: var(--t-sm); }
-.hero__panel .site-search { max-width: none; }
-.hero__hints {
-  margin: var(--s-4) 0 0;
-  padding: 0;
-  list-style: none;
+/* --- ستون تصویر ---------------------------------------------------
+   اینجا جای تصویر بزرگِ هیرو است. تا وقتی تصویر واقعی نرسیده، کارتِ
+   پیشنهادِ یک محصولِ واقعی همین فضا را پر می‌کند تا ستون خالی و
+   ناتمام به نظر نرسد. */
+.hero__visual { min-width: 0; display: flex; justify-content: center; }
+.hero__offer {
   display: grid;
-  gap: var(--s-2);
-  font-size: var(--t-sm);
-  color: var(--c-ink-2);
-}
-.hero__hints li { display: flex; gap: var(--s-2); align-items: baseline; }
-.hero__hints li::before {
-  content: '';
-  flex: 0 0 auto;
-  width: 6px; height: 6px;
-  border-radius: var(--r-pill);
-  background: var(--c-brand);
-}
-
-/* --- سربرگ بخش‌های صفحهٔ اصلی --- */
-.home-section { padding-block: var(--s-6); }
-.home-section--tint { background: var(--c-surface); border-block: 1px solid var(--c-line); }
-.home-section__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
   gap: var(--s-4);
-  flex-wrap: wrap;
-  margin-bottom: var(--s-4);
-}
-.home-section__title { margin: 0; font-size: var(--t-xl); }
-.home-section__text { margin: var(--s-1) 0 0; color: var(--c-ink-2); font-size: var(--t-sm); }
-.home-section__link { font-size: var(--t-sm); font-weight: 600; text-decoration: none; }
-.home-section__link:hover { text-decoration: underline; }
-
-/* --- دسته‌ها --- */
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: var(--s-3);
-}
-.category-card {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
+  width: 100%;
+  max-width: 30rem;
   padding: var(--s-4);
   background: var(--c-surface);
   border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-md);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.hero__offer:hover { border-color: var(--c-brand); box-shadow: 0 16px 40px -18px rgba(18, 26, 36, 0.3); }
+.hero__offer-media {
+  display: block;
+  aspect-ratio: 3 / 4;
   border-radius: var(--r-md);
-  text-decoration: none;
-  color: var(--c-ink);
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  overflow: hidden;
+  background: var(--c-sunken);
 }
-.category-card:hover {
-  border-color: var(--c-brand);
-  background: var(--c-brand-soft);
-  color: var(--c-brand-strong);
-}
-.category-card__name { font-weight: 600; }
-.category-card__count {
-  flex: 0 0 auto;
-  padding: 0.1rem 0.5rem;
-  border-radius: var(--r-pill);
-  background: var(--c-surface-2);
-  color: var(--c-ink-3);
-  font-size: var(--t-xs);
-}
-.home-section--tint .category-card { background: var(--c-bg); }
-
-/* --- برندها --- */
-.brand-strip { display: flex; flex-wrap: wrap; gap: var(--s-2); }
-.brand-chip {
-  padding: 0.4rem 0.9rem;
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-pill);
-  background: var(--c-surface);
-  color: var(--c-ink-2);
-  text-decoration: none;
+.hero__offer-media img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.hero__offer-body { display: flex; flex-direction: column; gap: var(--s-2); min-width: 0; }
+.hero__offer-brand { font-size: var(--t-xs); color: var(--c-ink-3); }
+.hero__offer-name { font-weight: 600; line-height: 1.6; color: var(--c-ink); }
+.hero__offer-price { display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap; }
+.hero__offer-price strong { font-size: var(--t-xl); font-weight: 700; color: var(--c-ink); }
+.hero__offer-price del { font-size: var(--t-xs); color: var(--c-ink-3); }
+.hero__offer-cta {
+  margin-top: var(--s-1);
+  align-self: flex-start;
+  color: var(--c-brand);
+  font-weight: 600;
   font-size: var(--t-sm);
 }
-.brand-chip:hover { border-color: var(--c-brand); color: var(--c-brand); }
-
-/* --- بخش اعتماد --- */
-/* فقط توانایی‌های واقعی و قابل تأیید همین نسخه نوشته می‌شوند. هیچ
-   ادعایی دربارهٔ ارسال، گارانتی یا پشتیبانی که هنوز پیاده نشده. */
-.value-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: var(--s-4);
-}
-.value-card {
-  padding: var(--s-5);
-  background: var(--c-surface);
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-md);
-}
-.home-section--tint .value-card { background: var(--c-bg); }
-.value-card__title { margin: 0 0 var(--s-2); font-size: var(--t-md); }
-.value-card__text { margin: 0; color: var(--c-ink-2); font-size: var(--t-sm); }
-
-/* --- فراخوان پایانی --- */
-.cta-band {
-  margin-block: var(--s-6);
-  padding: var(--s-6);
-  border-radius: var(--r-lg);
-  background: var(--c-brand);
-  color: var(--c-brand-ink);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-5);
-  flex-wrap: wrap;
-}
-.cta-band__title { margin: 0 0 var(--s-2); font-size: var(--t-xl); }
-.cta-band__text { margin: 0; color: var(--c-ink-2); max-width: 60ch; }
+.hero__visual-empty { aspect-ratio: 4 / 3; width: 100%; border-radius: var(--r-lg); background: var(--c-sunken); }
 
 /* ═══════════════════════════════════════════ ۸. فهرست کاتالوگ ═══ */
 
@@ -848,7 +732,7 @@ a:hover { color: var(--c-ink); }
 .listing-sidebar {
   display: flex;
   flex-direction: column;
-  gap: var(--s-4);
+  gap: var(--s-3);
   position: sticky;
   top: var(--s-4);
 }
@@ -858,13 +742,36 @@ a:hover { color: var(--c-ink); }
   border-radius: var(--r-md);
   padding: var(--s-4);
 }
+/* سرگروه = <summary>. نشانگر پیش‌فرض مرورگر برداشته می‌شود و یک
+   فلشِ خودمان می‌آید که با باز شدن می‌چرخد — در RTL هم درست می‌افتد
+   چون با transform کار می‌کند، نه با جهت. */
 .filter-group__title {
-  margin: 0 0 var(--s-3);
-  padding-bottom: var(--s-2);
+  margin: 0;
+  padding-bottom: var(--s-3);
   border-bottom: 1px solid var(--c-line);
   font-size: var(--t-sm);
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  color: var(--c-ink);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
 }
+.filter-group__title::-webkit-details-marker { display: none; }
+.filter-group__title::after {
+  content: '';
+  width: 0.5rem; height: 0.5rem;
+  border-inline-end: 2px solid var(--c-ink-3);
+  border-block-end: 2px solid var(--c-ink-3);
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+  flex: none;
+}
+.filter-group[open] > .filter-group__title::after { transform: rotate(-135deg); }
+.filter-group[open] > .filter-group__title { margin-bottom: var(--s-3); }
+.filter-group__title:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
 .filter-group__empty { margin: 0; font-size: var(--t-sm); color: var(--c-ink-3); }
 .filter-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .filter-list li { display: flex; }
@@ -952,6 +859,9 @@ a:hover { color: var(--c-ink); }
   gap: var(--s-4);
 }
 
+/* کارت محصول — نسخهٔ روشن.
+   مرز نازک به‌جای سایهٔ دائمی؛ سایه فقط هنگام hover بالا می‌آید تا
+   شبکهٔ محصول آرام بماند و با اشاره‌گر پاسخ بدهد. */
 .product-card {
   background: var(--c-surface);
   border: 1px solid var(--c-line);
@@ -959,7 +869,7 @@ a:hover { color: var(--c-ink); }
   overflow: hidden;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.product-card:hover { border-color: var(--c-line-strong); background: var(--c-surface); }
+.product-card:hover { border-color: var(--c-line-strong); box-shadow: var(--sh-md); }
 .product-card:focus-within { border-color: var(--c-brand); }
 
 .product-card__link {
@@ -974,7 +884,8 @@ a:hover { color: var(--c-ink); }
 .product-card__media {
   position: relative;
   aspect-ratio: 3 / 4;
-  background: var(--c-surface-2);
+  background: var(--c-sunken);
+  border-block-end: 1px solid var(--c-line);
 }
 .product-card__media img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
@@ -1078,7 +989,6 @@ a:hover { color: var(--c-ink); }
   font-size: var(--t-md);
   font-weight: 700;      /* قیمت، عددِ کلیدیِ کارت */
   color: var(--c-ink);
-  letter-spacing: -0.01em;
 }
 .price__old { font-size: var(--t-xs); color: var(--c-ink-3); }
 /* برچسب «قیمت:» — هم‌وزن برچسب موجودی، تا دو خط یک ریتم داشته باشند. */
@@ -1099,9 +1009,8 @@ a:hover { color: var(--c-ink); }
      sale روی قرمزِ تیرهٔ تأکید (#c1121f) → سفید = ۶٫۲۲
      new  روی سطح کارت                   → سفید = ۱۳٫۵۰
    قرمزِ روشن (#e63946) اینجا به کار نمی‌رود: سفید رویش ۴٫۱۷ است. */
-.badge--sale { background: var(--c-accent-strong); color: #ffffff; }
-.badge--new  { background: var(--c-surface); color: var(--c-ink);
-               border: 1px solid var(--c-line); }
+.badge--sale { background: var(--c-accent); color: #ffffff; }
+.badge--new  { background: var(--c-brand); color: #ffffff; }
 
 .stock { font-size: var(--t-xs); font-weight: 600; }
 .stock--in { color: var(--c-ok); }
@@ -1110,9 +1019,12 @@ a:hover { color: var(--c-ink); }
 
 /* ═══════════════════════════════════════════════ ۱۰. صفحهٔ محصول ═══ */
 
+/* صفحهٔ محصول — نسخهٔ روشن.
+   ستون تصویر کمی باریک‌تر از ستون متن است: عکس‌ها ۳:۴ پرتره‌اند و با
+   نسبت ۱:۱ بیش از حد بلند می‌شدند و دکمهٔ خرید را از قاب بیرون می‌راندند. */
 .product-detail {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
   gap: var(--s-6);
   align-items: start;
 }
@@ -1120,18 +1032,21 @@ a:hover { color: var(--c-ink); }
 .product-detail__media {
   background: var(--c-surface);
   border: 1px solid var(--c-line);
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
   padding: var(--s-4);
+  position: sticky;
+  top: var(--s-4);
 }
 .product-detail__image {
   width: 100%;
-  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
   display: block;
-  border-radius: var(--r-sm);
-  background: var(--c-surface-2);
+  border-radius: var(--r-md);
+  background: var(--c-sunken);
 }
 .product-detail__placeholder {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   border-radius: var(--r-sm);
   /* تا زمینهٔ SVG از گوشهٔ گرد بیرون نزند. */
   overflow: hidden;
@@ -1145,27 +1060,32 @@ a:hover { color: var(--c-ink); }
   flex-wrap: wrap;
 }
 .thumb-list img {
-  width: 72px; height: 72px;
+  width: 64px; height: 85px;
   object-fit: contain;
   border: 1px solid var(--c-line);
   border-radius: var(--r-sm);
-  background: var(--c-surface-2);
+  background: var(--c-sunken);
+  transition: border-color 0.15s ease;
 }
+.thumb-list img:hover { border-color: var(--c-brand); }
 
 .product-detail__brand { margin: 0 0 var(--s-2); font-size: var(--t-sm); }
 .product-detail__brand a { text-decoration: none; font-weight: 600; }
 .product-detail__brand a:hover { text-decoration: underline; }
-.product-detail__title { margin: 0 0 var(--s-3); font-size: var(--t-2xl); }
+.product-detail__title { margin: 0 0 var(--s-3); font-size: var(--t-2xl); line-height: 1.45; }
 .product-detail__lede { margin: 0 0 var(--s-4); color: var(--c-ink-2); }
 
 /* کارت خرید: قیمت، وضعیت و شناسه‌ها با هم. جایی که بعدا دکمهٔ
    «افزودن به سبد» می‌نشیند — امروز عمدا خالی است. */
+/* کارت خرید کانونِ تجاریِ صفحه است: مرز پررنگ‌تر و سایهٔ ملایم تا از
+   بقیهٔ بلوک‌های اطلاعاتی جدا شود. */
 .buy-card {
   background: var(--c-surface);
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-md);
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--r-lg);
   padding: var(--s-5);
   margin-bottom: var(--s-5);
+  box-shadow: var(--sh-sm);
 }
 .buy-card__price { display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
 /* روی صفحهٔ محصول، قیمت به اندازهٔ یک statistic بزرگ می‌شود. */
@@ -1609,4 +1529,62 @@ a:hover { color: var(--c-ink); }
      «حرکت کمتر» را روشن کرده‌اند، یعنی همان‌هایی که بیشتر از همه به آن
      نیاز دارند. */
   .ticker:hover .ticker__track { animation-play-state: paused !important; }
+}
+
+/* ═══════════════════════════ واکنش‌گراییِ طراحیِ تازه ═══ */
+
+/* هیرو زیر ۹۰۰ پیکسل تک‌ستونه می‌شود و کارت پیشنهاد زیر متن می‌نشیند. */
+@media (max-width: 900px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+    padding-block: var(--s-6);
+  }
+  .hero__visual { justify-content: stretch; }
+  .hero__offer { max-width: none; }
+  .hero__lede { font-size: var(--t-md); }
+}
+
+/* روی موبایل کارت پیشنهاد عمودی می‌شود تا تصویر خفه نشود. */
+@media (max-width: 560px) {
+  .hero__offer { grid-template-columns: 1fr; }
+  .hero__offer-media { max-width: 12rem; margin-inline: auto; }
+  .hero__offer-body { text-align: center; align-items: center; }
+  .hero__offer-cta { align-self: center; }
+  .hero__actions .btn { flex: 1 1 auto; justify-content: center; }
+}
+
+/* ناوبری دسته‌ها: روی دسکتاپ ستون کنار محتوا، روی موبایل آکاردئون.
+   <details> بومی است — بدون جاوااسکریپت، و با صفحه‌کلید هم کار می‌کند. */
+@media (max-width: 1000px) {
+  .listing-sidebar { position: static; }
+  .listing-sidebar .filter-group { border-radius: var(--r-md); }
+}
+
+/* ناوبری دسته‌ها: رفتار دسکتاپ در برابر موبایل --------------------- */
+
+/* دسکتاپ: گروه‌ها همیشه باز. دکمه پنهان می‌شود و محتوا حتی وقتی
+   <details> بسته است نمایش داده می‌شود، پس حالت باز/بستهٔ موبایل روی
+   دسکتاپ اثری ندارد. */
+@media (min-width: 1001px) {
+  .filter-group > .filter-group__title { cursor: default; }
+  .filter-group > .filter-group__title::after { display: none; }
+  .filter-group:not([open]) > :not(summary) { display: revert; }
+  .filter-group > .filter-group__title { margin-bottom: var(--s-3); }
+}
+
+/* موبایل: ستون کناری بالای شبکه می‌نشیند و گروه‌ها جمع‌اند تا محصول‌ها
+   پایین رانده نشوند. */
+@media (max-width: 1000px) {
+  .listing-sidebar { position: static; gap: var(--s-2); }
+  .filter-group { padding: var(--s-3) var(--s-4); }
+  .filter-group[open] { padding-bottom: var(--s-4); }
+}
+
+/* صفحهٔ محصول روی تبلت و موبایل تک‌ستونه می‌شود و ستون تصویر از حالت
+   چسبان درمی‌آید تا بالای صفحه گیر نکند. */
+@media (max-width: 900px) {
+  .product-detail { grid-template-columns: 1fr; gap: var(--s-5); }
+  .product-detail__media { position: static; }
+  .product-detail__image { max-width: 22rem; margin-inline: auto; }
 }

@@ -1,9 +1,19 @@
 {# نوار کناری فهرست: دسته‌ها و برندها با تعداد محصول.
    دستهٔ خالی هم با «۰» می‌آید — حذف بی‌سروصدایش، کاتالوگ را بزرگ‌تر از
    آنچه هست نشان می‌دهد. #}
+{# ناوبری دسته‌ها.
+
+   هر گروه یک <details> بومی است، نه جاوااسکریپت: پروژه هیچ اسکریپتی در
+   مرورگر اجرا نمی‌کند و این تصمیم با یک منوی آکاردئونی شکسته نمی‌شود.
+   <details> با صفحه‌کلید هم کار می‌کند و وضعیت باز/بسته را خودِ مرورگر
+   نگه می‌دارد.
+
+   روی دسکتاپ گروه‌ها همیشه باز دیده می‌شوند (CSS دکمه را پنهان و محتوا
+   را آشکار می‌کند)، و روی موبایل جمع می‌شوند تا شبکهٔ محصول پایین
+   رانده نشود. #}
 <aside class="listing-sidebar" aria-label="پالایش کاتالوگ">
-  <section class="filter-group">
-    <h2 class="filter-group__title">دسته‌بندی‌ها</h2>
+  <details class="filter-group" open>
+    <summary class="filter-group__title">دسته‌بندی‌ها</summary>
     {% if categoryList.length %}
       <ul class="filter-list">
         {% for c in categoryList %}
@@ -20,10 +30,10 @@
     {% else %}
       <p class="filter-group__empty">هنوز دسته‌بندی‌ای ثبت نشده است.</p>
     {% endif %}
-  </section>
+  </details>
 
-  <section class="filter-group">
-    <h2 class="filter-group__title">برندها</h2>
+  <details class="filter-group">
+    <summary class="filter-group__title">برندها</summary>
     {% if brandList.length %}
       <ul class="filter-list">
         {% for b in brandList %}
@@ -40,13 +50,13 @@
     {% else %}
       <p class="filter-group__empty">هنوز برندی ثبت نشده است.</p>
     {% endif %}
-  </section>
+  </details>
 
   {# خودروها فقط وقتی نشان داده می‌شوند که واقعا ثبت شده باشند — یک
      بخش خالیِ «سازگاری» به مشتری چیزی نمی‌گوید. #}
   {% if vehicleList and vehicleList.length %}
-    <section class="filter-group">
-      <h2 class="filter-group__title">سازگار با خودرو</h2>
+    <details class="filter-group">
+      <summary class="filter-group__title">سازگار با خودرو</summary>
       <ul class="filter-list">
         {% for v in vehicleList %}
           <li>
@@ -59,6 +69,6 @@
           </li>
         {% endfor %}
       </ul>
-    </section>
+    </details>
   {% endif %}
 </aside>

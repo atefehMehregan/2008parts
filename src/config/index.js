@@ -61,17 +61,17 @@ function sslSetting() {
 }
 
 /* پوستهٔ ظاهری. دو مقدار معتبر دارد و نه بیشتر:
- *   auros  پیش‌فرض — سبزآبیِ تیره (base.css تنها)
- *   blue   آبیِ روشن (base.css + theme-blue.css)
+ *   light  پیش‌فرض — روشن و تمیز (base.css تنها)
+ *   dark   سرمه‌ای (base.css + theme-dark.css)
  * مقدار ناشناخته بی‌صدا به پیش‌فرض برمی‌گردد: یک غلط تایپی در .env نباید
  * فروشگاه را بی‌استایل کند، ولی باید دیده شود، پس هشدار چاپ می‌شود. */
-const THEMES = ['auros', 'blue'];
+const THEMES = ['light', 'dark'];
 function themeSetting() {
   const raw = (process.env.THEME || '').trim().toLowerCase();
-  if (!raw) return 'auros';
+  if (!raw) return 'light';
   if (THEMES.includes(raw)) return raw;
-  console.warn(`[config] THEME ناشناخته: «${raw}». یکی از ${THEMES.join(' | ')} را بگذارید. فعلا auros.`);
-  return 'auros';
+  console.warn(`[config] THEME ناشناخته: «${raw}». یکی از ${THEMES.join(' | ')} را بگذارید. فعلا light.`);
+  return 'light';
 }
 
 export const config = {

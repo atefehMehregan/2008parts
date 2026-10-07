@@ -11,42 +11,78 @@
 
 {% block content %}
 
-{# ------------------------------------------------------------- هیرو #}
+{# --------------------------------------------------------------- هیرو
+
+   چیدمان دو ستونی و راست‌به‌چپ: متن از سمت راست (شروعِ خواندن فارسی)
+   و تصویر در سمت چپ. این آینهٔ مکانیکیِ یک قالب چپ‌به‌راست نیست —
+   متن جایی است که چشم فارسی‌زبان اول نگاه می‌کند.
+
+   ⚠️ جای تصویر عمدا خالیِ طراحی‌شده است، نه فراموش‌شده: هیچ تصویر
+   اتومبیلی در پروژه نیست و ساختن یا برداشتنِ یکی از جای دیگر درست
+   نبود. وقتی تصویر رسید، فقط همین یک بلوک عوض می‌شود و بقیهٔ چیدمان
+   دست‌نخورده می‌ماند. #}
 <section class="hero">
   <div class="container hero__inner">
+
     <div class="hero__copy">
-      <h1 class="hero__title">قطعه‌ای مطمئن، برای سفری مطمئن</h1>
-      {# جملهٔ «کاتالوگ فقط روی همین خودرو متمرکز است» برداشته شد: با حذف
-         نام خودرو از تیتر، «همین خودرو» دیگر مرجعی نداشت و بی‌معنا
-         می‌شد. جملهٔ دوم خودبسنده است و به نام خودرو وابسته نیست. #}
+      {% if heroOffer %}
+        <p class="hero__eyebrow"><span class="hero__tag">پیشنهاد ویژه</span> ۲۰۰۸پارتس</p>
+      {% endif %}
+
+      <h1 class="hero__title">قطعات و لوازم جانبی پژو ۲۰۰۸</h1>
       <p class="hero__lede">
         قطعه را با نام فارسی، کد کالا یا شماره فنی روی خودِ قطعه پیدا کنید.
       </p>
-      <div class="hero__actions">
-        <a class="btn btn--onDark" href="/products">دیدن همهٔ محصولات</a>
-        {% if categoryList.length %}
-          <a class="btn btn--ghost btn--onDark" href="#categories">مرور دسته‌بندی‌ها</a>
-        {% endif %}
-      </div>
-    </div>
 
-    <div class="hero__panel">
-      <h2 class="hero__panel-title">جست‌وجوی قطعه</h2>
-      <p class="hero__panel-text">
-        شماره فنی را با یا بدون خط تیره وارد کنید؛ نتیجه یکی است.
-      </p>
-      <form class="site-search" action="/search" method="get" role="search">
+      <form class="hero__search site-search" action="/search" method="get" role="search">
         <label class="sr-only" for="hero-search-input">جست‌وجوی قطعه</label>
         <input class="site-search__input" id="hero-search-input" type="search" name="q"
                placeholder="مثلا: فیلتر روغن یا ۹۶۷۸۱۹۱۵۸۰" />
         <button class="site-search__button" type="submit">جست‌وجو</button>
       </form>
-      <ul class="hero__hints">
-        <li>جست‌وجو با نام فارسی قطعه، حتی ناقص</li>
-        <li>جست‌وجو با کد کالا</li>
-        <li>جست‌وجو با شماره فنی (OEM)</li>
-      </ul>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="/products">دیدن همهٔ محصولات</a>
+        {% if categoryList.length %}
+          <a class="btn btn--ghost" href="#categories">مرور دسته‌بندی‌ها</a>
+        {% endif %}
+      </div>
     </div>
+
+    <div class="hero__visual">
+      {% if heroOffer %}
+        {# کارت پیشنهاد — محصول واقعیِ کاتالوگ، با قیمت واقعیِ همان ردیف. #}
+        <a class="hero__offer" href="/product/{{ heroOffer.slug | urlencode }}">
+          <span class="hero__offer-media">
+            <picture>
+              <source type="image/webp" srcset="/media/products/{{ heroOffer.primary_image_id }}/card.webp" />
+              <img src="/media/products/{{ heroOffer.primary_image_id }}/card.jpg"
+                   alt="{{ heroOffer.name }}" width="400" height="533" loading="eager" />
+            </picture>
+          </span>
+          <span class="hero__offer-body">
+            {% if heroOffer.brand_name %}
+              <span class="hero__offer-brand">{{ heroOffer.brand_name }}</span>
+            {% endif %}
+            <span class="hero__offer-name">{{ heroOffer.name }}</span>
+            {% if heroOffer.price_toman %}
+              <span class="hero__offer-price">
+                {% if heroOffer.sale_price_toman %}
+                  <strong class="num">{{ heroOffer.sale_price_toman | toman }}</strong>
+                  <del class="num">{{ heroOffer.price_toman | tomanPlain }}</del>
+                {% else %}
+                  <strong class="num">{{ heroOffer.price_toman | toman }}</strong>
+                {% endif %}
+              </span>
+            {% endif %}
+            <span class="hero__offer-cta">مشاهدهٔ محصول</span>
+          </span>
+        </a>
+      {% else %}
+        <div class="hero__visual-empty" aria-hidden="true"></div>
+      {% endif %}
+    </div>
+
   </div>
 </section>
 

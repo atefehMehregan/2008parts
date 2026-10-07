@@ -30,6 +30,12 @@ export function createHomeController({ products, categories, brands }) {
    */
   async function home(req, res, next) {
     try {
+      /* محصولِ پیشنهادِ هیرو. یک محصول *واقعی* از کاتالوگ، نه داده‌ی
+         ساختگی: تازه‌ترین محصولِ فعالی که تصویر دارد. اگر کاتالوگ خالی
+         بود، هیرو بی‌پیشنهاد رندر می‌شود و چیزی نمی‌شکند.
+         هیچ تخفیفی اینجا ساخته نمی‌شود: قیمتِ همان ردیف نمایش داده
+         می‌شود. اگر روزی sale_price واقعی ثبت شود، کارت خودش آن را
+         نشان می‌دهد. */
       const [featured, fresh, latest, categoryList, brandList] = await Promise.all([
         products.list({ filters: { isFeatured: true }, sort: 'newest', page: 1, perPage: SHELF_SIZE }),
         products.list({ filters: { isNew: true }, sort: 'newest', page: 1, perPage: SHELF_SIZE }),
@@ -41,7 +47,11 @@ export function createHomeController({ products, categories, brands }) {
       const featuredItems = featured.items;
       const freshItems = fresh.items;
 
+      const heroOffer = [...featuredItems, ...freshItems, ...latest.items]
+        .find((p) => p.primary_image_id) ?? null;
+
       res.render('pages/home', {
+        heroOffer,
         title: 'قطعات یدکی پژو ۲۰۰۸',
         metaDescription:
           '2008parts — فروشگاه اینترنتی قطعات یدکی پژو ۲۰۰۸. جست‌وجو بر اساس نام قطعه، کد کالا یا شماره فنی.',
