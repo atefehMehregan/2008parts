@@ -1905,3 +1905,81 @@ a:hover { color: var(--c-brand-strong); }
 .part-number {
   overflow-wrap: anywhere;
 }
+
+/* ═══════════════════════════════ ۱۴. صفحه‌های اطلاعاتی ═══ */
+
+/* «دربارهٔ ما» و «تماس با ما». متنِ خواندنی، نه رابط کاربری: عرض محدود
+   و خط‌فاصلهٔ بازتر. ۷۰ کاراکتر سقف خط است — فارسی در خطِ بلندتر از این
+   سخت دنبال می‌شود. */
+.prose { max-width: 70ch; }
+.prose h2 {
+  margin: var(--s-7) 0 var(--s-3);
+  font-size: var(--t-xl);
+  font-weight: 700;
+  color: var(--c-ink);
+}
+.prose p {
+  margin: 0 0 var(--s-4);
+  color: var(--c-ink-2);
+  line-height: 2.1;
+}
+.prose a { color: var(--c-brand); }
+.prose a:hover { color: var(--c-brand-strong); }
+.prose__lead {
+  font-size: var(--t-lg);
+  color: var(--c-ink) !important;
+  line-height: 1.95;
+}
+
+/* شمارهای کاتالوگ. عددها از پایگاه داده می‌آیند، پس قالبِ ثابت لازم
+   است تا با سه‌رقمی شدن، چیدمان نپرد. */
+.fact-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  list-style: none;
+  margin: 0 0 var(--s-5);
+  padding: 0;
+}
+.fact-list li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: var(--c-surface-2);
+}
+.fact-list strong { font-size: var(--t-2xl); font-weight: 700; color: var(--c-ink); }
+.fact-list span { font-size: var(--t-sm); color: var(--c-ink-3); }
+
+/* راه‌های ارتباطی. <dl> است چون واقعا جفتِ برچسب/مقدار است. */
+.contact-list { margin: 0 0 var(--s-5); }
+.contact-list__row {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: var(--s-3);
+  padding-block: var(--s-3);
+  border-block-end: 1px solid var(--c-line);
+}
+.contact-list__row:last-child { border-block-end: 0; }
+.contact-list dt { color: var(--c-ink-3); font-size: var(--t-sm); }
+.contact-list dd { margin: 0; color: var(--c-ink); }
+
+/* یادداشتِ آرام — برای گفتنِ «این هنوز نیست». نه هشدار است و نه خطا،
+   پس رنگ وضعیت نمی‌گیرد. */
+.notice--quiet {
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--c-line);
+  border-inline-start: 3px solid var(--c-line-strong);
+  border-radius: var(--r-md);
+  background: var(--c-surface-2);
+  margin-bottom: var(--s-5);
+}
+.notice--quiet p { margin: 0 0 var(--s-2); color: var(--c-ink-2); }
+.notice--quiet p:last-child { margin: 0; }
+
+@media (max-width: 560px) {
+  .contact-list__row { grid-template-columns: 1fr; gap: var(--s-1); }
+  .prose h2 { margin-block-start: var(--s-6); }
+}

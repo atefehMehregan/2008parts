@@ -287,6 +287,8 @@ test('همهٔ پیوندهای صفحهٔ اصلی به مسیرهای واقع
     /^\/category\//,
     /^\/brand\//,
     /^\/product\//,
+    /^\/about$/,                    // صفحهٔ اطلاعاتی — routes/pages.js
+    /^\/contact$/,                  // صفحهٔ اطلاعاتی — routes/pages.js
     /^\/css\//,                     // شیوه‌نامه
     /^\/img\//,                     // نشان برند و favicon
   ];

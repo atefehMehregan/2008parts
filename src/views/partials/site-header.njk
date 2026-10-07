@@ -158,6 +158,17 @@
           </li>
         {% endif %}
 
+        {# صفحه‌های اطلاعاتی. این دو مسیر *واقعا* وجود دارند
+           (routes/pages.js). «مقالات» عمدا نیست: نه مقاله‌ای هست و نه
+           جدولی برای نگه‌داشتنش. #}
+        <li>
+          <a class="site-nav__link{% if currentPath == '/about' %} is-current{% endif %}"
+             href="/about"{% if currentPath == '/about' %} aria-current="page"{% endif %}>دربارهٔ ما</a>
+        </li>
+        <li>
+          <a class="site-nav__link{% if currentPath == '/contact' %} is-current{% endif %}"
+             href="/contact"{% if currentPath == '/contact' %} aria-current="page"{% endif %}>تماس</a>
+        </li>
       </ul>
     </nav>
   </div>

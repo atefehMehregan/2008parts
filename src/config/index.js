@@ -196,6 +196,26 @@ export const config = {
     uploadMax: int('RATE_LIMIT_UPLOAD_MAX', 10),
   },
 
+  /* راه‌های ارتباطی فروشگاه — صفحهٔ «تماس با ما».
+
+     همه عمدا خالی‌اند و هیچ‌کدام ساختگی نیست. صفحهٔ تماس فقط همان‌هایی
+     را نشان می‌دهد که واقعا مقدار دارند و دربارهٔ بقیه صریح می‌گوید که
+     هنوز ثبت نشده‌اند. برای پر کردن، همین متغیرهای محیطی را بدهید؛
+     هیچ تغییری در کد لازم نیست.
+
+     اینجا راز نیست: شمارهٔ تماس و نشانی برای نمایش عمومی‌اند. پس
+     برخلاف DATABASE_URL، نبودشان در تولید خطا نمی‌دهد. */
+  contact: {
+    phone:     process.env.STORE_PHONE || '',
+    mobile:    process.env.STORE_MOBILE || '',
+    email:     process.env.STORE_EMAIL || '',
+    address:   process.env.STORE_ADDRESS || '',
+    hours:     process.env.STORE_HOURS || '',
+    telegram:  process.env.STORE_TELEGRAM || '',
+    instagram: process.env.STORE_INSTAGRAM || '',
+    whatsapp:  process.env.STORE_WHATSAPP || '',
+  },
+
   /* پیامک — ارائه‌دهنده هنوز انتخاب نشده است (فاز بعد). */
   sms: {
     provider: process.env.SMS_PROVIDER || '',
