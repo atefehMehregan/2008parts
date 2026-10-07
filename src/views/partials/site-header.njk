@@ -72,6 +72,15 @@
       <button class="site-search__button" type="submit">جست‌وجو</button>
     </form>
 
+    {# ناوبری اصلی: سه مقصد و نه بیشتر.
+
+       پیش از این یازده دسته هرکدام یک آیتمِ هم‌ردهٔ «خانه» و «محصولات»
+       بودند (ردیف cat-bar). حالا همهٔ آن‌ها پشت یک ورودی جمع شده‌اند.
+
+       ⚠️ «درباره ما»، «تماس با ما»، «سوالات متداول» و مانندشان اینجا
+       نیامده‌اند چون چنین صفحه‌ای در پروژه وجود ندارد — تنها مسیرهای
+       عمومی /، /products، /search، /category/:slug، /brand/:slug و
+       /product/:slug هستند. پیوند به صفحه‌ای که نیست، پیوند مرده است. #}
     <nav class="site-nav" aria-label="ناوبری اصلی">
       <ul class="site-nav__list">
         <li>
@@ -82,33 +91,44 @@
           <a class="site-nav__link{% if currentPath == '/products' %} is-current{% endif %}"
              href="/products"{% if currentPath == '/products' %} aria-current="page"{% endif %}>محصولات</a>
         </li>
+
+        {# دسته‌بندی‌ها: یک <details> بومی، نه منوی جاوااسکریپتی. پروژه
+           هیچ اسکریپت مرورگری ندارد و CSP هم script-src 'self' است.
+           <details> با صفحه‌کلید کار می‌کند و خودش وضعیت باز/بسته را
+           به صفحه‌خوان اعلام می‌کند.
+
+           ⚠️ محدودیتِ شناخته‌شده: بدون جاوااسکریپت، کلیک بیرون از پنل
+           آن را نمی‌بندد؛ باید دوباره روی خودِ عنوان کلیک کرد (یا Esc).
+           این بهای نداشتن اسکریپت است و آگاهانه پذیرفته شده. #}
+        {% if navCategories.length %}
+          <li class="site-nav__item--menu">
+            <details class="cat-menu">
+              <summary class="site-nav__link cat-menu__summary">دسته‌بندی‌ها</summary>
+
+              <div class="cat-menu__panel">
+                <div class="container cat-menu__inner">
+                  <ul class="cat-menu__list">
+                    {% for c in navCategories %}
+                      {% set catPath = '/category/' + (c.slug | urlencode) %}
+                      <li>
+                        <a class="cat-menu__link{% if currentPath == catPath %} is-current{% endif %}"
+                           href="{{ catPath }}"
+                           {% if currentPath == catPath %}aria-current="page"{% endif %}>
+                          <span class="cat-menu__name">{{ c.name }}</span>
+                          <span class="cat-menu__count num">{{ c.product_count | faDigits }}</span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+
+                  <a class="cat-menu__all" href="/products">همهٔ قطعات</a>
+                </div>
+              </div>
+            </details>
+          </li>
+        {% endif %}
       </ul>
     </nav>
   </div>
 
-  {# ردیف دسته‌ها — الگوی متعارف فروشگاه قطعات: دسترسی یک‌کلیکی به هر
-     دسته از هر صفحه. دسته‌ها از پایگاه داده می‌آیند (res.locals در
-     app.js) و اگر خالی بود، کل ردیف رندر نمی‌شود — نه ردیف خالی، نه
-     پیوند مرده.
-
-     روی موبایل به‌جای منوی کشویی و جاوااسکریپت، ردیف افقی اسکرول
-     می‌شود: دو خط CSS در برابر یک همبرگر و شنونده‌های رویداد. #}
-  {% if navCategories.length %}
-    <nav class="cat-bar" aria-label="دسته‌بندی قطعات">
-      <ul class="container cat-bar__list">
-        <li>
-          <a class="cat-bar__link{% if currentPath == '/products' %} is-current{% endif %}"
-             href="/products">همهٔ قطعات</a>
-        </li>
-        {% for c in navCategories %}
-          {% set catPath = '/category/' + (c.slug | urlencode) %}
-          <li>
-            <a class="cat-bar__link{% if currentPath == catPath %} is-current{% endif %}"
-               href="{{ catPath }}"
-               {% if currentPath == catPath %}aria-current="page"{% endif %}>{{ c.name }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </nav>
-  {% endif %}
 </header>

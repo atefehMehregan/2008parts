@@ -345,6 +345,10 @@ a:hover { color: var(--c-brand-strong); }
 /* هدر گرادیانِ نشان را می‌گیرد تا لوگو بی‌درز در آن بنشیند:
    سرمه‌ای در بالا، آبی در پایین — همان جهت خودِ نشان. */
 .site-header {
+  /* لنگرِ پنل دسته‌بندی‌ها: پنل absolute است و باید نسبت به کل هدر
+     تمام‌عرض شود، نه نسبت به آیتمِ ناوبری. */
+  position: relative;
+  z-index: 20;
   background: var(--c-surface);
   border-bottom: 1px solid var(--c-line);
 }
@@ -514,35 +518,91 @@ a:hover { color: var(--c-brand-strong); }
 
 /* --- ردیف دسته‌ها ---------------------------------------------------
    روی موبایل افقی اسکرول می‌شود: بدون همبرگر، بدون جاوااسکریپت. */
-.cat-bar {
-  background: var(--c-surface);
-  border-block-end: 1px solid var(--c-line);
-}
-.cat-bar__list {
+/* --- منوی دسته‌بندی‌ها ------------------------------------------------
+   جانشین ردیف قدیمیِ cat-bar که یازده دسته را به‌صورت تخت کنار «خانه» و
+   «محصولات» می‌چید. حالا یک ورودی در ناوبری، و سلسله‌مراتب پشت آن.
+
+   پنل تمام‌عرضِ زیر هدر است، نه یک کشوی باریک: یازده دسته در یک ستونِ
+   کشویی به یک فهرست بلندِ اسکرول‌دار تبدیل می‌شد. */
+.cat-menu { position: static; }
+
+.cat-menu__summary {
   display: flex;
   align-items: center;
-  gap: var(--s-1);
-  margin: 0;
-  padding-block: var(--s-2);
+  gap: var(--s-2);
+  cursor: pointer;
+  /* نشانگر پیش‌فرض مرورگر برداشته می‌شود؛ فلشِ خودمان جایش می‌آید. */
   list-style: none;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
 }
-.cat-bar__link {
-  display: block;
-  padding: 0.35rem 0.7rem;
+.cat-menu__summary::-webkit-details-marker { display: none; }
+.cat-menu__summary::after {
+  content: '';
+  width: 0.45rem; height: 0.45rem;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  /* با transform می‌چرخد، نه با جهت — پس در RTL هم درست می‌افتد. */
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform 0.15s ease;
+  flex: none;
+}
+.cat-menu[open] > .cat-menu__summary::after { transform: rotate(-135deg); }
+.cat-menu[open] > .cat-menu__summary { color: var(--c-brand); background: var(--c-brand-soft); }
+.cat-menu__summary:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+
+/* پنل روی محتوا می‌افتد و آن را به پایین هل نمی‌دهد، پس باز و بسته شدنش
+   چیدمان صفحه را نمی‌پراند. بلوکِ دربرگیرنده .site-header است. */
+.cat-menu__panel {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  z-index: 30;
+  background: var(--c-surface);
+  border-block: 1px solid var(--c-line);
+  box-shadow: var(--sh-md);
+}
+.cat-menu__inner { padding-block: var(--s-5); }
+.cat-menu__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--s-1) var(--s-4);
+  list-style: none;
+  margin: 0 0 var(--s-4);
+  padding: 0;
+}
+.cat-menu__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 0.5rem 0.7rem;
   border-radius: var(--r-sm);
   color: var(--c-ink-2);
   text-decoration: none;
   font-size: var(--t-sm);
-  white-space: nowrap;
 }
-.cat-bar__link:hover { background: var(--c-brand-soft); color: var(--c-ink); }
-.cat-bar__link.is-current {
-  background: var(--c-brand);
-  color: var(--c-brand-ink);
+.cat-menu__link:hover { background: var(--c-brand-soft); color: var(--c-brand-strong); }
+.cat-menu__link.is-current { background: var(--c-brand-soft); color: var(--c-brand-strong); font-weight: 600; }
+.cat-menu__name { min-width: 0; }
+/* شمار محصول: همان قرصِ کم‌رنگِ کارت دسته در صفحهٔ اصلی. */
+.cat-menu__count {
+  flex: none;
+  padding: 0.05rem 0.5rem;
+  border-radius: var(--r-pill);
+  background: var(--c-brand-soft);
+  color: var(--c-brand-strong);
+  font-size: var(--t-xs);
 }
+.cat-menu__all {
+  display: inline-block;
+  padding-block-start: var(--s-3);
+  border-block-start: 1px solid var(--c-line);
+  width: 100%;
+  color: var(--c-brand);
+  font-weight: 600;
+  font-size: var(--t-sm);
+  text-decoration: none;
+}
+.cat-menu__all:hover { text-decoration: underline; }
 
 /* --- ناوبری --- */
 .site-nav { margin-inline-start: auto; }
@@ -1287,11 +1347,20 @@ a:hover { color: var(--c-brand-strong); }
   /* کپی‌رایت و شعار روی موبایل زیر هم، نه دو سرِ یک خطِ تنگ. */
   .site-footer__bottom { flex-direction: column; align-items: flex-start; gap: var(--s-2); }
 
-  /* هدر موبایل: برند و ناوبری در یک ردیف، جست‌وجو تمام‌عرض زیر آن.
-     همه با ترتیب flex — هیچ جاوااسکریپتی و هیچ منوی کشویی‌ای لازم نیست. */
+  /* هدر موبایل سه ردیف می‌شود: برند، ناوبری، جست‌وجو. فقط با ترتیب
+     flex — بدون همبرگر و بدون جاوااسکریپت.
+
+     ناوبری ردیف خودش را می‌گیرد چون با آمدن «دسته‌بندی‌ها» سه آیتم شد
+     و کنار نشانِ برند در ۳۷۵ پیکسل جا نمی‌شد.
+
+     پنل دسته‌ها اینجا قاعدهٔ جداگانه نمی‌خواهد: به .site-header لنگر
+     انداخته، نه به آیتم ناوبری، پس در هر عرضی خودش تمام‌عرض است و
+     ستون‌هایش با auto-fill کم و زیاد می‌شوند. */
   .site-header__bar { gap: var(--s-3); min-height: 0; }
-  .site-nav { margin-inline-start: auto; }
+  .site-nav { order: 2; flex-basis: 100%; margin-inline-start: 0; }
+  .site-nav__list { flex-wrap: wrap; }
   .site-search { order: 3; flex-basis: 100%; max-width: none; }
+  .cat-menu__inner { padding-block: var(--s-4); }
 
   .listing-toolbar { flex-direction: column; align-items: stretch; }
   .listing-toolbar__field { min-width: 0; }
