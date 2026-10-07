@@ -143,6 +143,7 @@ export function createApp({
   app.use(async (req, res, next) => {
     res.locals.navCategories = [];
     res.locals.navBrands = [];
+    res.locals.navVehicles = [];
     /* فایل‌های استاتیک و بخش مدیر به این منو نیازی ندارند. */
     if (req.path.startsWith('/admin') || req.path.startsWith('/media')) return next();
     try {
@@ -158,6 +159,12 @@ export function createApp({
       const brands = repositories?.brands;
       if (brands?.listWithCounts) res.locals.navBrands = await brands.listWithCounts();
       else if (brands?.listActive) res.locals.navBrands = await brands.listActive();
+
+      /* خودروهای سازگار. تا وقتی هیچ خودرویی ثبت نشده باشد، منوی
+         «خودروها» در هدر اصلا رندر نمی‌شود. */
+      const vehicles = repositories?.vehicles;
+      if (vehicles?.listWithCounts) res.locals.navVehicles = await vehicles.listWithCounts();
+      else if (vehicles?.listActive) res.locals.navVehicles = await vehicles.listActive();
     } catch (err) {
       console.error('[nav] خواندن منوی ناوبری شکست خورد:', err.code || err.message);
     }

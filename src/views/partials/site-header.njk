@@ -131,6 +131,41 @@
           </li>
         {% endif %}
 
+        {# خودروهای سازگار. برچسب هر قلم «قطعات <نام خودرو>» است، همان
+           شکلی که خواسته شده.
+
+           از پایگاه داده می‌آید، نه از فهرست ثابت: امروز یک خودرو ثبت
+           شده (پژو ۲۰۰۸) و همهٔ ۵۵ محصول به آن وصل‌اند، پس این منو یک
+           قلم دارد. به‌محض اینکه خودروی دومی با قطعات خودش ثبت شود،
+           همین منو خودش بزرگ می‌شود و هیچ تغییری در کد لازم نیست.
+
+           ⚠️ تا وقتی فقط یک خودرو هست، این قلم همان ۵۵ محصولِ «محصولات»
+           را نشان می‌دهد. تفکیک‌کننده شدنش به خودروی دوم بستگی دارد. #}
+        {% if navVehicles.length %}
+          <li class="site-nav__item--menu">
+            <details class="nav-menu">
+              <summary class="nav-menu__summary">خودروها</summary>
+              <div class="nav-menu__panel">
+                <div class="container nav-menu__inner">
+                  <p class="nav-menu__heading">قطعات بر اساس خودرو</p>
+                  <ul class="nav-menu__list">
+                    {% for v in navVehicles %}
+                      <li>
+                        <a class="nav-menu__link"
+                           href="/products?vehicle={{ v.slug | urlencode }}">
+                          <span class="nav-menu__name">قطعات {{ v.display_name }}</span>
+                          <span class="nav-menu__count num">{{ v.product_count | default(0) | faDigits }}</span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <a class="nav-menu__all" href="/products">همهٔ قطعات ←</a>
+                </div>
+              </div>
+            </details>
+          </li>
+        {% endif %}
+
         {% if navBrands.length %}
           <li class="site-nav__item--menu">
             <details class="nav-menu">
