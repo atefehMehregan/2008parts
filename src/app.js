@@ -131,14 +131,24 @@ export function createApp({
      بالا بیاید (همان قاعده‌ای که /health روی آن بنا شده). */
   app.use(async (req, res, next) => {
     res.locals.navCategories = [];
+    res.locals.navBrands = [];
     /* فایل‌های استاتیک و بخش مدیر به این منو نیازی ندارند. */
     if (req.path.startsWith('/admin') || req.path.startsWith('/media')) return next();
     try {
-      if (repositories?.categories?.listActive) {
-        res.locals.navCategories = await repositories.categories.listActive();
-      }
+      /* ‎listWithCounts و نه listActive: منوی هدر کنار نام هر دسته شمار
+         محصول را هم نشان می‌دهد، و listActive آن ستون را برنمی‌گرداند —
+         نتیجه‌اش یازده قرصِ خالی در منو بود. اگر مخزنِ تزریق‌شده این
+         متد را نداشت، به listActive برمی‌گردیم و منو بدون شمار می‌آید؛
+         خالی ماندنِ کل منو بدتر از نبودِ عدد است. */
+      const cats = repositories?.categories;
+      if (cats?.listWithCounts) res.locals.navCategories = await cats.listWithCounts();
+      else if (cats?.listActive) res.locals.navCategories = await cats.listActive();
+
+      const brands = repositories?.brands;
+      if (brands?.listWithCounts) res.locals.navBrands = await brands.listWithCounts();
+      else if (brands?.listActive) res.locals.navBrands = await brands.listActive();
     } catch (err) {
-      console.error('[nav] خواندن دسته‌ها شکست خورد:', err.code || err.message);
+      console.error('[nav] خواندن منوی ناوبری شکست خورد:', err.code || err.message);
     }
     return next();
   });

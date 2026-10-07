@@ -92,41 +92,72 @@
              href="/products"{% if currentPath == '/products' %} aria-current="page"{% endif %}>محصولات</a>
         </li>
 
-        {# دسته‌بندی‌ها: یک <details> بومی، نه منوی جاوااسکریپتی. پروژه
+        {# دو منوی گروه‌شده: دسته‌بندی‌ها و برندها.
+
+           هر کدام یک <details> بومی است، نه منوی جاوااسکریپتی: پروژه
            هیچ اسکریپت مرورگری ندارد و CSP هم script-src 'self' است.
-           <details> با صفحه‌کلید کار می‌کند و خودش وضعیت باز/بسته را
+           <details> با صفحه‌کلید کار می‌کند و وضعیت باز/بسته را خودش
            به صفحه‌خوان اعلام می‌کند.
 
            ⚠️ محدودیتِ شناخته‌شده: بدون جاوااسکریپت، کلیک بیرون از پنل
-           آن را نمی‌بندد؛ باید دوباره روی خودِ عنوان کلیک کرد (یا Esc).
-           این بهای نداشتن اسکریپت است و آگاهانه پذیرفته شده. #}
+           آن را نمی‌بندد؛ باید دوباره روی عنوان کلیک کرد یا Esc زد.
+
+           هیچ مقصدی حذف نشده: همان یازده دسته‌ای که پیش‌تر در ردیفِ تختِ
+           زیر هدر بودند، اینجا هستند — فقط گروه‌شده. #}
         {% if navCategories.length %}
           <li class="site-nav__item--menu">
-            <details class="cat-menu">
-              <summary class="site-nav__link cat-menu__summary">دسته‌بندی‌ها</summary>
-
-              <div class="cat-menu__panel">
-                <div class="container cat-menu__inner">
-                  <ul class="cat-menu__list">
+            <details class="nav-menu">
+              <summary class="nav-menu__summary">دسته‌بندی‌ها</summary>
+              <div class="nav-menu__panel">
+                <div class="container nav-menu__inner">
+                  <p class="nav-menu__heading">دسته‌بندی قطعات</p>
+                  <ul class="nav-menu__list">
                     {% for c in navCategories %}
                       {% set catPath = '/category/' + (c.slug | urlencode) %}
                       <li>
-                        <a class="cat-menu__link{% if currentPath == catPath %} is-current{% endif %}"
+                        <a class="nav-menu__link{% if currentPath == catPath %} is-current{% endif %}"
                            href="{{ catPath }}"
                            {% if currentPath == catPath %}aria-current="page"{% endif %}>
-                          <span class="cat-menu__name">{{ c.name }}</span>
-                          <span class="cat-menu__count num">{{ c.product_count | faDigits }}</span>
+                          <span class="nav-menu__name">{{ c.name }}</span>
+                          <span class="nav-menu__count num">{{ c.product_count | default(0) | faDigits }}</span>
                         </a>
                       </li>
                     {% endfor %}
                   </ul>
-
-                  <a class="cat-menu__all" href="/products">همهٔ قطعات</a>
+                  <a class="nav-menu__all" href="/products">همهٔ قطعات ←</a>
                 </div>
               </div>
             </details>
           </li>
         {% endif %}
+
+        {% if navBrands.length %}
+          <li class="site-nav__item--menu">
+            <details class="nav-menu">
+              <summary class="nav-menu__summary">برندها</summary>
+              <div class="nav-menu__panel">
+                <div class="container nav-menu__inner">
+                  <p class="nav-menu__heading">برند قطعات</p>
+                  <ul class="nav-menu__list">
+                    {% for b in navBrands %}
+                      {% set brandPath = '/brand/' + (b.slug | urlencode) %}
+                      <li>
+                        <a class="nav-menu__link{% if currentPath == brandPath %} is-current{% endif %}"
+                           href="{{ brandPath }}"
+                           {% if currentPath == brandPath %}aria-current="page"{% endif %}>
+                          <span class="nav-menu__name">{{ b.name }}</span>
+                          <span class="nav-menu__count num">{{ b.product_count | default(0) | faDigits }}</span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <a class="nav-menu__all" href="/products">همهٔ قطعات ←</a>
+                </div>
+              </div>
+            </details>
+          </li>
+        {% endif %}
+
       </ul>
     </nav>
   </div>

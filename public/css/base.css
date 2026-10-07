@@ -518,92 +518,6 @@ a:hover { color: var(--c-brand-strong); }
 
 /* --- ردیف دسته‌ها ---------------------------------------------------
    روی موبایل افقی اسکرول می‌شود: بدون همبرگر، بدون جاوااسکریپت. */
-/* --- منوی دسته‌بندی‌ها ------------------------------------------------
-   جانشین ردیف قدیمیِ cat-bar که یازده دسته را به‌صورت تخت کنار «خانه» و
-   «محصولات» می‌چید. حالا یک ورودی در ناوبری، و سلسله‌مراتب پشت آن.
-
-   پنل تمام‌عرضِ زیر هدر است، نه یک کشوی باریک: یازده دسته در یک ستونِ
-   کشویی به یک فهرست بلندِ اسکرول‌دار تبدیل می‌شد. */
-.cat-menu { position: static; }
-
-.cat-menu__summary {
-  display: flex;
-  align-items: center;
-  gap: var(--s-2);
-  cursor: pointer;
-  /* نشانگر پیش‌فرض مرورگر برداشته می‌شود؛ فلشِ خودمان جایش می‌آید. */
-  list-style: none;
-}
-.cat-menu__summary::-webkit-details-marker { display: none; }
-.cat-menu__summary::after {
-  content: '';
-  width: 0.45rem; height: 0.45rem;
-  border-inline-end: 2px solid currentColor;
-  border-block-end: 2px solid currentColor;
-  /* با transform می‌چرخد، نه با جهت — پس در RTL هم درست می‌افتد. */
-  transform: rotate(45deg) translate(-1px, -1px);
-  transition: transform 0.15s ease;
-  flex: none;
-}
-.cat-menu[open] > .cat-menu__summary::after { transform: rotate(-135deg); }
-.cat-menu[open] > .cat-menu__summary { color: var(--c-brand); background: var(--c-brand-soft); }
-.cat-menu__summary:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
-
-/* پنل روی محتوا می‌افتد و آن را به پایین هل نمی‌دهد، پس باز و بسته شدنش
-   چیدمان صفحه را نمی‌پراند. بلوکِ دربرگیرنده .site-header است. */
-.cat-menu__panel {
-  position: absolute;
-  inset-inline: 0;
-  top: 100%;
-  z-index: 30;
-  background: var(--c-surface);
-  border-block: 1px solid var(--c-line);
-  box-shadow: var(--sh-md);
-}
-.cat-menu__inner { padding-block: var(--s-5); }
-.cat-menu__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--s-1) var(--s-4);
-  list-style: none;
-  margin: 0 0 var(--s-4);
-  padding: 0;
-}
-.cat-menu__link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
-  padding: 0.5rem 0.7rem;
-  border-radius: var(--r-sm);
-  color: var(--c-ink-2);
-  text-decoration: none;
-  font-size: var(--t-sm);
-}
-.cat-menu__link:hover { background: var(--c-brand-soft); color: var(--c-brand-strong); }
-.cat-menu__link.is-current { background: var(--c-brand-soft); color: var(--c-brand-strong); font-weight: 600; }
-.cat-menu__name { min-width: 0; }
-/* شمار محصول: همان قرصِ کم‌رنگِ کارت دسته در صفحهٔ اصلی. */
-.cat-menu__count {
-  flex: none;
-  padding: 0.05rem 0.5rem;
-  border-radius: var(--r-pill);
-  background: var(--c-brand-soft);
-  color: var(--c-brand-strong);
-  font-size: var(--t-xs);
-}
-.cat-menu__all {
-  display: inline-block;
-  padding-block-start: var(--s-3);
-  border-block-start: 1px solid var(--c-line);
-  width: 100%;
-  color: var(--c-brand);
-  font-weight: 600;
-  font-size: var(--t-sm);
-  text-decoration: none;
-}
-.cat-menu__all:hover { text-decoration: underline; }
-
 /* --- ناوبری --- */
 .site-nav { margin-inline-start: auto; }
 .site-nav__list {
@@ -624,6 +538,110 @@ a:hover { color: var(--c-brand-strong); }
 }
 .site-nav__link:hover { color: var(--c-brand); background: var(--c-brand-soft); }
 .site-nav__link.is-current { color: var(--c-brand); background: var(--c-brand-soft); }
+
+/* --- منوهای گروه‌شدهٔ ناوبری -----------------------------------------
+   جانشین ردیف قدیمیِ cat-bar که یازده دسته را به‌صورت تخت کنار «خانه» و
+   «محصولات» می‌چید. هیچ مقصدی حذف نشد؛ گروه شد.
+
+   ⚠️ این بلوک عمدا *بعد* از .site-nav__link آمده. وقتی بالاتر بود،
+   ‎.site-nav__link{display:block} روی ‎.nav-menu__summary{display:flex}
+   را می‌پوشاند — هم‌ویژگی بودند و ترتیب منبع تصمیم می‌گرفت — و فلشِ
+   کنار عنوان از جا در می‌رفت. */
+.nav-menu { position: static; }
+
+/* عنوان منو هم‌شکلِ پیوندهای ناوبری است، ولی کلاس آن‌ها را نمی‌گیرد تا
+   دوباره گرفتار همان تداخلِ display نشود. */
+.nav-menu__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--r-md);
+  color: var(--c-ink-2);
+  font-weight: 500;
+  font-size: var(--t-sm);
+  cursor: pointer;
+  list-style: none;
+  white-space: nowrap;
+}
+.nav-menu__summary::-webkit-details-marker { display: none; }
+.nav-menu__summary::after {
+  content: '';
+  width: 0.45rem; height: 0.45rem;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  /* با transform می‌چرخد، نه با جهت — پس در RTL هم درست می‌افتد. */
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform 0.15s ease;
+  flex: none;
+  opacity: 0.75;
+}
+.nav-menu__summary:hover { color: var(--c-brand); background: var(--c-brand-soft); }
+.nav-menu__summary:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.nav-menu[open] > .nav-menu__summary { color: var(--c-brand); background: var(--c-brand-soft); }
+.nav-menu[open] > .nav-menu__summary::after { transform: rotate(-135deg); }
+
+/* پنل تمام‌عرضِ زیر هدر، نه کشوی باریک: یازده دسته در یک ستون به فهرستی
+   بلند و اسکرول‌دار تبدیل می‌شد. روی محتوا می‌افتد و آن را پایین هل
+   نمی‌دهد، پس باز و بسته شدن چیدمان را نمی‌پراند. */
+.nav-menu__panel {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  z-index: 30;
+  background: var(--c-surface);
+  border-block: 1px solid var(--c-line);
+  box-shadow: var(--sh-md);
+}
+.nav-menu__inner { padding-block: var(--s-5); }
+.nav-menu__heading {
+  margin: 0 0 var(--s-3);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--c-ink-3);
+}
+.nav-menu__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--s-1) var(--s-4);
+  list-style: none;
+  margin: 0 0 var(--s-4);
+  padding: 0;
+}
+.nav-menu__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--r-sm);
+  color: var(--c-ink-2);
+  text-decoration: none;
+  font-size: var(--t-sm);
+}
+.nav-menu__link:hover { background: var(--c-brand-soft); color: var(--c-brand-strong); }
+.nav-menu__link.is-current { background: var(--c-brand-soft); color: var(--c-brand-strong); font-weight: 600; }
+.nav-menu__name { min-width: 0; }
+/* شمار محصول — همان قرصِ کم‌رنگِ کارت دسته در صفحهٔ اصلی. */
+.nav-menu__count {
+  flex: none;
+  padding: 0.05rem 0.5rem;
+  border-radius: var(--r-pill);
+  background: var(--c-brand-soft);
+  color: var(--c-brand-strong);
+  font-size: var(--t-xs);
+}
+.nav-menu__all {
+  display: inline-block;
+  padding-block-start: var(--s-3);
+  border-block-start: 1px solid var(--c-line);
+  width: 100%;
+  color: var(--c-brand);
+  font-weight: 600;
+  font-size: var(--t-sm);
+  text-decoration: none;
+}
+.nav-menu__all:hover { text-decoration: underline; }
 
 /* ═══════════════════════════════════════════════════════ ۶. فوتر ═══ */
 
@@ -1360,7 +1378,7 @@ a:hover { color: var(--c-brand-strong); }
   .site-nav { order: 2; flex-basis: 100%; margin-inline-start: 0; }
   .site-nav__list { flex-wrap: wrap; }
   .site-search { order: 3; flex-basis: 100%; max-width: none; }
-  .cat-menu__inner { padding-block: var(--s-4); }
+  .nav-menu__inner { padding-block: var(--s-4); }
 
   .listing-toolbar { flex-direction: column; align-items: stretch; }
   .listing-toolbar__field { min-width: 0; }
