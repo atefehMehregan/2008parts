@@ -1810,27 +1810,6 @@ a:hover { color: var(--c-brand-strong); }
   .brand-logo:hover { transform: none; }
 }
 
-/* نوار اعتماد — چه چیزی این کاتالوگ را کار راه‌انداز می‌کند. هر کارت یک
-   قابلیتِ واقعیِ همین نسخه است، نه شعار. */
-.value-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--s-4);
-}
-.value-card {
-  padding: var(--s-5);
-  background: var(--c-surface);
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-md);
-}
-.home-section--tint .value-card { background: var(--c-bg); }
-.value-card__title {
-  margin: 0 0 var(--s-2);
-  font-size: var(--t-md);
-  font-weight: 600;
-  color: var(--c-ink);
-}
-.value-card__text { margin: 0; color: var(--c-ink-2); font-size: var(--t-sm); line-height: 1.9; }
 
 /* فراخوان پایانی — تنها بلوک پررنگِ صفحه. */
 .cta-band {
