@@ -110,3 +110,14 @@ a:hover { color: var(--c-ink); }
 }
 /* کاشیِ جانشینِ نام هم باید روی سفید خوانده شود، نه روی سرمه‌ای. */
 .brand-logo__wordmark { background: #eef1f5; color: #46556a; }
+
+/* کلید پوسته روی هدرِ گرادیانیِ این پوسته. قاب و دکمهٔ فعال باید از
+   زمینه جدا شوند، و --c-surface اینجا سرمه‌ایِ روشن‌تر است. */
+.theme-switch { background: rgba(0, 0, 0, 0.22); border-color: rgba(255, 255, 255, 0.14); }
+.theme-switch__btn { color: var(--c-ink-3); }
+.theme-switch__btn:hover { color: var(--c-ink); background: rgba(255, 255, 255, 0.10); }
+:root[data-theme="dark"] .theme-switch__btn--dark,
+:root:not([data-theme]) .theme-switch__btn--dark {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}

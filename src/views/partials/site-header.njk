@@ -101,6 +101,40 @@
       </nav>
     {% endif %}
 
+    {# انتخاب پوستهٔ روشن/تاریک.
+
+       فرم POST است و نه پیوند GET: حالت را عوض می‌کند، و یک پیوند GET
+       را مرورگر یا خزنده ممکن است از پیش بارگیری کند و پوستهٔ کاربر را
+       بی‌اجازه برگرداند. CSRF همان requireCsrf موجود است.
+
+       هر دو دکمه همیشه دیده می‌شوند تا حالت جاری روشن باشد. کدام یک
+       «فعال» است با CSS تعیین می‌شود، نه اینجا — چون در حالت auto
+       سرور نمی‌داند سیستم‌عامل کاربر روشن است یا تیره، ولی CSS با
+       prefers-color-scheme می‌داند. #}
+    <form class="theme-switch" action="/theme" method="post"
+          role="group" aria-label="انتخاب پوستهٔ نمایش">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <input type="hidden" name="returnTo" value="{{ currentUrl }}" />
+
+      <button class="theme-switch__btn theme-switch__btn--light" type="submit"
+              name="mode" value="light" aria-label="نمایش با پوستهٔ روشن">
+        <svg class="theme-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.6v2.6M12 18.8v2.6M21.4 12h-2.6M5.2 12H2.6
+                   M18.6 5.4l-1.9 1.9M7.3 16.7l-1.9 1.9M18.6 18.6l-1.9-1.9M7.3 7.3 5.4 5.4" />
+        </svg>
+        <span class="sr-only">روشن</span>
+      </button>
+
+      <button class="theme-switch__btn theme-switch__btn--dark" type="submit"
+              name="mode" value="dark" aria-label="نمایش با پوستهٔ تاریک">
+        <svg class="theme-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M20.2 14.4A8.6 8.6 0 0 1 9.6 3.8a8.6 8.6 0 1 0 10.6 10.6z" />
+        </svg>
+        <span class="sr-only">تاریک</span>
+      </button>
+    </form>
+
     {# سبد خرید. شمار از res.locals.cartCount می‌آید که میان‌افزار
        cartCount روی هر درخواست از کوکی می‌خواند — پس بعد از افزودن،
        حذف، تغییر تعداد، تازه‌کردن صفحه و جابه‌جایی بین صفحه‌ها درست

@@ -320,15 +320,22 @@ test('هر سه دکمهٔ شناور برچسب دسترس‌پذیر دارن�
 
 /* ═══════════════════════════════════ ۹. صفحهٔ تماس */
 
+/* ⚠️ مقدارها از پیکربندی خوانده می‌شوند، نه از رشتهٔ ثابتِ داخل آزمون.
+   نسخهٔ اول ایمیل را عینا نوشته بود و با عوض شدن ایمیلِ فروشگاه شکست —
+   در حالی که صفحه درست بود. آزمون باید بگوید «همان چیزی که پیکربندی
+   می‌گوید نشان داده می‌شود»، نه «این رشتهٔ بخصوص». */
 test('صفحهٔ تماس هر سه راه ارتباطی واقعی را نشان می‌دهد', async () => {
+  const { config } = await import('../src/config/index.js');
+  const c = config.contact;
   const jar = await freshJar();
   const html = await (await get(jar, '/contact')).text();
-  assert.match(html, /021-33333502/);
-  assert.match(html, /09355292911/);
-  assert.match(html, /mohammad\.mozaffari616@gmail\.com/);
-  assert.match(html, /href="tel:\+982133333502"/);
-  assert.match(html, /href="tel:\+989355292911"/);
-  assert.match(html, /href="mailto:mohammad\.mozaffari616@gmail\.com"/);
+
+  for (const v of [c.phone, c.mobile, c.email]) {
+    assert.ok(html.includes(v), `مقدار «${v}» باید نشان داده شود`);
+  }
+  assert.ok(html.includes(`href="tel:${c.phoneTel}"`));
+  assert.ok(html.includes(`href="tel:${c.mobileTel}"`));
+  assert.ok(html.includes(`href="mailto:${c.email}"`));
   /* دیگر نباید بگوید «ثبت نشده». */
   assert.ok(!html.includes('هنوز در این صفحه ثبت نشده‌اند'));
 });

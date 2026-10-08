@@ -60,18 +60,23 @@ function sslSetting() {
   return isProd ? { rejectUnauthorized: true } : false;
 }
 
-/* پوستهٔ ظاهری. دو مقدار معتبر دارد و نه بیشتر:
- *   light  پیش‌فرض — روشن و تمیز (base.css تنها)
- *   dark   سرمه‌ای (base.css + theme-dark.css)
+/* پوستهٔ ظاهری — *پیش‌فرضِ سایت* برای بازدیدکننده‌ای که هنوز انتخابی
+ * نکرده است. انتخابِ خودِ کاربر در کوکی می‌نشیند و بر این مقدم است.
+ *
+ *   auto   پیش‌فرض — از ترجیح سیستم‌عامل پیروی می‌کند
+ *          (prefers-color-scheme، بدون هیچ جاوااسکریپتی)
+ *   light  همیشه روشن
+ *   dark   همیشه سرمه‌ای
+ *
  * مقدار ناشناخته بی‌صدا به پیش‌فرض برمی‌گردد: یک غلط تایپی در .env نباید
  * فروشگاه را بی‌استایل کند، ولی باید دیده شود، پس هشدار چاپ می‌شود. */
-const THEMES = ['light', 'dark'];
+export const THEMES = ['auto', 'light', 'dark'];
 function themeSetting() {
   const raw = (process.env.THEME || '').trim().toLowerCase();
-  if (!raw) return 'light';
+  if (!raw) return 'auto';
   if (THEMES.includes(raw)) return raw;
-  console.warn(`[config] THEME ناشناخته: «${raw}». یکی از ${THEMES.join(' | ')} را بگذارید. فعلا light.`);
-  return 'light';
+  console.warn(`[config] THEME ناشناخته: «${raw}». یکی از ${THEMES.join(' | ')} را بگذارید. فعلا auto.`);
+  return 'auto';
 }
 
 export const config = {
@@ -110,6 +115,14 @@ export const config = {
      نشست مدیر عمدا از نشست مشتری جداست: کوکی جدا، نام جدا، و عمر بسیار
      کوتاه‌تر. SESSION_DAYS (۳۰ روز) برای حساب مشتری است و هرگز نباید
      ورود مدیر را اداره کند. */
+  /* ⚠️ این بلوک themeCookie است و نه theme: بالاتر، config.theme یک
+     *رشته* است (auto|light|dark). اولین بار این را theme نامیدم و شیء،
+     رشته را بی‌صدا بلعید و کل پوسته‌دهی از کار افتاد. */
+  themeCookie: {
+    name: process.env.THEME_COOKIE_NAME || '2008parts_theme',
+    maxAgeDays: int('THEME_COOKIE_MAX_AGE_DAYS', 365),
+  },
+
   admin: {
     cookieName: process.env.ADMIN_COOKIE_NAME || '2008parts_admin_session',
     csrfCookieName: process.env.ADMIN_CSRF_COOKIE_NAME || '2008parts_admin_csrf',
@@ -218,7 +231,7 @@ export const config = {
     phoneTel:    process.env.STORE_PHONE_TEL    || '+982133333502',
     mobile:      process.env.STORE_MOBILE       || '09355292911',
     mobileTel:   process.env.STORE_MOBILE_TEL   || '+989355292911',
-    email:       process.env.STORE_EMAIL        || 'mohammad.mozaffari616@gmail.com',
+    email:       process.env.STORE_EMAIL        || '2008parts@gmail.com',
     address:     process.env.STORE_ADDRESS      || '',
     hours:       process.env.STORE_HOURS        || '',
     telegram:    process.env.STORE_TELEGRAM     || '',

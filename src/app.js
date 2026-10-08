@@ -13,6 +13,7 @@ import path from 'node:path';
 import { config, ROOT } from './config/index.js';
 import { extraSecurityHeaders, csrfToken, notFound, errorHandler } from './middleware/security.js';
 import { cartCount } from './controllers/cartController.js';
+import { themeLocals } from './controllers/themeController.js';
 import { generalLimiter, loginLimiter, uploadLimiter } from './middleware/rateLimit.js';
 import { healthRouter } from './routes/health.js';
 import { createPageRouter } from './routes/pages.js';
@@ -110,6 +111,9 @@ export function createApp({
 
   app.use(csrfToken);
 
+  /* انتخاب پوستهٔ کاربر. باید پیش از رندر هر قالبی اجرا شود. */
+  app.use(themeLocals);
+
   /* شمار سبد برای هدر. فقط کوکی را می‌شمارد و به پایگاه داده نمی‌زند. */
   app.use(cartCount);
 
@@ -130,8 +134,14 @@ export function createApp({
     res.locals.storeNameLatin = '';
     /* پوسته از پیکربندی می‌آید، نه از درخواست: انتخاب رنگ یک تصمیم
        استقرار است، نه ترجیح کاربر. قالب فقط همین را می‌خواند. */
-    res.locals.theme = config.theme;
+    /* پوسته از میان‌افزار themeLocals می‌آید (کوکیِ کاربر)، نه از
+       config مستقیم — config فقط پیش‌فرضِ سایت است. */
     res.locals.currentPath = req.path;
+    /* مقصد بازگشتِ فرم پوسته: مسیر به‌علاوهٔ پرس‌وجو، تا کاربر دقیقا به
+       همان صفحه‌ای برگردد که بود (مثلا /products?page=3&sort=name).
+       خودِ کنترلر هم دوباره اعتبارسنجی می‌کند — به این مقدار اعتماد
+       نمی‌شود چون از طریق فرم به سرور برمی‌گردد. */
+    res.locals.currentUrl = req.originalUrl || req.path;
     res.locals.year = new Date().getFullYear();
     next();
   });

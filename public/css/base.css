@@ -66,6 +66,15 @@
   font-display: swap;
 }
 
+/* به مرورگر می‌گوید ویجت‌های بومی — نوار پیمایش، select، کادر متن —
+   را با کدام پوسته بکشد. بدون این، در پوستهٔ تیره یک نوار پیمایشِ سفید
+   کنار صفحهٔ سرمه‌ای می‌ماند. */
+:root { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; }
+}
+
 :root {
   /* ===================================================================
      پوستهٔ روشنِ ۲۰۰۸پارتس — پیش‌فرض
@@ -2274,4 +2283,73 @@ a:hover { color: var(--c-brand-strong); }
   fill: none; stroke: currentColor; stroke-width: 1.6;
   stroke-linecap: round; stroke-linejoin: round;
   opacity: 0.7;
+}
+
+/* ═══════════════════════════════ ۱۷. انتخاب پوستهٔ روشن/تاریک ═══ */
+
+/* دو دکمه در یک قاب، مثل کلید دوحالته. هر دو همیشه دیده می‌شوند تا
+   کاربر بداند چه گزینه‌هایی دارد و کدام فعال است. */
+.theme-switch {
+  display: inline-flex;
+  flex: none;
+  padding: 2px;
+  gap: 2px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: var(--c-surface-2);
+}
+.theme-switch__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* هدف لمس ۴۰ پیکسل؛ کنار سبد که ۴۴ است می‌نشیند و هدر را بلند نمی‌کند. */
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--r-md) - 3px);
+  background: transparent;
+  color: var(--c-ink-3);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.theme-switch__btn:hover { color: var(--c-ink); background: var(--c-brand-soft); }
+.theme-switch__btn:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.theme-switch__icon {
+  width: 19px; height: 19px;
+  fill: none; stroke: currentColor; stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ── کدام دکمه «فعال» است ─────────────────────────────────────────────
+   سه حالت، و هر سه فقط با CSS — چون سرور در حالت auto نمی‌داند
+   سیستم‌عاملِ کاربر روشن است یا تیره، ولی مرورگر می‌داند.
+
+   ۱. انتخاب صریحِ روشن  → [data-theme="light"]
+   ۲. انتخاب صریحِ تاریک → [data-theme="dark"]
+   ۳. auto (بدون صفت)    → از prefers-color-scheme پیروی کن
+
+   ترتیب مهم است: قاعده‌های صریح *بعد* از قاعدهٔ media می‌آیند تا انتخاب
+   کاربر همیشه بر ترجیح سیستم بچربد. */
+/* ۳الف. auto + سیستم روشن → دکمهٔ «روشن» فعال */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .theme-switch__btn--light { background: var(--c-surface); color: var(--c-brand); }
+}
+/* ۳ب. auto + سیستم تاریک → دکمهٔ «تاریک» فعال */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-switch__btn--dark { background: var(--c-surface); color: var(--c-brand); }
+}
+/* ۱ و ۲. انتخاب صریح — بعد از media، پس برنده. */
+:root[data-theme="light"] .theme-switch__btn--light,
+:root[data-theme="dark"]  .theme-switch__btn--dark {
+  background: var(--c-surface);
+  color: var(--c-brand);
+  box-shadow: var(--sh-sm);
+}
+
+/* روی موبایل کلید کنار نشان برند می‌ماند و جا را تنگ نمی‌کند. */
+@media (max-width: 640px) {
+  .theme-switch__btn { min-width: 38px; min-height: 38px; }
+  .theme-switch__icon { width: 17px; height: 17px; }
 }

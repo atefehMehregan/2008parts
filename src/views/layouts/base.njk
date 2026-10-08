@@ -1,12 +1,22 @@
 <!doctype html>
-<html lang="fa" dir="rtl">
+{# data-theme فقط وقتی می‌آید که کاربر *صریح* انتخاب کرده باشد. در
+   حالت auto هیچ صفتی نمی‌نشیند، تا قاعده‌های
+   :root:not([data-theme="light"]) در base.css کار کنند. #}
+<html lang="fa" dir="rtl"{% if themeAttr %} data-theme="{{ themeAttr }}"{% endif %}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{{ metaDescription | default('فروشگاه اینترنتی قطعات یدکی پژو ۲۰۰۸') }}" />
-    {# رنگ نوار مرورگر موبایل باید با پوستهٔ فعال بخواند. پیش از این
-       روی آبی ثابت بود و در پوستهٔ تیره با خود صفحه نمی‌خواند. #}
-    <meta name="theme-color" content="{% if theme == 'dark' %}#0a1a2f{% else %}#ffffff{% endif %}" />
+    {# رنگ نوار مرورگر موبایل. در حالت auto دو تا می‌آید و خودِ مرورگر
+       بر اساس ترجیح سیستم یکی را برمی‌دارد — بدون جاوااسکریپت. #}
+    {% if theme == 'dark' %}
+      <meta name="theme-color" content="#0a1a2f" />
+    {% elif theme == 'light' %}
+      <meta name="theme-color" content="#ffffff" />
+    {% else %}
+      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a1a2f" />
+    {% endif %}
     <title>{{ title }} | {{ storeName }}</title>
     {# نشان برند. SVG برای مرورگرهای امروزی، و PNG مات برای آیکون iOS —
        iOS آیکون شفاف را روی زمینهٔ سیاه می‌نشاند. #}
@@ -15,9 +25,25 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/img/brand/2008parts-icon-32.png" />
     <link rel="apple-touch-icon" href="/img/brand/2008parts-icon-180.png" />
     <link rel="stylesheet" href="/css/base.css" />
-    {# پوستهٔ آبی یک لایهٔ روی base.css است و فقط تفاوت رنگ را دارد، پس
-       باید *بعد* از آن بیاید. با THEME=auros هیچ درخواست اضافی نمی‌رود. #}
-    {% if theme == 'dark' %}<link rel="stylesheet" href="/css/theme-dark.css" />{% endif %}
+    {# پوستهٔ تیره یک لایهٔ روی base.css است و فقط تفاوت رنگ را دارد، پس
+       باید *بعد* از آن بیاید.
+
+       ⚠️ اینجا جایی است که «پرشِ پوسته» از بین می‌رود، و بدون یک بایت
+       جاوااسکریپت:
+
+         dark  — فایل بی‌قید بار می‌شود.
+         light — اصلا بار نمی‌شود.
+         auto  — با صفت media بار می‌شود؛ خودِ مرورگر پیش از نخستین
+                 رنگ‌آمیزی تصمیم می‌گیرد اعمالش کند یا نه.
+
+       در هر سه حالت، نخستین فریمی که کاربر می‌بیند همان پوستهٔ درست
+       است. (در auto مرورگر فایل را برای چاپ/تطبیق می‌گیرد ولی رندر را
+       مسدود نمی‌کند اگر media نخواند.) #}
+    {% if theme == 'dark' %}
+      <link rel="stylesheet" href="/css/theme-dark.css" />
+    {% elif theme == 'auto' %}
+      <link rel="stylesheet" href="/css/theme-dark.css" media="(prefers-color-scheme: dark)" />
+    {% endif %}
   </head>
 
   <body>

@@ -11,6 +11,7 @@ import { createHomeController } from '../controllers/homeController.js';
 import { createPageController } from '../controllers/pageController.js';
 import { createCartController } from '../controllers/cartController.js';
 import { requireCsrf } from '../middleware/security.js';
+import { setTheme } from '../controllers/themeController.js';
 
 export function createPageRouter(repositories) {
   const router = express.Router();
@@ -29,6 +30,9 @@ export function createPageRouter(repositories) {
      همان requireCsrf موجود استفاده می‌شود (double-submit)، نه یک
      پیاده‌سازی دوم. */
   const cart = createCartController(repositories);
+  /* انتخاب پوستهٔ روشن/تاریک. POST و پشت CSRF، چون حالت را عوض می‌کند. */
+  router.post('/theme', requireCsrf, setTheme);
+
   router.get('/cart', cart.index);
   router.post('/cart/add', requireCsrf, cart.add);
   router.post('/cart/update', requireCsrf, cart.update);
