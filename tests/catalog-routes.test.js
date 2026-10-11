@@ -105,10 +105,19 @@ test('قیمت حراج با قیمت خط‌خوردهٔ قبلی نشان دا
   assert.match(html, /<del class="price__old num">۲٬۰۰۰٬۰۰۰<\/del>/);
 });
 
-test('وضعیت موجودی به فارسی نمایش داده می‌شود', async () => {
+/* وضعیت موجودی دیگر روی کارتِ فهرست نمی‌آید — تصمیمِ نمایش، نه تغییرِ
+   داده: ردیف همچنان availability خودش را دارد و فیلترِ نوار پالایش با
+   همان کار می‌کند.
+
+   ⚠️ سنجه «class="stock» است و نه متنِ «قابل سفارش»: همان صفحه یک
+   select پالایش دارد که این برچسب را به‌عنوان گزینه فهرست می‌کند، پس
+   جست‌وجوی متنی نتیجهٔ کاذب می‌داد. */
+test('وضعیت موجودی روی کارتِ فهرست نمایش داده نمی‌شود', async () => {
   const catId = await insertCategory(db);
   await insertProduct(db, { categoryId: catId, slug: 'a', sku: 'S1', availability: 'on_order' });
-  assert.match(await text('/products'), /قابل سفارش/);
+  const html = await text('/products');
+  assert.match(html, /class="product-card__name"/, 'کارت محصول باید رندر شود');
+  assert.doesNotMatch(html, /class="stock/, 'نشانِ موجودی نباید روی کارت باشد');
 });
 
 /* ------------------------------------------------ نشانی‌های فارسی */

@@ -371,35 +371,39 @@ const stockChips = (html) =>
 const availabilityChips = (html) =>
   [...html.matchAll(/<span class="availability[^"]*">\s*([^<]*?)\s*<\/span>/g)].map((m) => m[1]);
 
-test('نشان موجودیِ هر کارت دقیقا «استعلام موجودی» است', async () => {
+/* حضورِ کارت، مستقل از نشانِ موجودی.
+   پیش از این دو آزمونِ زیر از خودِ نشانِ موجودی به‌عنوان نشانهٔ «کارتی
+   رندر شد» استفاده می‌کردند. با برداشتن آن نشان از کارت، آن سنجه از بین
+   می‌رفت — پس مرجع به نامِ محصول منتقل شد، که همیشه روی کارت هست. */
+const cardNames = (html) =>
+  [...html.matchAll(/<h3 class="product-card__name">\s*([^<]*?)\s*<\/h3>/g)].map((m) => m[1]);
+
+/* ⚠️ چرا فقط span‌های stock سنجیده می‌شوند و نه کل صفحه: نوار پالایش
+   (listing-toolbar) هر چهار وضعیت سامانه را به‌عنوان *گزینهٔ فیلتر*
+   فهرست می‌کند و آن عمدا سر جایش مانده است. «ناموجود» در آن select یک
+   گزینهٔ پالایش است، نه ادعایی دربارهٔ محصولی. نوار اطلاعیهٔ هدر هم واژهٔ
+   «موجودی» را دارد. پس جست‌وجوی متنی روی کل سند نتیجهٔ کاذب می‌داد. */
+test('کارت‌های فهرست بدون نشانِ موجودی رندر می‌شوند', async () => {
   const pages = await allListingHtml('/products');
-  let total = 0;
+  let cards = 0;
   for (const html of pages) {
-    const chips = stockChips(html);
-    total += chips.length;
-    for (const c of chips) {
-      assert.equal(c, AVAILABILITY_ON_ENQUIRY_LABEL, `نشان نادرست: «${c}»`);
-    }
-    assert.doesNotMatch(html, /stock--in/, 'هیچ نشانِ سبزِ «موجود» نباید باشد');
+    cards += cardNames(html).length;
+    assert.equal(stockChips(html).length, 0, 'کارت نباید نشانِ موجودی داشته باشد');
+    assert.doesNotMatch(html, /class="stock/, 'هیچ عنصری با کلاس stock نباید رندر شود');
   }
-  assert.equal(total, 40, 'روی هم باید چهل نشان موجودی باشد');
+  assert.equal(cards, 40, 'روی هم باید چهل کارت محصول باشد');
 });
 
-test('هیچ کارت محصولی در هیچ فهرستی ادعای موجودی نمی‌کند', async () => {
+test('هیچ کارت محصولی در هیچ فهرستی نشانِ موجودی ندارد', async () => {
   const cat = categories.find((c) => c.key === 'filters');
   const paths = ['/', '/products', `/category/${encodeURIComponent(cat.slug)}`,
     '/search?q=%D9%81%DB%8C%D9%84%D8%AA%D8%B1'];
   for (const path of paths) {
-    const chips = stockChips(await text(path));
-    assert.ok(chips.length > 0, `هیچ کارتی در ${path} نیست`);
-    for (const c of chips) {
-      assert.equal(c, AVAILABILITY_ON_ENQUIRY_LABEL, `«${c}» در ${path}`);
-      assert.notEqual(c, 'موجود');
-      assert.notEqual(c, 'قابل سفارش');
-      assert.notEqual(c, 'ناموجود');
-    }
+    const html = await text(path);
+    assert.ok(cardNames(html).length > 0, `هیچ کارتی در ${path} نیست`);
+    assert.equal(stockChips(html).length, 0, `نشانِ موجودی در ${path}`);
+    assert.doesNotMatch(html, /class="stock/, `کلاس stock در ${path}`);
   }
-  assert.equal(AVAILABILITY_ON_ENQUIRY_LABEL, 'استعلام موجودی');
   assert.equal(PRICE_ON_ENQUIRY_LABEL, 'استعلام قیمت');
 });
 

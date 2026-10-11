@@ -51,22 +51,16 @@
           {% endif %}
         </div>
 
-        {# شمار واقعیِ موجودی نشان داده می‌شود، نه فقط برچسب وضعیت.
-           شاخه‌های بعدی جانشین می‌مانند تا محصولی که هنوز قیمت یا موجودی
-           ندارد، بی‌صدا «۰ عدد» نشان ندهد. #}
-        {% if item.stock_qty > 0 %}
-          <span class="stock stock--in">موجودی: <span class="num">{{ item.stock_qty | faDigits }}</span> عدد</span>
-        {% elif not item.price_toman %}
-          <span class="stock stock--order">استعلام موجودی</span>
-        {% elif item.availability == 'in_stock' %}
-          <span class="stock stock--in">موجود</span>
-        {% elif item.availability == 'on_order' %}
-          <span class="stock stock--order">قابل سفارش</span>
-        {% elif item.availability == 'discontinued' %}
-          <span class="stock stock--out">تولید متوقف شده</span>
-        {% else %}
-          <span class="stock stock--out">ناموجود</span>
-        {% endif %}
+        {# موجودی و وضعیت روی کارتِ فهرست نشان داده نمی‌شوند.
+           پیش از این یک نشانِ موجودی اینجا بود (شمار واقعی، و در نبودش
+           یکی از برچسب‌های وضعیت). آگاهانه برداشته شد: تصمیمِ نمایش است،
+           نه تغییرِ داده.
+
+           ⚠️ هیچ چیزی در لایهٔ داده عوض نشده. ستون‌های stock_qty و
+           availability سر جایشان‌اند، مخزن همان‌طور که بود آن‌ها را
+           برمی‌گرداند، فیلترِ «وضعیت موجودی» در نوار پالایش کار می‌کند،
+           سقفِ تعداد در سبد همان موجودی است، و صفحهٔ محصول و بخش مدیر
+           دست‌نخورده‌اند. فقط این کارت دیگر چیزی ادعا نمی‌کند. #}
       </div>
     </div>
   </a>
