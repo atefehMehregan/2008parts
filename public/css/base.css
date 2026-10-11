@@ -659,7 +659,15 @@ a:hover { color: var(--c-brand-strong); }
 .hero__inner {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  /* نسبت ۰٫۸ به ۱٫۶ — یعنی متن یک‌سوم و اسلایدشو دو‌سومِ عرضِ گرید.
+     پیش از این ۱ به ۱٫۰۵ بود (تقریبا نصف‌نصف) و تصویر برجسته دیده
+     نمی‌شد. ستون متن حتی در این نسبت از سقف ۳۴ نویسه‌ایِ .hero__lede
+     پهن‌تر می‌ماند، پس پاراگراف دوباره نمی‌شکند.
+
+     ⚠️ این نسبت فقط بالای ۹۰۰ پیکسل معنا دارد: بلوک
+     max-width: 900px پایین‌تر در همین فایل گرید را به یک ستون
+     برمی‌گرداند و چون دیرتر می‌آید، برنده می‌شود. */
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr);
   align-items: center;
   gap: var(--s-6);
   min-height: clamp(23rem, 17rem + 13vw, 34rem);
@@ -1372,6 +1380,16 @@ a:hover { color: var(--c-brand-strong); }
   .site-nav { flex-basis: 100%; margin-inline-start: 0; }
   .site-nav__list { justify-content: flex-start; }
   .site-header__bar { padding-block: var(--s-3); min-height: 0; row-gap: var(--s-3); }
+
+  /* پلهٔ میانی برای هیرو. با نسبتِ دسکتاپ (۰٫۸ به ۱٫۶) ستون متن روی
+     ۹۰۱ پیکسل به حدود ۳۰۰ پیکسل می‌رسید که برای یک لِدِ ۳۴ نویسه‌ای
+     تنگ است. اینجا ۱ به ۱٫۴ می‌شود: اسلایدشو همچنان پهن‌تر است، ولی
+     متن جا دارد.
+
+     ⚠️ زیر ۹۰۰ پیکسل این قاعده هم بی‌اثر می‌شود: بلوک
+     max-width: 900px پایین‌تر در همین فایل است، پس در ترتیبِ منبع
+     برنده می‌شود و گرید را به یک ستون برمی‌گرداند. */
+  .hero__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
 }
 
 
