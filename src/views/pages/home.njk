@@ -59,15 +59,63 @@
       </div>
     </div>
 
-    {# ترسیم خانهٔ دوم همین گرید است، نه لایه‌ای روی متن: روی روشن‌ترین
-       خطش کنتراست متن سفید مردود می‌شود، پس روی دسکتاپ هرگز زیر متن
-       نمی‌رود. روی موبایل که ناچار پس‌زمینه می‌شود، شفافیتش پایین
-       می‌آید تا همان نقطه دوباره قبول شود.
+    {# اسلایدشوی خانهٔ دوم همین گرید است، نه لایه‌ای روی متن: روی دسکتاپ
+       هر کدام ستون خودشان را دارند، پس عکس هرگز زیر متن نمی‌رود. روی
+       موبایل که ناچار پس‌زمینه می‌شود، شفافیتش پایین می‌آید تا کنتراست
+       متن سفید روی هر سه عکس قبول بماند.
 
-       تزئینی است: معنا را تیتر می‌رساند. پس alt خالی و از دید خوانندهٔ
-       صفحه پنهان — نه یک توضیحِ ساختگی برای یک ترسیم انتزاعی. #}
-    <img class="hero__art" src="/img/hero-automotive-blueprint.svg"
-         alt="" aria-hidden="true" width="1200" height="800" />
+       تزئینی است: معنا را تیتر می‌رساند. پس هر اسلاید از دید صفحه‌خوان
+       پنهان است و هیچ توضیح ساختگی‌ای برایش نوشته نشده.
+
+       ⚠️ هر سه عکس خودِ پژو ۲۰۰۸ است. برچسب جداگانه‌ای روی اسلایدها
+       نمی‌آید: نوشتن «پژو ۲۰۰۸» سه بار پشت سر هم نویز است، و هیچ ادعای
+       سازگاری‌ای هم اینجا گفته نمی‌شود.
+
+       ⚠️ عکس‌ها از CSS می‌آیند (background-image با مسیر *نسبی*)، نه از
+       src این قالب. دلیلش مسیر پایه است: url() در CSS نسبت به نشانیِ
+       خودِ فایل سبک حل می‌شود، پس اگر روزی سایت زیر یک پیشوند سرو شود
+       عکس‌ها خودبه‌خود همان پیشوند را می‌گیرند و این قالب دست‌نخورده
+       می‌ماند.
+
+       ⚠️ دکمه‌ها و نقطه‌ها با hidden می‌آیند و جاوااسکریپت آن‌ها را
+       نشان می‌دهد. اگر اسکریپت بار نشود، اسلاید اول مثل یک عکس ثابت
+       سر جایش می‌ماند و هیچ کنترلِ مرده‌ای روی صفحه نیست. #}
+    <div class="hero__carousel" data-hero-carousel
+         role="group" aria-roledescription="اسلایدشو"
+         aria-label="تصاویر پژو ۲۰۰۸">
+      <div class="hero__slides">
+        <div class="hero__slide hero__slide--1 is-active"
+             data-hero-slide aria-hidden="true"></div>
+        <div class="hero__slide hero__slide--2"
+             data-hero-slide aria-hidden="true"></div>
+        <div class="hero__slide hero__slide--3"
+             data-hero-slide aria-hidden="true"></div>
+      </div>
+
+      {# ترتیب DOM: قبلی سپس بعدی. جایگاهشان را CSS تعیین می‌کند و در
+         RTL دکمهٔ «قبلی» سمت راست می‌نشیند. #}
+      <button class="hero__nav hero__nav--prev" type="button"
+              data-hero-prev aria-label="تصویر قبلی" hidden>
+        <span aria-hidden="true">‹</span>
+      </button>
+      <button class="hero__nav hero__nav--next" type="button"
+              data-hero-next aria-label="تصویر بعدی" hidden>
+        <span aria-hidden="true">›</span>
+      </button>
+
+      {# role="group" و نه tablist: اسلایدها tabpanel نیستند و ادعای
+         tablist یک قرارداد را جعل می‌کرد. وضعیت فعال با aria-current
+         گفته می‌شود. #}
+      <div class="hero__dots" role="group" aria-label="انتخاب تصویر"
+           data-hero-dots hidden>
+        <button class="hero__dot" type="button" data-hero-dot="0"
+                aria-label="تصویر ۱ از ۳" aria-current="true"></button>
+        <button class="hero__dot" type="button" data-hero-dot="1"
+                aria-label="تصویر ۲ از ۳"></button>
+        <button class="hero__dot" type="button" data-hero-dot="2"
+                aria-label="تصویر ۳ از ۳"></button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -248,5 +296,22 @@
     </div>
   </div>
 </section>
+
+{# ------------------------------------------------- اسکریپت اسلایدشو
+
+   نخستین — و تنها — جاوااسکریپت سایت. عمدا اینجاست و نه در
+   layouts/base.njk:
+
+     ۱. اسلایدشو فقط روی همین صفحه هست، پس بقیهٔ صفحه‌ها یک درخواست
+        اضافه نمی‌دهند.
+     ۲. مسیر *نسبی* است. در base.njk که قالبِ همهٔ صفحه‌هاست، «js/…»
+        روی ‎/product/<slug>‎ به ‎/product/js/…‎ حل می‌شد و ۴۰۴ می‌گرفت.
+        صفحهٔ اصلی همیشه ریشهٔ استقرار است، پس همان‌جا درست حل می‌شود —
+        هم روی ‎/‎ و هم زیر یک پیشوند.
+
+   CSP دست‌نخورده می‌ماند: فایل بیرونی و هم‌مبدأ است، که
+   scriptSrc: ["'self'"] از قبل اجازه می‌دهد. هیچ اسکریپت درون‌خطی،
+   هیچ کتابخانه، هیچ وابستگی تازه. #}
+<script src="js/hero-carousel.js" defer></script>
 
 {% endblock %}

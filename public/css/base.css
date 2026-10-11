@@ -741,6 +741,101 @@ a:hover { color: var(--c-brand-strong); }
   pointer-events: none;
 }
 
+/* ------------------------------------------------- اسلایدشوی هیرو --
+   خانهٔ دوم گرید هیرو. همان بیرون‌زدگیِ .hero__art را می‌گیرد تا شکل
+   نوار عوض نشود؛ فقط محتوایش از یک ترسیم ثابت به سه عکس می‌رود.
+
+   ⚠️ عکس‌ها background-image با مسیر نسبی‌اند. url() در CSS نسبت به
+   نشانیِ خودِ این فایل حل می‌شود (‎<پیشوند>/css/base.css‎)، پس
+   ‎../img/hero/x.jpg‎ در هر استقراری به ‎<پیشوند>/img/hero/x.jpg‎
+   می‌رسد — بدون هیچ منطق مسیر پایه در سرور یا قالب.
+
+   ⚠️ هیچ پرشِ چیدمانی ممکن نیست: اندازهٔ قاب را CSS می‌دهد (ارتفاع
+   سلول گرید روی دسکتاپ، نسبت ابعاد روی موبایل)، نه ابعاد ذاتیِ عکس.
+   background-image اصلا در جریان چیدمان نیست. */
+.hero__carousel {
+  --hero-bleed: max(var(--s-4), (100vw - var(--container)) / 2 + var(--s-4));
+  position: relative;
+  justify-self: stretch;
+  width: calc(100% + var(--hero-bleed));
+  margin-inline-end: calc(var(--hero-bleed) * -1);
+  height: calc(100% + var(--s-7) * 2);
+  margin-block: calc(var(--s-7) * -1);
+  max-height: 34rem;
+  overflow: hidden;
+}
+
+/* کشیدنِ افقی کار اسلایدشو است، پیمایشِ عمودی کار مرورگر. */
+.hero__slides { position: absolute; inset: 0; touch-action: pan-y; }
+
+/* هر سه اسلاید روی هم. فقط فعال دیده می‌شود.
+   عکس‌ها ۶۰۰×۴۰۰ هستند — کوچک‌تر از این قاب — پس cover لازم است تا
+   نوار خالی نماند. لبهٔ چپ مرجع است، همان‌جا که ترسیم قبلی می‌چسبید. */
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: left center;
+  opacity: 0;
+  transition: opacity 600ms ease-in-out;
+}
+.hero__slide.is-active { opacity: 1; }
+
+.hero__slide--1 { background-image: url('../img/hero/peugeot-2008-1.jpg'); }
+.hero__slide--2 { background-image: url('../img/hero/peugeot-2008-2.jpg'); }
+.hero__slide--3 { background-image: url('../img/hero/peugeot-2008-3.jpg'); }
+
+/* دکمه‌های قبلی/بعدی. inset-inline تا در RTL خودبه‌خود جا عوض کنند:
+   «قبلی» سمت راست، «بعدی» سمت چپ. */
+.hero__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  background: rgba(13, 28, 46, 0.55);
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.hero__nav:hover { background: rgba(13, 28, 46, 0.8); border-color: #ffffff; }
+/* حلقهٔ فوکوس روشن، چون زمینه تیره است — همان قاعدهٔ دکمهٔ هیرو. */
+.hero__nav:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+.hero__nav--prev { inset-inline-start: var(--s-3); }
+.hero__nav--next { inset-inline-end: var(--s-3); }
+
+.hero__dots {
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--s-4);
+  z-index: 2;
+  display: flex;
+  gap: var(--s-2);
+  justify-content: center;
+}
+.hero__dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+.hero__dot:hover { background: rgba(255, 255, 255, 0.55); }
+.hero__dot[aria-current="true"] { background: #ffffff; transform: scale(1.25); }
+.hero__dot:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+
 /* ═══════════════════════════════════════════ ۸. فهرست کاتالوگ ═══ */
 
 .listing {
@@ -1634,11 +1729,48 @@ a:hover { color: var(--c-brand-strong); }
   /* متن باید *روی* ترسیم بیفتد، نه زیرش. */
   .hero__copy { position: relative; z-index: 1; }
   .hero__lede { max-width: 42ch; }
+
+  /* اسلایدشو همان مسیر .hero__art را می‌رود: از ستونِ گرید به
+     پس‌زمینهٔ تمام‌عرضِ خودِ .hero. */
+  .hero__carousel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+  }
+  /* شفافیت روی خودِ اسلاید می‌نشیند و نه روی قاب، چون قاب دکمه‌ها و
+     نقطه‌ها را هم در خود دارد و آن‌ها باید خوانا بمانند. ۰٬۳۲ همان
+     عددی است که ترسیم قبلی داشت و کنتراست متن سفید را قبول می‌کرد. */
+  .hero__slide.is-active { opacity: 0.32; }
+  .hero__slide--1,
+  .hero__slide--2,
+  .hero__slide--3 { background-position: center; }
+
+  /* فلش‌ها روی عرض کم کنار تیتر و دکمه می‌افتادند و لمسِ اشتباه
+     می‌ساختند. نقطه‌ها می‌مانند — سه هدف لمسی کوچک در لبهٔ پایین، که
+     با فاصلهٔ پایینِ متن تداخل نمی‌کنند. */
+  .hero__nav { display: none; }
+  .hero__copy { padding-block-end: var(--s-6); }
+  .hero__dots { bottom: var(--s-3); }
 }
 
 @media (max-width: 560px) {
   .hero__lede { font-size: var(--t-md); }
   .hero__actions .btn { flex: 1 1 auto; justify-content: center; }
+}
+
+/* ترجیح «حرکت کمتر»: محو شدن حذف می‌شود و تعویض لحظه‌ای می‌شود.
+   چرخشِ خودکار را هم جاوااسکریپت با همین کوئری خاموش می‌کند، پس
+   کاربر هیچ حرکت ناخواسته‌ای نمی‌بیند — ولی دکمه‌ها و نقطه‌ها
+   همچنان کار می‌کنند. */
+@media (prefers-reduced-motion: reduce) {
+  .hero__slide { transition: none; }
+  .hero__nav,
+  .hero__dot { transition: none; }
+  .hero__dot[aria-current="true"] { transform: none; }
 }
 
 /* ناوبری دسته‌ها: روی دسکتاپ ستون کنار محتوا، روی موبایل آکاردئون.
