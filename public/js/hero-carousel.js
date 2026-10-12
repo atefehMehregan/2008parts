@@ -162,7 +162,7 @@
 
   root.addEventListener('pointerdown', function (event) {
     /* فقط دکمهٔ اصلی/لمس، و نه وقتی کشیدن از روی یک کنترل شروع شده.
-       ‎'button, a' و نه فقط 'button': دکمهٔ «مشاهده محصولات» روی تصویر
+       ‎'button, a' و نه فقط 'button': دکمهٔ «محصولات» روی تصویر
        یک <a> است. بدون این، کشیدن از روی آن هم اسلاید را عوض می‌کرد و
        هم پیوند را باز می‌کرد. */
     if (event.button !== 0 || event.target.closest('button, a')) return;
