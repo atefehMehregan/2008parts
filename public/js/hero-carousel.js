@@ -34,7 +34,7 @@
   /* کمتر از دو اسلاید، اسلایدشو نیست. کنترل‌ها پنهان می‌مانند. */
   if (slides.length < 2) return;
 
-  var INTERVAL = 5000;
+  var INTERVAL = 3000;
   var index = slides.findIndex(function (s) {
     return s.classList.contains('is-active');
   });
@@ -161,8 +161,11 @@
   var swipeY = null;
 
   root.addEventListener('pointerdown', function (event) {
-    /* فقط دکمهٔ اصلی/لمس، و نه وقتی کشیدن از روی یک کنترل شروع شده. */
-    if (event.button !== 0 || event.target.closest('button')) return;
+    /* فقط دکمهٔ اصلی/لمس، و نه وقتی کشیدن از روی یک کنترل شروع شده.
+       ‎'button, a' و نه فقط 'button': دکمهٔ «مشاهده محصولات» روی تصویر
+       یک <a> است. بدون این، کشیدن از روی آن هم اسلاید را عوض می‌کرد و
+       هم پیوند را باز می‌کرد. */
+    if (event.button !== 0 || event.target.closest('button, a')) return;
     swipeX = event.clientX;
     swipeY = event.clientY;
     pause();
