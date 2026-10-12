@@ -90,6 +90,14 @@ export function createApp({
         frameAncestors: ["'none'"],
         baseUri: ["'self'"],
         formAction: ["'self'"],
+        /* موقت — فقط برای پیش‌نمایش روی HTTP.
+           helmet این دستور را به‌صورت پیش‌فرض اضافه می‌کند (useDefaults
+           پیش‌فرضش true است)، پس *ننوشتنش* آن را حذف نمی‌کند و مرورگر
+           هر نشانی http را به https ارتقا می‌دهد. روی پیش‌نمایشی که
+           شنوندهٔ HTTPS ندارد، یعنی CSS و تصویر و فونت همه شکست
+           می‌خورند. مقدار null خودِ دستور را از نقشه برمی‌دارد.
+           وقتی TLS واقعی برقرار شد این خط باید برگردد. */
+        upgradeInsecureRequests: null,
       },
     },
     /* HSTS فقط در تولید و پشت HTTPS معنا دارد. */
