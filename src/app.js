@@ -44,7 +44,7 @@ export function createApp({
   const app = express();
 
   /* پشت پراکسی (IIS/ARR یا Nginx) آی‌پی واقعی در X-Forwarded-For است. */
-  app.set('trust proxy', 1);
+  app.set('trust proxy', (ip) => ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1');
   app.disable('x-powered-by');
 
   /* ---------------------------------------------------------- قالب‌ها */
@@ -90,6 +90,7 @@ export function createApp({
         frameAncestors: ["'none'"],
         baseUri: ["'self'"],
         formAction: ["'self'"],
+        upgradeInsecureRequests: null,
       },
     },
     /* HSTS فقط در تولید و پشت HTTPS معنا دارد. */
