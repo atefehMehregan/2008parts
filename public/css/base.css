@@ -1920,6 +1920,65 @@ a:hover { color: var(--c-brand-strong); }
 }
 .home-section--tint .category-card { background: var(--c-bg); }
 
+/* --- گالری خودروها ----------------------------------------------------
+   چهار کاشیِ فقط-عکس: همیشه دو ستون در دو ردیف، روی دسکتاپ و موبایل
+   یکسان.
+
+   برخلاف .category-grid و .brand-logos که auto-fill می‌گیرند، اینجا
+   تعداد ستون‌ها صریحا دو است: تعداد کارت‌ها دقیقا چهار است و چیدمان
+   ۲×۲ خواستهٔ طراحی است، نه نتیجهٔ عرضِ صفحه.
+
+   minmax(0, 1fr) و نه 1fr: کمینهٔ پیش‌فرضِ آیتم گرید auto است و اگر
+   تصویر از سهمِ ستون پهن‌تر شود، ستون کش می‌آید و صفحه سرریزِ افقی
+   پیدا می‌کند. صفر کردنِ کمینه جلوی آن را می‌گیرد.
+
+   جهت: گرید از جریان سند پیروی می‌کند، پس در RTL خودبه‌خود از راست
+   پر می‌شود و هیچ قاعدهٔ جهت‌داری لازم نیست. */
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* قاب ۴:۳ افقی — مناسبِ شکلِ خودرو، برخلاف قابِ ۳:۴ عمودیِ کارت قطعه.
+
+   نسبت روی *قاب* می‌نشیند نه روی تصویر: چهار عکس نسبت‌های یکسانی
+   ندارند (۱٫۸۰ تا ۲٫۰۹) و contain هر کدام را کامل و بدون کشیدگی
+   داخل همین قاب جا می‌دهد. چون قاب نسبت ثابت دارد، جای کارت پیش از
+   بار شدن تصویر رزرو است و چیدمان نمی‌پرد. */
+.vehicle-card {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.vehicle-card:hover {
+  border-color: var(--c-brand);
+  box-shadow: var(--sh-md);
+  transform: translateY(-2px);
+}
+.vehicle-card:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+
+/* contain و نه cover: هیچ بخشی از خودرو بریده نمی‌شود.
+   همان الگوی .product-card__media img — انتخاب شد چون با <picture>
+   در همین پروژه جواب داده است. */
+.vehicle-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vehicle-card:hover { transform: none; }
+}
+
 /* برندها — تراشه‌های کم‌وزن، نه کارت. */
 /* --- نشان برندها ------------------------------------------------------
    جانشین .brand-strip/.brand-chip که فهرستِ متنی بود. کاشی‌های هم‌اندازه
