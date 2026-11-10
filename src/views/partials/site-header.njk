@@ -86,8 +86,32 @@
        این ردیف بیرون آمدند تا ناوبری اصلی دقیقا همان پنج قلم بماند.
        هیچ‌کدام حذف نشده‌اند: نشان برند به خانه می‌رود، و فوتر هر پنج
        مقصد را دارد (ستون‌های «دسترسی سریع»، «دسته‌بندی‌ها»، «برندها»). #}
+    {# دکمهٔ همبرگر — فقط روی موبایل و فقط وقتی جاوااسکریپت کار می‌کند.
+
+       پیش‌فرضِ CSS این دکمه را پنهان نگه می‌دارد؛ اسکریپت
+       public/js/mobile-nav.js روی <html> نشانهٔ data-nav-js می‌گذارد و
+       تنها آن‌وقت دکمه دیده می‌شود و ناوبری به پنل تبدیل می‌شود. اگر
+       اسکریپت نرسد یا خطا بدهد، هدر همان سه‌ردیفهٔ قبلی می‌ماند و هر پنج
+       پیوند خودرو سر جایشان‌اند — هیچ مقصدی با شکستِ جاوااسکریپت گم
+       نمی‌شود.
+
+       type="button" صریح نوشته شده: دکمهٔ بی‌نوع داخل یک <form> به
+       submit تبدیل می‌شود و اینجا درست کنار فرمِ پوسته می‌نشیند.
+
+       aria-controls به همان <nav> موجود اشاره می‌کند، نه به یک نسخهٔ
+       دوم؛ فهرستِ ناوبری روی موبایل و دسکتاپ *یک* عنصر است. #}
     {% if navVehicles.length %}
-      <nav class="site-nav" aria-label="ناوبری اصلی — قطعات بر اساس خودرو">
+      <button class="nav-toggle" type="button"
+              aria-expanded="false" aria-controls="site-nav-panel"
+              aria-label="باز کردن منوی ناوبری">
+        <svg class="nav-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    {% endif %}
+
+    {% if navVehicles.length %}
+      <nav class="site-nav" id="site-nav-panel" aria-label="ناوبری اصلی — قطعات بر اساس خودرو">
         <ul class="site-nav__list">
           {% for v in navVehicles %}
             {% set vPath = '/products?vehicle=' + (v.slug | urlencode) %}

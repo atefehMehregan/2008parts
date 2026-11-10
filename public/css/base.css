@@ -567,6 +567,44 @@ a:hover { color: var(--c-brand-strong); }
 .site-nav__link:hover { color: var(--c-brand); background: var(--c-brand-soft); }
 .site-nav__link.is-current { color: var(--c-brand); background: var(--c-brand-soft); }
 
+/* --- دکمهٔ همبرگر ------------------------------------------------------
+   پیش‌فرض: پنهان. روی دسکتاپ هرگز دیده نمی‌شود، و روی موبایل هم تا وقتی
+   جاوااسکریپت نشانهٔ data-nav-js را نگذاشته باشد پنهان می‌ماند — چون بدون
+   اسکریپت دکمه‌ای که باز نمی‌شود بدتر از نبودنش است.
+
+   اندازه و واژگان از .cart-link گرفته شده تا دو کنترلِ کنار هم یک‌شکل
+   باشند: هدف لمس ۴۴ پیکسل، همان قاب و همان شعاع. */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--c-ink-2);
+  font: inherit;
+  cursor: pointer;
+  flex: none;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.nav-toggle:hover { color: var(--c-brand); border-color: var(--c-brand); background: var(--c-brand-soft); }
+.nav-toggle:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.nav-toggle__icon {
+  width: 22px; height: 22px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* وقتی منو باز است دکمه حالت فعال می‌گیرد؛ تنها نشانهٔ دیداریِ وضعیت
+   نیست — aria-expanded همان را به صفحه‌خوان می‌گوید. */
+.nav-toggle[aria-expanded="true"] {
+  color: var(--c-brand);
+  border-color: var(--c-brand);
+  background: var(--c-brand-soft);
+}
+
 /* ═══════════════════════════════════════════════════════ ۶. فوتر ═══ */
 
 /* فوتر همان گرادیان هدر را می‌گیرد.
@@ -1483,6 +1521,61 @@ a:hover { color: var(--c-brand-strong); }
   .site-nav__list { flex-wrap: wrap; justify-content: flex-start; gap: var(--s-1); }
   /* هدف لمس: ۴۴ پیکسل ارتفاع برای هر قلم ناوبری. */
   .site-nav__link { padding: 0.6rem 0.8rem; }
+
+  /* --- ناوبری همبرگری ---------------------------------------------------
+     همه‌چیز زیر [data-nav-js] است: آن نشانه را فقط mobile-nav.js روی
+     <html> می‌گذارد. بدون جاوااسکریپت هیچ‌کدام از این قاعده‌ها فعال
+     نمی‌شوند و هدر همان سه‌ردیفهٔ بالا می‌ماند — پنج پیوند خودرو باز و
+     قابل لمس. این عمدی است: ناوبری نباید به اجرای یک اسکریپت گره بخورد.
+
+     ⚠️ هیچ نسخهٔ دومی از فهرست ساخته نمی‌شود. همان <nav id="site-nav-panel">
+     که روی دسکتاپ یک ردیف است، اینجا پنل می‌شود. پس «ناوبری تکراری روی
+     موبایل» ممکن نیست و هر مقصدی که در دسکتاپ هست در موبایل هم هست. */
+  [data-nav-js] .nav-toggle { display: inline-flex; order: 1; }
+
+  /* پنل زیر هدر می‌نشیند. موقعیت absolute نسبت به .site-header است که
+     position: relative و z-index: 20 دارد، پس پنل خودبه‌خود روی محتوای
+     صفحه می‌افتد بی‌آنکه لازم باشد z-index تازه‌ای به جنگ بقیه بفرستیم. */
+  [data-nav-js] .site-nav {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    z-index: 1;
+    margin: 0;
+    padding: var(--s-3);
+    background: var(--c-surface);
+    border-bottom: 1px solid var(--c-line);
+    box-shadow: var(--sh-md);
+    /* سقف ارتفاع + اسکرول عمودی: روی ۳۲۰ پیکسل با پنج قلم جا می‌شود،
+       ولی اگر روزی خودروها زیاد شدند پنل از صفحه بیرون نمی‌زند. */
+    max-height: calc(100vh - 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  /* بسته = از درخت دسترسی و از چیدمان بیرون. display:none و نه صرفا
+     شفافیت، تا پیوندهای پنهان با Tab قابل رسیدن نباشند. */
+  [data-nav-js] .site-nav[hidden] { display: none; }
+
+  /* ستونی، نه ردیفی: روی عرض کم، پنج نام فارسی کنار هم خوانا نیست.
+     جهت از جریان سند می‌آید، پس در RTL خودبه‌خود راست‌چین است. */
+  [data-nav-js] .site-nav__list {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: var(--s-1);
+  }
+  [data-nav-js] .site-nav__link {
+    /* هدف لمس ۴۴ پیکسل برای هر قلم. */
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--s-2) var(--s-3);
+    white-space: normal;
+  }
+  [data-nav-js] .site-nav__link:focus-visible {
+    outline: 2px solid var(--c-focus);
+    outline-offset: -2px;
+  }
 
   .listing-toolbar { flex-direction: column; align-items: stretch; }
   .listing-toolbar__field { min-width: 0; }
